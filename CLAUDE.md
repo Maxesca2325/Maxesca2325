@@ -7,5 +7,7 @@ The workflow is the skill in `.claude/skills/animated-shorts/SKILL.md`. Read it 
 - Short (9:16): `npx remotion render src/index.ts Short episodes/ep1/out/episode_1.mp4 --codec=h264 --crf=18`
 - Long version (16:9): composition `Long`.
 - Voice: Kokoro (`node scripts/voice.mjs epN`) OR an ai33.pro voice (`node scripts/voice_ai33.mjs epN <voice_id>`) OR the user's own audio (`python3 scripts/import_voice.py epN <file>`). All write the same files.
+- Writing helpers (in `.claude/skills/`): script-writer, storytelling-hooks, titles-and-thumbnails, long-form-youtube, channel-formula, retention-audit. Creator rules: `creator.md`. Where each is used: "Helper skills" in the animated-shorts SKILL.
+- AgentAlley connector: use it when its tools are available in the session.
 - Always check stills before rendering: `node scripts/stills.mjs <shot ids>`.
 - New video, new chat.

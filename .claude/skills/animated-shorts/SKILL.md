@@ -36,6 +36,15 @@ Write it all into `styles/<channel>.md` with the numbers. Every rule must be a n
 ### 3. "Turn this into a skill"
 Create `.claude/skills/<channel>-style/SKILL.md` that says: use the animated-shorts workflow, with the look in `styles/<channel>.md`, and lists the exact engine settings that produce it (the `Look` values: sun, hemi, fog, exposure, aperture, ink, warm/cool, saturation; caption size and position; voice speed; shot length). Test it by building one still of a sample shot and comparing it with a frame from the channel side by side. Fix the numbers until they match.
 
+## Helper skills (use them at these steps)
+Installed in this project (`.claude/skills/`, sources in `.claude/skills/SOURCES.md`). The creator's rules are in `creator.md` (it replaces `~/CLAUDE.md` for script-writer). The measured style file always wins over the generic advice of these skills (pace, length, opener).
+- **Ideas (step 4):** `channel-formula` once the channel has 3+ winners and 1+ flop → save the profile in `research/<channel>-formula.md`, and check every new idea against it.
+- **Script (step 5):** `script-writer` (10 hooks over 6+ mechanics, scored, best 3; beat map with a re-hook every 6–8 s; quality gate) + `storytelling-hooks` (six levers, the three hook layers: first frame, spoken line, on-screen text). Then apply this skill's style rules on top.
+- **Long version (step 9):** `long-form-youtube` (open-loop tracker, chapters, sag-point re-hook).
+- **Package (step 10):** `titles-and-thumbnails` (5–10 titles over 4+ formulas, thumbnail brief, honesty check).
+- **After publishing:** `retention-audit` on the retention graph screenshot, then update the channel-formula profile.
+- **AgentAlley connector:** if its tools are available in the session, use them where they fit (research, ideas, publishing). Look at what its tools do before using them; if it isn't connected, carry on without it and say so.
+
 ### 4. "Give me 10 ideas" (or use the master prompt in claude.ai)
 Ten true, strange, visual stories that fit the channel. For each one, **search YouTube** for the topic and write down the biggest Short and long video on it. If a Short already has millions of views on the same story, drop it (someone told it already). Pick one with a clear twist.
 
