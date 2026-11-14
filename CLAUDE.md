@@ -6,5 +6,6 @@ The workflow is the skill in `.claude/skills/animated-shorts/SKILL.md`. Read it 
 - Example episode: `episodes/ep1` + `src/ep1` (London's green taxi huts). Copy it for new episodes.
 - Short (9:16): `npx remotion render src/index.ts Short episodes/ep1/out/episode_1.mp4 --codec=h264 --crf=18`
 - Long version (16:9): composition `Long`.
+- Voice: Kokoro (`node scripts/voice.mjs epN`) OR the user's own audio (`python3 scripts/import_voice.py epN <file>`). Both write the same files.
 - Always check stills before rendering: `node scripts/stills.mjs <shot ids>`.
 - New video, new chat.

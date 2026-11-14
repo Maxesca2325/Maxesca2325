@@ -50,6 +50,13 @@ Split it into `episodes/epN/shots.json`: one line of voice per shot (`{"id", "te
 ### 6. "Make the voice"
 `node scripts/voice.mjs epN <voice> <speed>`. Default `am_michael` at speed 1.05. Writes `public/epN/voice.wav` and `episodes/epN/timing.json` (every shot and every word). Listen to it. If a word is wrong, change its `say` and run it again.
 
+**Or use the user's own recording** (their voice, or a voice made elsewhere): put the file anywhere in the project (e.g. `ref/voice/epN.mp3`, any format ffmpeg reads) and run
+`python3 scripts/import_voice.py epN <audio file> [--lang en|fr|...]`.
+It writes the same `public/epN/voice.wav` + `episodes/epN/timing.json` as Kokoro, so every step after this is identical.
+- If `shots.json` exists, its text must be what is said in the recording (captions show the script's spelling, e.g. "1875"). Check the "Matched X/Y" line: under 60% means wrong text or wrong `--lang`.
+- If there is no `shots.json`, it is created from the recording (one sentence per shot). Split long sentences into more shots in `shots.json`, then run the command again.
+- Don't speed up or cut the user's recording; build the shots to its timing.
+
 ### 7. "Build the video"
 1. Write `src/epN/sets.tsx` (the places), `src/epN/cast.ts` (the characters) and `src/epN/shots.tsx` (one entry per shot: look, camera from/to, focus distance, who stands where). Copy `src/ep1/` as the example. Use the kit in `src/engine/kit.tsx` (Box, Cyl, Roof, House, Window, Lamp, Cab, Cart, Fire, Sign, Snow…) and add new pieces there when a story needs them.
 2. **Check stills before rendering:** `node scripts/stills.mjs <ids>` and look at every still. Check: is the subject in frame, is a face covered, is the camera inside a wall, is anyone hidden behind someone else, does the shot show what the line says, is it too dark or too yellow. Fix and check again.
