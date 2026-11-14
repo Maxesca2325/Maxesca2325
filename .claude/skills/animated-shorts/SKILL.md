@@ -50,6 +50,13 @@ Split it into `episodes/epN/shots.json`: one line of voice per shot (`{"id", "te
 ### 6. "Make the voice"
 `node scripts/voice.mjs epN <voice> <speed>`. Default `am_michael` at speed 1.05. Writes `public/epN/voice.wav` and `episodes/epN/timing.json` (every shot and every word). Listen to it. If a word is wrong, change its `say` and run it again.
 
+**Or use an ai33.pro voice** (ElevenLabs, MiniMax, Fish Audio, the user's cloned voices…; costs ai33 credits, roughly 40 credits per short line on ElevenLabs):
+- Find a voice: `node scripts/voice_ai33.mjs --voices <elevenlabs|minimax|fishaudio|clone|edge|kokoro|vbee> [search]`. The user's own clones: `--voices clone` (e.g. `clone_2574492` "Maxime Voice USA", English).
+- Make the voice: `node scripts/voice_ai33.mjs epN <voice_id> [speed 0.5–1.5]`. Writes the same `voice.wav` + `timing.json` as Kokoro. Each line is checked (whisper) and regenerated once if the voice said other words; a WARNING means listen to that line. Lines already made with the same text/voice/speed are reused, so a re-run only pays for changed lines.
+- New clone from a sample (max 10 MB, only with the speaker's consent): `node scripts/voice_ai33.mjs --clone sample.mp3 "Name"`.
+- The API key is injected by the cloud environment's network proxy (never ask for it in chat, never write it in a file). On another computer: `export AI33_API_KEY=...`.
+- Before monetizing, the user should confirm ai33's terms allow commercial use of these voices.
+
 **Or use the user's own recording** (their voice, or a voice made elsewhere): put the file anywhere in the project (e.g. `ref/voice/epN.mp3`, any format ffmpeg reads) and run
 `python3 scripts/import_voice.py epN <audio file> [--lang en|fr|...]`.
 It writes the same `public/epN/voice.wav` + `episodes/epN/timing.json` as Kokoro, so every step after this is identical.
