@@ -207,7 +207,7 @@ export const Shelter: React.FC<{ pos: V3; rotY?: number; build?: number; hatch?:
 };
 
 // Falling snow (screen-friendly round flakes), deterministic per frame
-export const Snow: React.FC<{ count?: number; area?: [number, number, number]; center?: V3; speed?: number; size?: number }> = ({ count = 1500, area = [40, 20, 40], center = [0, 0, 0], speed = 1.2, size = 0.09 }) => {
+export const Snow: React.FC<{ count?: number; area?: [number, number, number]; center?: V3; speed?: number; size?: number; color?: string; opacity?: number }> = ({ count = 1500, area = [40, 20, 40], center = [0, 0, 0], speed = 1.2, size = 0.09, color = "#ffffff", opacity = 0.9 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -233,7 +233,7 @@ export const Snow: React.FC<{ count?: number; area?: [number, number, number]; c
   pos.needsUpdate = true;
   return (
     <points geometry={geo} layers={LAYER_FX}>
-      <pointsMaterial map={tex} size={size} sizeAttenuation transparent depthWrite={false} color="#ffffff" opacity={0.9} />
+      <pointsMaterial map={tex} size={size} sizeAttenuation transparent depthWrite={false} color={color} opacity={opacity} />
     </points>
   );
 };

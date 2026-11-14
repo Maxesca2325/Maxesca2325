@@ -2,17 +2,20 @@
 // dot eyes + thick brows, bean-shaped coat, thin black stick limbs, round white hands, ink outline everywhere).
 // Drawn fresh every frame, so walking, blinking, talking and props are just numbers.
 
-export type Hat = "none" | "top" | "bowler" | "flatcap" | "stripecap" | "cabbie" | "boater" | "helmet";
+export type Hat = "none" | "top" | "bowler" | "flatcap" | "stripecap" | "cabbie" | "boater" | "helmet" | "madras" | "kepi";
 export type Eyes = "dot" | "wide" | "closed" | "half" | "angry" | "happy" | "sad";
 export type Mouth = "smile" | "flat" | "open" | "frown" | "o" | "grin" | "wavy";
 export type Arm = "down" | "hips" | "wave" | "point" | "hold" | "up" | "cross" | "shrug" | "drink" | "warm";
-export type Prop = "none" | "newspaper" | "mug" | "teacup" | "sandwich" | "coin" | "cane" | "whip" | "plate";
+export type Prop = "none" | "newspaper" | "mug" | "teacup" | "sandwich" | "coin" | "cane" | "whip" | "plate" | "lantern" | "paper" | "shovel";
 
 export type ToonSpec = {
   hat: Hat; hatColor?: string; band?: string;
   coat: string; vest?: string; scarf?: string; buttons?: string;
   hair?: string; moustache?: boolean; whiskers?: boolean; beard?: boolean; glasses?: boolean;
   height?: number; // 0.6 (child) .. 1.0
+  skin?: string; // head + hands colour (default: the style's white head and mittens)
+  bandage?: boolean; // white bandage strips on the body and arms
+  skirt?: string; // long skirt colour (drawn over the legs)
   wide?: number; // body width factor
 };
 export type ToonPose = {
@@ -26,6 +29,7 @@ export type ToonPose = {
 
 const INK = "#161212";
 const LW = 9;
+let SKIN = "#fbfaf6";
 
 const darker = (hex: string, k: number) => {
   const n = parseInt(hex.slice(1), 16);
@@ -34,7 +38,7 @@ const darker = (hex: string, k: number) => {
 };
 
 function hand(g: CanvasRenderingContext2D, x: number, y: number, r = 15) {
-  g.fillStyle = "#fbfaf6"; g.strokeStyle = INK; g.lineWidth = 6;
+  g.fillStyle = SKIN; g.strokeStyle = INK; g.lineWidth = 6;
   g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); g.stroke();
 }
 
@@ -82,12 +86,27 @@ function drawProp(g: CanvasRenderingContext2D, p: Prop, x: number, y: number, t:
   } else if (p === "plate") {
     g.fillStyle = "#f4f1ea"; g.beginPath(); g.ellipse(x, y - 4, 48, 14, 0, 0, Math.PI * 2); g.fill(); g.stroke();
     g.fillStyle = "#c98b4a"; g.beginPath(); g.ellipse(x - 8, y - 14, 22, 10, 0, 0, Math.PI * 2); g.fill(); g.stroke();
+  } else if (p === "lantern") {
+    limb(g, [[x, y], [x, y + 30]], 4);
+    const fl = 0.8 + Math.sin(t * 13) * 0.1;
+    g.fillStyle = `rgba(255,${190 + fl * 40},90,1)`; g.beginPath(); g.roundRect(x - 20, y + 30, 40, 52, 8); g.fill(); g.stroke();
+    g.fillStyle = INK; g.fillRect(x - 24, y + 26, 48, 8); g.fillRect(x - 24, y + 80, 48, 8);
+  } else if (p === "paper") {
+    g.save(); g.translate(x + side * 20, y - 30); g.rotate(-0.1 * side);
+    g.fillStyle = "#f3ecd8"; g.fillRect(-45, -60, 90, 120); g.strokeRect(-45, -60, 90, 120);
+    for (let i = 0; i < 6; i++) { g.fillStyle = "rgba(20,20,20,0.5)"; g.fillRect(-32, -42 + i * 15, i === 5 ? 34 : 64, 5); }
+    g.fillStyle = "#c0262c"; g.beginPath(); g.arc(22, 40, 11, 0, 7); g.fill();
+    g.restore();
+  } else if (p === "shovel") {
+    limb(g, [[x - side * 10, y - 120], [x + side * 10, y + 150]], 10);
+    g.fillStyle = "#8a8f98"; g.beginPath(); g.moveTo(x + side * 10 - 26, y + 150); g.lineTo(x + side * 10 + 26, y + 150); g.lineTo(x + side * 14 + 18, y + 205); g.lineTo(x + side * 14, y + 222); g.lineTo(x + side * 14 - 18, y + 205); g.closePath(); g.fill(); g.lineWidth = 6; g.stroke();
   }
 }
 
 // Draws one character into a 768 x 1024 canvas (room for pointing arms); feet stand on y = 1000.
 export function drawToon(g: CanvasRenderingContext2D, s: ToonSpec, p: ToonPose) {
   g.clearRect(0, 0, 768, 1024);
+  SKIN = s.skin ?? "#fbfaf6";
   const H = 940 * (s.height ?? 1), cx = 384, ground = 1000;
   const W = s.wide ?? 1;
   const walk = p.walk ?? 0, ph = p.t * 7.5 * (walk || 1);
@@ -117,6 +136,14 @@ export function drawToon(g: CanvasRenderingContext2D, s: ToonSpec, p: ToonPose) 
       limb(g, [[cx + side * legSpread, hipY - 4], [(cx + side * legSpread + fx) / 2 + sw * 8, (hipY + fy) / 2], [fx, fy - 6]]);
       g.fillStyle = INK; g.beginPath(); g.ellipse(fx + 12, fy - 6, 25, 11, 0, 0, Math.PI * 2); g.fill();
     }
+  }
+
+  if (s.skirt && !sit) {
+    g.fillStyle = s.skirt; g.strokeStyle = INK; g.lineWidth = LW;
+    const sw = Math.sin(p.t * 2.2) * 6;
+    g.beginPath(); g.moveTo(cx - torsoW * 0.45, hipY - 30); g.lineTo(cx + torsoW * 0.45, hipY - 30);
+    g.quadraticCurveTo(cx + torsoW * 0.75 + sw, ground - 60, cx + torsoW * 0.7 + sw, ground - 22);
+    g.lineTo(cx - torsoW * 0.7 + sw, ground - 22); g.quadraticCurveTo(cx - torsoW * 0.75 + sw, ground - 60, cx - torsoW * 0.45, hipY - 30); g.closePath(); g.fill(); g.stroke();
   }
 
   // ---- arms (behind/around the body): shoulder points ----
@@ -173,8 +200,15 @@ export function drawToon(g: CanvasRenderingContext2D, s: ToonSpec, p: ToonPose) 
   if (front(p.armL ?? "down")) { drawArm(aL); }
   if (front(p.armR ?? "down")) { drawArm(aR); }
 
+  if (s.bandage) {
+    g.strokeStyle = "#f4f1ea"; g.lineWidth = 16; g.lineCap = "butt";
+    for (const k of [0.35, 0.62]) { g.beginPath(); g.moveTo(hx - torsoW * 0.5, torsoTop + torsoH * k); g.lineTo(hx + torsoW * 0.5, torsoTop + torsoH * k - 18); g.stroke(); }
+    for (const A of [aL, aR]) { const mx = (A.ex + A.hx) / 2, my2 = (A.ey + A.hy) / 2; g.beginPath(); g.moveTo(mx - 14, my2 - 6); g.lineTo(mx + 14, my2 + 6); g.stroke(); }
+    g.lineCap = "round";
+  }
+
   // ---- head ----
-  g.fillStyle = "#fbfaf6"; g.strokeStyle = INK; g.lineWidth = 10;
+  g.fillStyle = SKIN; g.strokeStyle = INK; g.lineWidth = 10;
   g.beginPath(); g.ellipse(hx, headY, headR * 1.04, headR, 0, 0, Math.PI * 2); g.fill(); g.stroke();
   // soft cheek shade
   const sh = g.createRadialGradient(hx - headR * 0.3, headY - headR * 0.4, headR * 0.2, hx, headY, headR * 1.05);
@@ -182,7 +216,11 @@ export function drawToon(g: CanvasRenderingContext2D, s: ToonSpec, p: ToonPose) 
   g.fillStyle = sh; g.beginPath(); g.ellipse(hx, headY, headR * 0.98, headR * 0.94, 0, 0, Math.PI * 2); g.fill();
 
   // hair tufts at the sides
-  if (s.hair) {
+  if (s.hair && s.skin && s.hat === "none") {
+    // short curly hair on top of the head
+    g.fillStyle = s.hair; g.lineWidth = 6;
+    g.beginPath(); g.ellipse(hx, headY - headR * 0.05, headR * 1.04, headR, 0, Math.PI * 1.08, Math.PI * 1.92); g.quadraticCurveTo(hx, headY - headR * 0.62, hx - headR * 1.0, headY - headR * 0.4); g.closePath(); g.fill(); g.stroke();
+  } else if (s.hair && !s.skin) {
     g.fillStyle = s.hair; g.lineWidth = 5;
     for (const side of [-1, 1]) {
       g.beginPath(); g.moveTo(hx + side * headR * 0.98, headY - headR * 0.35);
@@ -280,6 +318,19 @@ export function drawToon(g: CanvasRenderingContext2D, s: ToonSpec, p: ToonPose) 
     g.beginPath(); g.moveTo(hx - headR * 0.72, top + 4); g.bezierCurveTo(hx - headR * 0.8, top - headR * 1.25, hx + headR * 0.8, top - headR * 1.25, hx + headR * 0.72, top + 4); g.closePath(); g.fill(); g.stroke();
     g.fillStyle = hc; g.beginPath(); g.arc(hx, top - headR * 0.98, headR * 0.12, 0, Math.PI * 2); g.fill(); g.stroke();
     g.fillStyle = s.band ?? "#d9d9e0"; g.beginPath(); g.moveTo(hx, top - headR * 0.6); g.lineTo(hx + headR * 0.18, top - headR * 0.3); g.lineTo(hx, top - headR * 0.05); g.lineTo(hx - headR * 0.18, top - headR * 0.3); g.closePath(); g.fill(); g.lineWidth = 4; g.stroke();
+  } else if (s.hat === "madras") {
+    g.fillStyle = hc; g.beginPath();
+    g.moveTo(hx - headR * 0.98, top + headR * 0.45); g.bezierCurveTo(hx - headR * 1.05, top - headR * 0.9, hx + headR * 1.05, top - headR * 0.9, hx + headR * 0.98, top + headR * 0.45);
+    g.quadraticCurveTo(hx, top + headR * 0.15, hx - headR * 0.98, top + headR * 0.45); g.closePath(); g.fill(); g.stroke();
+    g.save(); g.clip(); g.strokeStyle = s.band ?? "#f2c64b"; g.lineWidth = 6;
+    for (let i = -5; i <= 5; i++) { g.beginPath(); g.moveTo(hx + i * 26, top - headR); g.lineTo(hx + i * 26, top + headR); g.stroke(); }
+    g.lineWidth = 4; for (let j = 0; j < 4; j++) { g.beginPath(); g.moveTo(hx - headR, top - headR * 0.6 + j * 26); g.lineTo(hx + headR, top - headR * 0.6 + j * 26); g.stroke(); }
+    g.restore(); g.lineWidth = 7; g.strokeStyle = INK;
+    g.fillStyle = hc; for (const a of [-0.5, 0.5]) { g.beginPath(); g.ellipse(hx + headR * 0.5, top - headR * 0.72, headR * 0.3, headR * 0.14, a, 0, Math.PI * 2); g.fill(); g.stroke(); }
+  } else if (s.hat === "kepi") {
+    g.fillStyle = hc; g.beginPath(); g.moveTo(hx - headR * 0.7, top + 6); g.lineTo(hx - headR * 0.58, top - headR * 0.75); g.lineTo(hx + headR * 0.62, top - headR * 0.85); g.lineTo(hx + headR * 0.72, top + 6); g.closePath(); g.fill(); g.stroke();
+    if (s.band) { g.fillStyle = s.band; g.fillRect(hx - headR * 0.68, top - headR * 0.18, headR * 1.38, headR * 0.16); }
+    g.fillStyle = INK; g.beginPath(); g.ellipse(hx + headR * 0.35, top + 8, headR * 0.6, headR * 0.12, 0.08, 0, Math.PI * 2); g.fill();
   } else if (s.hat === "boater") {
     g.fillStyle = hc; g.beginPath(); g.ellipse(hx, top + 2, headR * 1.15, headR * 0.16, 0, 0, Math.PI * 2); g.fill(); g.stroke();
     g.beginPath(); g.roundRect(hx - headR * 0.6, top - headR * 0.4, headR * 1.2, headR * 0.42, 4); g.fill(); g.stroke();

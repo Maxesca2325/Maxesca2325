@@ -67,6 +67,8 @@ for (const [id, kind] of Object.entries(S.amb || {})) {
   if (kind === "pub") { const m = lowpass(noise(d, (t) => (0.75 + 0.25 * Math.sin(t * 2.1)) * Math.min(1, t / 0.15, (d - t) / 0.2)), 420); add(m, a, 0.14); }
   if (kind === "room") { add(lowpass(noise(d, (t) => Math.min(1, t / 0.08, (d - t) / 0.1)), 300), a, 0.12); }
   if (kind === "desk") add(lowpass(noise(d, (t) => Math.min(1, t / 0.08, (d - t) / 0.1)), 200), a, 0.06);
+  if (kind === "sea") { const w = lowpass(noise(d, (t) => (0.55 + 0.45 * Math.sin(t * 0.9 + +id) ** 2) * Math.min(1, t / 0.1, (d - t) / 0.1)), 650); add(w, a, 0.1, 0.1); }
+  if (kind === "rumble") { const w = lowpass(lowpass(noise(d, (t) => (0.7 + 0.3 * Math.sin(t * 3.1)) * Math.min(1, t / 0.1, (d - t) / 0.15)), 140), 140); add(w, a, 0.9); }
 }
 
 // ---- sound effects ----
@@ -80,11 +82,12 @@ const FX = {
   hoof: () => { const o = tone(380, 220, 0.08, 45); return o.map((v) => v * 0.9); },
   chatter: () => { const o = new Float32Array(Math.round(0.9 * SR)); for (let k = 0; k < 14; k++) { const c = tone(2000 + rnd() * 300, 1600, 0.02, 120); o.set(c.map((v, i) => v + (o[Math.round(k * 0.06 * SR) + i] || 0)), Math.round(k * 0.06 * SR)); } return o; },
   bite: () => lowpass(noise(0.12, (t, d) => (1 - t / d) * (t < 0.01 ? t / 0.01 : 1)), 2500),
+  boom: () => { const n = lowpass(lowpass(noise(2.6, (t, d) => Math.exp(-t * 1.6) * Math.min(1, t / 0.02)), 180), 180); const o = tone(62, 28, 2.6, 1.4); return n.map((v, i) => v * 3 + (o[i] || 0) * 0.8); },
   shimmer: () => { const o = new Float32Array(Math.round(1.6 * SR)); [0, 4, 7, 12, 16].forEach((n, k) => { const b = bell(semi(n + 24), 1.2); for (let i = 0; i < b.length && i + k * 3000 < o.length; i++) o[i + k * 3000] += b[i] * 0.6; }); return o; },
 };
 // 2026-11-05 user: effects were too loud -> all about 5 dB lower
 const SFXK = 0.4;   // 2026-11-05 user (2nd time): effects still too loud → 0.56 → 0.4
-const GAIN = { whoosh: 0.35 * SFXK, coin: 0.25 * SFXK, pop: 0.12 * SFXK, thump: 0.6 * SFXK, knock: 0.35 * SFXK, tick: 0.18 * SFXK, hoof: 0.22 * SFXK, chatter: 0.12 * SFXK, bite: 0.25 * SFXK, shimmer: 0.12 * SFXK };
+const GAIN = { whoosh: 0.35 * SFXK, coin: 0.25 * SFXK, pop: 0.12 * SFXK, thump: 0.6 * SFXK, knock: 0.35 * SFXK, tick: 0.18 * SFXK, hoof: 0.22 * SFXK, chatter: 0.12 * SFXK, bite: 0.25 * SFXK, shimmer: 0.12 * SFXK, boom: 0.9 * SFXK };
 for (const c of S.sfx || []) {
   const t0 = shotStart(c.shot) + (c.at || 0);
   const n = c.repeat || 1;

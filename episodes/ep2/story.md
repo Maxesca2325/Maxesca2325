@@ -1,7 +1,7 @@
 # Épisode 2 : Le prisonnier qui a survécu au volcan
 
 Langue : français (public France). Format : Story (script-writer), style Ricks Clips, pivot « Tu vois, ».
-Durée visée : 90–120 s. Voix : Kokoro n'a pas de voix française → voix française ai33 (clone FR, ElevenLabs multilingue ou Edge fr-FR) ou enregistrement de l'utilisateur. ~320 mots ≈ 100–118 s à un débit français normal (2,7–3,2 mots/s) : mesurer après génération et ajuster la vitesse.
+Durée : 98,7 s. Voix : ElevenLabs « Florian - The Narrator » via ai33.pro (`node scripts/voice_ai33.mjs ep2 elevenlabs_HvO2LE2Dr2f7xw0c4X9X 1.1`), 3,28 mots/s.
 
 ## Script
 

@@ -70,12 +70,25 @@ const lineText = (s) => (s.say ?? s.text).replace(/_/g, " ");
 const jobs = shots.map((s) => ({ s, file: path.join(work, `shot${s.id}.mp3`) }));
 let credits = 0;
 
-// submit lines, wait for the tasks, download the audio
-async function generate(todo) {
+// submit lines, wait for the tasks, download the audio (ai33 allows 10 tasks in the queue, so send 8 at a time)
+async function generate(all) {
+  for (let i = 0; i < all.length; i += 8) await generateBatch(all.slice(i, i + 8));
+}
+async function generateBatch(todo) {
   for (const j of todo) {
     j.done = false;
-    j.task = curl(["-X", "POST", `${API}/v3/text-to-speech`, "--form-string", `text=${lineText(j.s)}`, "--form-string", `voice_id=${voice}`,
-      "--form-string", `speed=${speed}`, "--form-string", "with_transcript=false"]).task_id;
+    for (let tries = 0; ; tries++) {
+      try {
+        j.task = curl(["-X", "POST", `${API}/v3/text-to-speech`, "--form-string", `text=${lineText(j.s)}`, "--form-string", `voice_id=${voice}`,
+          "--form-string", `speed=${speed}`, "--form-string", "with_transcript=false"]).task_id;
+        break;
+      } catch (e) {
+        // 429 = too many tasks in ai33's queue: wait for them to finish
+        if (!/too many tasks|429/i.test(String(e.stdout || "") + String(e.stderr || "") + e.message) || tries > 60) throw e;
+        if (tries === 0) console.log("ai33 queue is full, waiting...");
+        await sleep(10000);
+      }
+    }
     console.log(`shot ${j.s.id}: submitted`);
   }
   const t0 = Date.now();
