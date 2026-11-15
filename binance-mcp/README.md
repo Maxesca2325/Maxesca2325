@@ -52,7 +52,7 @@ Puis, sur le serveur :
 
 ```bash
 curl -fsSL https://get.docker.com | sh          # installe Docker
-git clone https://github.com/Maxesca2325/Maxesca2325.git
+git clone -b claude/affectionate-darwin-xpe7yx https://github.com/Maxesca2325/Maxesca2325.git
 cd Maxesca2325/binance-mcp
 mkdir -p data && chmod 777 data
 cp .env.example .env
