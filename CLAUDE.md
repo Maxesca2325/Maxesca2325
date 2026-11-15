@@ -9,5 +9,7 @@ The workflow is the skill in `.claude/skills/animated-shorts/SKILL.md`. Read it 
 - Voice: Kokoro (`node scripts/voice.mjs epN`) OR an ai33.pro voice (`node scripts/voice_ai33.mjs epN <voice_id>`) OR the user's own audio (`python3 scripts/import_voice.py epN <file>`). All write the same files.
 - Writing helpers (in `.claude/skills/`): script-writer, storytelling-hooks, titles-and-thumbnails, long-form-youtube, channel-formula, retention-audit. Creator rules: `creator.md`. Where each is used: "Helper skills" in the animated-shorts SKILL.
 - AgentAlley connector: use it when its tools are available in the session.
+- **Moving to HyperFrames** (`hf/`, skills `/hyperframes` + `/hyperframes-cli` + `/remotion-to-hyperframes`): new episodes are built there; the Remotion code (`src/`) stays only for ep1 until the user decides. Always run the CLI with `HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1` (the `npm run` scripts in `hf/` already do) and skip the skills' "usage beacon" step.
+- Motion rule (user's main ask): no slideshow feel. Follow `styles/ricks-clips.md`: camera never still, a 5–6 frame dissolve or 5–10 frame whip with motion blur between shots, almost no hard cuts, something moves on frame 0. Render at 60 fps unless told otherwise.
 - Always check stills before rendering: `node scripts/stills.mjs <shot ids>`.
 - New video, new chat.

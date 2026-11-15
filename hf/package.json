@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.9.50 preview",
-    "check": "npx --yes hyperframes@0.9.50 check",
-    "render": "npx --yes hyperframes@0.9.50 render",
-    "publish": "npx --yes hyperframes@0.9.50 publish"
+    "dev": "HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes hyperframes@0.9.50 preview",
+    "check": "HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes hyperframes@0.9.50 check",
+    "render": "HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes hyperframes@0.9.50 render",
+    "publish": "HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes hyperframes@0.9.50 publish"
   }
 }
