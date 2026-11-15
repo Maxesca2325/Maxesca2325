@@ -26,6 +26,10 @@ This file replaces `~/CLAUDE.md` for the script-writer skill (the cloud machine'
 2. **SFX everywhere, for a clean finish.** Every visible action has its sound (knock, footsteps, door creak, paper slide, cloth rustle, breath, phone buzz, switch click…), plus a room-tone/ambience bed, whooshes on fast camera moves, risers into reveals, stingers on scares. Voice always on top and clear.
 3. **Nothing moves by itself.** Every object moves because someone moves it, on screen: the character reaches, grabs, lifts the paper; a hand opens the door; a finger hits the switch. Only exception: the supernatural thing the story is about, and then it must read as scary on purpose. Before rendering, list every moving object and its cause.
 4. The user picks the voice (they are choosing a better one). Don't spend credits on a new voice without asking.
+5. The user wants **one prompt → finished video**: follow "ONE-PROMPT MODE" in the animated-shorts skill; don't stop between steps.
+
+## Voice
+- Chosen voice: _not chosen yet_ (the user is looking for one; "John" `elevenlabs_5DD3eZMBEVRcWAmpxded` was judged not good enough). Write the chosen voice_id here once given.
 
 ## Caption (post text)
 "⚠️PARTIE 2 DISPONIBLE⚠️" when a next part exists · title · 1–2 line hook · the question · #horreur #creepypasta #peur #nuit #pourtoi

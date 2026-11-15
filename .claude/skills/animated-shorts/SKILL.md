@@ -36,6 +36,19 @@ Write it all into `styles/<channel>.md` with the numbers. Every rule must be a n
 ### 3. "Turn this into a skill"
 Create `.claude/skills/<channel>-style/SKILL.md` that says: use the animated-shorts workflow, with the look in `styles/<channel>.md`, and lists the exact engine settings that produce it (the `Look` values: sun, hemi, fog, exposure, aperture, ink, warm/cool, saturation; caption size and position; voice speed; shot length). Test it by building one still of a sample shot and comparing it with a frame from the channel side by side. Fix the numbers until they match.
 
+## ONE-PROMPT MODE: "fais une vidéo" (do everything, ask nothing unless blocked)
+When the user asks for a video in one sentence ("Fais une vidéo", "nouvel épisode", "partie 2: les gens ont voté B"), run the whole chain yourself, in this order, then deliver the MP4. Stop to ask only for: a missing voice choice, spending ai33 credits for the first time in a session, or a real blocker.
+1. **Read** `creator.md`, `styles/protocole.md`, `episodes/*/choices.md` (series state).
+2. **Idea**: if none given, pick the best of 5 original premises (night, wrong detail, a rule, an A/B choice). For a "partie N", continue the series from the voted choice.
+3. **Script** with `script-writer` + creator.md rules → `episodes/<serie>-pN/story.md` + `shots.json` (one line per shot; `say` for numbers). 260–380 words, ends on the choice. Update `choices.md`.
+4. **Voice**: the user's chosen voice (ask once if unknown; remember it in creator.md "Voice"). `node scripts/voice_ai33.mjs <ep> <voice_id>` (or `import_voice.py` for their recording). Dead air is cut to 0.18 s automatically; check the printed words/s is 3.0–3.4, else re-run with `TEMPO=1.1`.
+5. **Plan the shots** from `timing.json`: for each shot, camera move, action, who moves what (**nothing moves by itself**: hands pick things up), and its SFX. Write it at the top of `story.md`.
+6. **Build in 3D** in `hf/` (copy the pattern of `hf/scene3d.js` + `hf/tools/gen_proto3d.py`: one continuous camera, transitions on cause, sub-frame motion blur on fast moves, captions from timing.json, clock bar, grain/vignette). Reuse/extend the props and the hero; keep one look across the series.
+7. **Sound**: SFX on every action + ambience + whooshes/risers/stingers (pattern: `hf/tools/sfx_proto.py`), voice on top.
+8. **Check**: `cd hf && npm run check` (fix every error), then snapshots of every shot and every seam; look at them and fix what's wrong (framing, faces hidden, objects moving alone, captions over faces, dark/unreadable frames).
+9. **Render**: `npm run render` (60 fps). Check the output with ffprobe (1080×1920, 60 fps, audio present) and a frame strip.
+10. **Deliver**: the MP4 path, the TikTok caption ("⚠️PARTIE 2 DISPONIBLE⚠️" when relevant + hook + question + hashtags), and the A/B question. Commit + push.
+
 ## Current niche (overrides steps 4–5 where they differ)
 Since 2026-11-15 the channel makes **French interactive horror "protocole" series** (fiction, 2nd person, the comments vote the next part), not true stories. Rules: `creator.md`; look and numbers: `styles/protocole.md`; engine: HyperFrames (`hf/`).
 - Step 4 ideas = original night-horror situations with a wrong detail + a rule + a two-way choice. Check TikTok that the same premise isn't already a hit (the reference account's stories are off-limits).
