@@ -1,3 +1,6 @@
 node_modules/
 out/
 public/*/ai33/
+hf/renders/
+hf/.hyperframes/
+hf/node_modules/
