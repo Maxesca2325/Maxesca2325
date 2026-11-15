@@ -1,0 +1,3 @@
+{$DOMAIN} {
+	reverse_proxy binance-mcp:8000
+}
