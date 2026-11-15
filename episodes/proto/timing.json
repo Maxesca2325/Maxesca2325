@@ -1,0 +1,184 @@
+{
+ "voice": "imported:narration.wav",
+ "speed": 1,
+ "total": 13.478,
+ "shots": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 1.58,
+   "words": [
+    {
+     "w": "2h41.",
+     "start": 0.0,
+     "end": 1.58
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "start": 1.58,
+   "end": 4.34,
+   "words": [
+    {
+     "w": "Quelqu'un",
+     "start": 1.58,
+     "end": 2.6
+    },
+    {
+     "w": "frappe",
+     "start": 2.6,
+     "end": 2.96
+    },
+    {
+     "w": "à",
+     "start": 2.96,
+     "end": 3.04
+    },
+    {
+     "w": "la",
+     "start": 3.04,
+     "end": 3.16
+    },
+    {
+     "w": "porte",
+     "start": 3.16,
+     "end": 3.42
+    },
+    {
+     "w": "de",
+     "start": 3.42,
+     "end": 3.68
+    },
+    {
+     "w": "ta",
+     "start": 3.68,
+     "end": 3.84
+    },
+    {
+     "w": "chambre.",
+     "start": 3.84,
+     "end": 4.34
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "start": 4.88,
+   "end": 6.06,
+   "words": [
+    {
+     "w": "Trois",
+     "start": 4.88,
+     "end": 5.22
+    },
+    {
+     "w": "petits",
+     "start": 5.22,
+     "end": 5.38
+    },
+    {
+     "w": "coups.",
+     "start": 5.38,
+     "end": 6.06
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "start": 6.24,
+   "end": 6.98,
+   "words": [
+    {
+     "w": "Tu",
+     "start": 6.24,
+     "end": 6.36
+    },
+    {
+     "w": "vis",
+     "start": 6.36,
+     "end": 6.58
+    },
+    {
+     "w": "seul.",
+     "start": 6.58,
+     "end": 6.98
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "start": 7.82,
+   "end": 10.24,
+   "words": [
+    {
+     "w": "Sous",
+     "start": 7.82,
+     "end": 8.18
+    },
+    {
+     "w": "la",
+     "start": 8.18,
+     "end": 8.32
+    },
+    {
+     "w": "porte,",
+     "start": 8.32,
+     "end": 9.22
+    },
+    {
+     "w": "une",
+     "start": 9.22,
+     "end": 9.34
+    },
+    {
+     "w": "feuille",
+     "start": 9.34,
+     "end": 9.7
+    },
+    {
+     "w": "glisse.",
+     "start": 9.7,
+     "end": 10.24
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "start": 10.82,
+   "end": 13.34,
+   "words": [
+    {
+     "w": "Règle",
+     "start": 10.82,
+     "end": 11.324
+    },
+    {
+     "w": "numéro",
+     "start": 11.324,
+     "end": 11.929
+    },
+    {
+     "w": "un,",
+     "start": 11.929,
+     "end": 12.13
+    },
+    {
+     "w": "ne",
+     "start": 12.13,
+     "end": 12.332
+    },
+    {
+     "w": "réponds",
+     "start": 12.332,
+     "end": 13.038
+    },
+    {
+     "w": "pas.",
+     "start": 13.038,
+     "end": 13.34
+    }
+   ]
+  }
+ ]
+}

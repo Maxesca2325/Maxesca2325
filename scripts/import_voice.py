@@ -77,7 +77,9 @@ else:
     shots_path.write_text(json.dumps(shots, indent=1, ensure_ascii=False))
     print(f"Created {shots_path} with {len(shots)} shots (one sentence each). Edit it to split/merge shots, then run this again.")
 
-script = [(si, w) for si, s in enumerate(shots) for w in s["text"].split()]
+# align on what is SPOKEN ("say", e.g. "deux heures quarante et une"); captions show what is WRITTEN ("text", e.g. "2h41.")
+spoken = lambda s: (s.get("say") or s["text"]).replace("_", " ")
+script = [(si, w) for si, s in enumerate(shots) for w in spoken(s).split()]
 
 # 4. match script words to heard words; words not matched get times in between their neighbours
 sm = difflib.SequenceMatcher(None, [norm(w) for _, w in script], [norm(h["w"]) for h in heard], autojunk=False)
@@ -122,6 +124,14 @@ for si, s in enumerate(shots):
         start = times[k][0]
         end = times[idx[n + 1]][0] if n + 1 < len(idx) else min(total, times[k][1])
         words.append({"w": script[k][1], "start": round(start, 3), "end": round(max(end, start + 0.06), 3)})
+    written = s["text"].split()
+    if spoken(s).split() != written:  # spread the written words over the spoken span, by length
+        a, b = words[0]["start"], words[-1]["end"]
+        lens = [max(1, len(norm(w))) for w in written]
+        t, words = a, []
+        for w, L in zip(written, lens):
+            d = (b - a) * L / sum(lens)
+            words.append({"w": w, "start": round(t, 3), "end": round(t + d, 3)}); t += d
     timing.append({"id": s["id"], "start": 0.0 if si == 0 else words[0]["start"], "end": words[-1]["end"], "words": words})
 
 (ep_dir / "timing.json").write_text(json.dumps({"voice": f"imported:{src.name}", "speed": 1, "total": round(total, 3), "shots": timing}, indent=1, ensure_ascii=False))

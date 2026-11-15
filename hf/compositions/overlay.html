@@ -1,20 +1,20 @@
 <template>
   <style>
     #root { position: absolute; inset: 0; overflow: hidden; }
-    #ov-bar { position:absolute; left:0; right:0; top:310px; display:flex; flex-direction:column; align-items:center; gap:6px; }
-    #ov-room { font-family:'Oswald'; font-weight:700; font-size:30px; letter-spacing:.35em; color:rgba(255,255,255,.7); }
-    #ov-time { font-family:'JetBrains Mono'; font-weight:700; font-size:64px; color:#fff; text-shadow:0 0 18px rgba(224,48,58,.55); display:flex; }
+    #ov-bar { position:absolute; left:0; right:0; top:225px; display:flex; flex-direction:column; align-items:center; gap:4px; }
+    #ov-room { font-family:'Oswald'; font-weight:700; font-size:28px; letter-spacing:.35em; color:rgba(255,255,255,.72); }
+    #ov-time { font-family:'JetBrains Mono'; font-weight:700; font-size:60px; color:#fff; text-shadow:0 0 18px rgba(224,48,58,.55); display:flex; }
     .ov-sec { position:absolute; opacity:0; }
-    #ov-secs { position:relative; width:78px; }
-    #ov-vig { position:absolute; inset:0; background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(6,4,16,.78) 100%); }
-    #ov-grain { position:absolute; inset:-40px; opacity:.13; mix-blend-mode:overlay; }
+    #ov-secs { position:relative; width:74px; }
+    #ov-vig { position:absolute; inset:0; background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 50%, rgba(6,4,16,.7) 100%); }
+    #ov-grain { position:absolute; inset:-40px; opacity:.10; mix-blend-mode:overlay; }
   </style>
   <div id="root" data-composition-id="overlay" data-width="1080" data-height="1920">
     <svg id="ov-grain" viewBox="0 0 1160 2000" data-layout-ignore><filter id="ov-noise"><feTurbulence id="ov-turb" type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="1"/></filter><rect width="100%" height="100%" filter="url(#ov-noise)"/></svg>
     <div id="ov-vig" data-layout-ignore></div>
     <div id="ov-bar">
       <div id="ov-room">CHAMBRE</div>
-      <div id="ov-time">02:41:<span id="ov-secs">
+      <div id="ov-time">02:41:<span id="ov-secs" data-layout-allow-overlap>
       <span id="ov-s7" class="ov-sec">07</span>
       <span id="ov-s8" class="ov-sec">08</span>
       <span id="ov-s9" class="ov-sec">09</span>
@@ -233,7 +233,7 @@
     tl.set("#ov-turb", { attr: { seed: 82 } }, 14.8333); tl.set("#ov-grain", { x: 6, y: 14 }, 14.8333);
     tl.set("#ov-turb", { attr: { seed: 83 } }, 14.9167); tl.set("#ov-grain", { x: 3, y: -13 }, 14.9167);
     tl.fromTo("#ov-bar", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.0);
-    tl.to("#ov-bar", { opacity: 0, duration: 0.15 }, 14.4);
+    tl.to("#ov-bar", { opacity: 0, duration: 0.15 }, 14.0);
 
     window.__timelines["overlay"] = tl;
   </script>

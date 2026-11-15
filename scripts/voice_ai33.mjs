@@ -3,7 +3,7 @@
 //   public/<ep>/voice.wav  +  episodes/<ep>/timing.json   (word times by scripts/import_voice.py, free, local)
 //
 // Usage:
-//   node scripts/voice_ai33.mjs <ep> <voice_id> [speed]        e.g. node scripts/voice_ai33.mjs ep2 elevenlabs_nPczCjzI2devNBz1zQrb 1.05
+//   [GAP=0.45] node scripts/voice_ai33.mjs <ep> <voice_id> [speed]   e.g. node scripts/voice_ai33.mjs ep2 elevenlabs_nPczCjzI2devNBz1zQrb 1.05
 //   node scripts/voice_ai33.mjs --voices <provider> [search]   provider: elevenlabs | minimax | fishaudio | clone | edge | kokoro | vbee
 //   node scripts/voice_ai33.mjs --clone <sample.mp3> "<name>"  creates a cloned voice, prints its voice_id (clone_...)
 //   node scripts/voice_ai33.mjs --delete-clone <id>
@@ -17,7 +17,7 @@ import path from "node:path";
 
 const API = "https://api.ai33.pro";
 const KEY = process.env.AI33_API_KEY || "proxy-injected";
-const GAP = 0.06; // seconds between lines, same as voice.mjs
+const GAP = Number(process.env.GAP || 0.06); // seconds between lines (voice.mjs uses 0.06; horror: GAP=0.45)
 const SR = 24000;
 
 const curl = (args) => {
