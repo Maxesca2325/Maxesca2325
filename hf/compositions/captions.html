@@ -1,0 +1,45 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    .cap { position:absolute; left:150px; right:150px; top:1020px; text-align:center; opacity:0; visibility:hidden;
+      font-family:'Oswald'; font-weight:700; font-size:104px; letter-spacing:.01em; color:#fff;
+      -webkit-text-stroke: 10px #1A1426; paint-order: stroke fill; text-shadow: 0 8px 22px rgba(0,0,0,.6); }
+    .cap.red { color:#E0303A; }
+  </style>
+  <div id="root" data-composition-id="captions" data-width="1080" data-height="1920">
+    <div id="cap-0" class="cap">2H41.</div>
+    <div id="cap-1" class="cap">QUELQU'UN</div>
+    <div id="cap-2" class="cap red">FRAPPE</div>
+    <div id="cap-3" class="cap">À LA PORTE</div>
+    <div id="cap-4" class="cap">DE TA CHAMBRE.</div>
+    <div id="cap-5" class="cap">TROIS</div>
+    <div id="cap-6" class="cap">PETITS</div>
+    <div id="cap-7" class="cap">COUPS.</div>
+    <div id="cap-8" class="cap">TU</div>
+    <div id="cap-9" class="cap">VIS</div>
+    <div id="cap-10" class="cap red">SEUL.</div>
+    <div id="cap-11" class="cap">SOUS</div>
+    <div id="cap-12" class="cap">LA PORTE,</div>
+    <div id="cap-13" class="cap">UNE</div>
+    <div id="cap-14" class="cap">FEUILLE.</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.set("#cap-0", { visibility: "visible" }, 0.15); tl.fromTo("#cap-0", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 0.15); tl.to("#cap-0", { opacity: 0, duration: 0.06, ease: "power2.in" }, 0.890); tl.set("#cap-0", { opacity: 0, visibility: "hidden" }, 0.95);
+    tl.set("#cap-1", { visibility: "visible" }, 1.05); tl.fromTo("#cap-1", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 1.05); tl.to("#cap-1", { opacity: 0, duration: 0.06, ease: "power2.in" }, 1.440); tl.set("#cap-1", { opacity: 0, visibility: "hidden" }, 1.5);
+    tl.set("#cap-2", { visibility: "visible" }, 1.5); tl.fromTo("#cap-2", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 1.5); tl.to("#cap-2", { opacity: 0, duration: 0.06, ease: "power2.in" }, 1.890); tl.set("#cap-2", { opacity: 0, visibility: "hidden" }, 1.95);
+    tl.set("#cap-3", { visibility: "visible" }, 1.95); tl.fromTo("#cap-3", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 1.95); tl.to("#cap-3", { opacity: 0, duration: 0.06, ease: "power2.in" }, 2.490); tl.set("#cap-3", { opacity: 0, visibility: "hidden" }, 2.55);
+    tl.set("#cap-4", { visibility: "visible" }, 2.55); tl.fromTo("#cap-4", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 2.55); tl.to("#cap-4", { opacity: 0, duration: 0.06, ease: "power2.in" }, 3.340); tl.set("#cap-4", { opacity: 0, visibility: "hidden" }, 3.4);
+    tl.set("#cap-5", { visibility: "visible" }, 5.75); tl.fromTo("#cap-5", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 5.75); tl.to("#cap-5", { opacity: 0, duration: 0.06, ease: "power2.in" }, 6.090); tl.set("#cap-5", { opacity: 0, visibility: "hidden" }, 6.15);
+    tl.set("#cap-6", { visibility: "visible" }, 6.15); tl.fromTo("#cap-6", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 6.15); tl.to("#cap-6", { opacity: 0, duration: 0.06, ease: "power2.in" }, 6.490); tl.set("#cap-6", { opacity: 0, visibility: "hidden" }, 6.55);
+    tl.set("#cap-7", { visibility: "visible" }, 6.55); tl.fromTo("#cap-7", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 6.55); tl.to("#cap-7", { opacity: 0, duration: 0.06, ease: "power2.in" }, 7.240); tl.set("#cap-7", { opacity: 0, visibility: "hidden" }, 7.3);
+    tl.set("#cap-8", { visibility: "visible" }, 7.6); tl.fromTo("#cap-8", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 7.6); tl.to("#cap-8", { opacity: 0, duration: 0.06, ease: "power2.in" }, 7.840); tl.set("#cap-8", { opacity: 0, visibility: "hidden" }, 7.9);
+    tl.set("#cap-9", { visibility: "visible" }, 7.9); tl.fromTo("#cap-9", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 7.9); tl.to("#cap-9", { opacity: 0, duration: 0.06, ease: "power2.in" }, 8.140); tl.set("#cap-9", { opacity: 0, visibility: "hidden" }, 8.2);
+    tl.set("#cap-10", { visibility: "visible" }, 8.2); tl.fromTo("#cap-10", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 8.2); tl.to("#cap-10", { opacity: 0, duration: 0.06, ease: "power2.in" }, 9.140); tl.set("#cap-10", { opacity: 0, visibility: "hidden" }, 9.2);
+    tl.set("#cap-11", { visibility: "visible" }, 10.3); tl.fromTo("#cap-11", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 10.3); tl.to("#cap-11", { opacity: 0, duration: 0.06, ease: "power2.in" }, 10.540); tl.set("#cap-11", { opacity: 0, visibility: "hidden" }, 10.6);
+    tl.set("#cap-12", { visibility: "visible" }, 10.6); tl.fromTo("#cap-12", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 10.6); tl.to("#cap-12", { opacity: 0, duration: 0.06, ease: "power2.in" }, 10.940); tl.set("#cap-12", { opacity: 0, visibility: "hidden" }, 11.0);
+    tl.set("#cap-13", { visibility: "visible" }, 11.0); tl.fromTo("#cap-13", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 11.0); tl.to("#cap-13", { opacity: 0, duration: 0.06, ease: "power2.in" }, 11.240); tl.set("#cap-13", { opacity: 0, visibility: "hidden" }, 11.3);
+    tl.set("#cap-14", { visibility: "visible" }, 11.3); tl.fromTo("#cap-14", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.09, ease: "power3.out" }, 11.3); tl.to("#cap-14", { opacity: 0, duration: 0.06, ease: "power2.in" }, 11.940); tl.set("#cap-14", { opacity: 0, visibility: "hidden" }, 12.0);
+    window.__timelines["captions"] = tl;
+  </script>
+</template>

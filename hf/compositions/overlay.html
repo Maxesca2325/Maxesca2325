@@ -1,0 +1,240 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #ov-bar { position:absolute; left:0; right:0; top:310px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+    #ov-room { font-family:'Oswald'; font-weight:700; font-size:30px; letter-spacing:.35em; color:rgba(255,255,255,.7); }
+    #ov-time { font-family:'JetBrains Mono'; font-weight:700; font-size:64px; color:#fff; text-shadow:0 0 18px rgba(224,48,58,.55); display:flex; }
+    .ov-sec { position:absolute; opacity:0; }
+    #ov-secs { position:relative; width:78px; }
+    #ov-vig { position:absolute; inset:0; background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(6,4,16,.78) 100%); }
+    #ov-grain { position:absolute; inset:-40px; opacity:.13; mix-blend-mode:overlay; }
+  </style>
+  <div id="root" data-composition-id="overlay" data-width="1080" data-height="1920">
+    <svg id="ov-grain" viewBox="0 0 1160 2000" data-layout-ignore><filter id="ov-noise"><feTurbulence id="ov-turb" type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="1"/></filter><rect width="100%" height="100%" filter="url(#ov-noise)"/></svg>
+    <div id="ov-vig" data-layout-ignore></div>
+    <div id="ov-bar">
+      <div id="ov-room">CHAMBRE</div>
+      <div id="ov-time">02:41:<span id="ov-secs">
+      <span id="ov-s7" class="ov-sec">07</span>
+      <span id="ov-s8" class="ov-sec">08</span>
+      <span id="ov-s9" class="ov-sec">09</span>
+      <span id="ov-s10" class="ov-sec">10</span>
+      <span id="ov-s11" class="ov-sec">11</span>
+      <span id="ov-s12" class="ov-sec">12</span>
+      <span id="ov-s13" class="ov-sec">13</span>
+      <span id="ov-s14" class="ov-sec">14</span>
+      <span id="ov-s15" class="ov-sec">15</span>
+      <span id="ov-s16" class="ov-sec">16</span>
+      <span id="ov-s17" class="ov-sec">17</span>
+      <span id="ov-s18" class="ov-sec">18</span>
+      <span id="ov-s19" class="ov-sec">19</span>
+      <span id="ov-s20" class="ov-sec">20</span>
+      <span id="ov-s21" class="ov-sec">21</span>
+      <span id="ov-s22" class="ov-sec">22</span>
+      </span></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.set("#ov-s7", { opacity: 1 }, 0); tl.set("#ov-s7", { opacity: 0 }, 1);
+    tl.set("#ov-s8", { opacity: 1 }, 1); tl.set("#ov-s8", { opacity: 0 }, 2);
+    tl.set("#ov-s9", { opacity: 1 }, 2); tl.set("#ov-s9", { opacity: 0 }, 3);
+    tl.set("#ov-s10", { opacity: 1 }, 3); tl.set("#ov-s10", { opacity: 0 }, 4);
+    tl.set("#ov-s11", { opacity: 1 }, 4); tl.set("#ov-s11", { opacity: 0 }, 5);
+    tl.set("#ov-s12", { opacity: 1 }, 5); tl.set("#ov-s12", { opacity: 0 }, 6);
+    tl.set("#ov-s13", { opacity: 1 }, 6); tl.set("#ov-s13", { opacity: 0 }, 7);
+    tl.set("#ov-s14", { opacity: 1 }, 7); tl.set("#ov-s14", { opacity: 0 }, 8);
+    tl.set("#ov-s15", { opacity: 1 }, 8); tl.set("#ov-s15", { opacity: 0 }, 9);
+    tl.set("#ov-s16", { opacity: 1 }, 9); tl.set("#ov-s16", { opacity: 0 }, 10);
+    tl.set("#ov-s17", { opacity: 1 }, 10); tl.set("#ov-s17", { opacity: 0 }, 11);
+    tl.set("#ov-s18", { opacity: 1 }, 11); tl.set("#ov-s18", { opacity: 0 }, 12);
+    tl.set("#ov-s19", { opacity: 1 }, 12); tl.set("#ov-s19", { opacity: 0 }, 13);
+    tl.set("#ov-s20", { opacity: 1 }, 13); tl.set("#ov-s20", { opacity: 0 }, 14);
+    tl.set("#ov-s21", { opacity: 1 }, 14); tl.set("#ov-s21", { opacity: 0 }, 15);
+    tl.set("#ov-s22", { opacity: 1 }, 15); tl.set("#ov-s22", { opacity: 0 }, 16);
+    tl.set("#ov-turb", { attr: { seed: 1 } }, 0.0000); tl.set("#ov-grain", { x: -20, y: -20 }, 0.0000);
+    tl.set("#ov-turb", { attr: { seed: 2 } }, 0.0833); tl.set("#ov-grain", { x: 17, y: -7 }, 0.0833);
+    tl.set("#ov-turb", { attr: { seed: 3 } }, 0.1667); tl.set("#ov-grain", { x: 14, y: 6 }, 0.1667);
+    tl.set("#ov-turb", { attr: { seed: 4 } }, 0.2500); tl.set("#ov-grain", { x: 11, y: 19 }, 0.2500);
+    tl.set("#ov-turb", { attr: { seed: 5 } }, 0.3333); tl.set("#ov-grain", { x: 8, y: -8 }, 0.3333);
+    tl.set("#ov-turb", { attr: { seed: 6 } }, 0.4167); tl.set("#ov-grain", { x: 5, y: 5 }, 0.4167);
+    tl.set("#ov-turb", { attr: { seed: 7 } }, 0.5000); tl.set("#ov-grain", { x: 2, y: 18 }, 0.5000);
+    tl.set("#ov-turb", { attr: { seed: 8 } }, 0.5833); tl.set("#ov-grain", { x: -1, y: -9 }, 0.5833);
+    tl.set("#ov-turb", { attr: { seed: 9 } }, 0.6667); tl.set("#ov-grain", { x: -4, y: 4 }, 0.6667);
+    tl.set("#ov-turb", { attr: { seed: 10 } }, 0.7500); tl.set("#ov-grain", { x: -7, y: 17 }, 0.7500);
+    tl.set("#ov-turb", { attr: { seed: 11 } }, 0.8333); tl.set("#ov-grain", { x: -10, y: -10 }, 0.8333);
+    tl.set("#ov-turb", { attr: { seed: 12 } }, 0.9167); tl.set("#ov-grain", { x: -13, y: 3 }, 0.9167);
+    tl.set("#ov-turb", { attr: { seed: 13 } }, 1.0000); tl.set("#ov-grain", { x: -16, y: 16 }, 1.0000);
+    tl.set("#ov-turb", { attr: { seed: 14 } }, 1.0833); tl.set("#ov-grain", { x: -19, y: -11 }, 1.0833);
+    tl.set("#ov-turb", { attr: { seed: 15 } }, 1.1667); tl.set("#ov-grain", { x: 18, y: 2 }, 1.1667);
+    tl.set("#ov-turb", { attr: { seed: 16 } }, 1.2500); tl.set("#ov-grain", { x: 15, y: 15 }, 1.2500);
+    tl.set("#ov-turb", { attr: { seed: 17 } }, 1.3333); tl.set("#ov-grain", { x: 12, y: -12 }, 1.3333);
+    tl.set("#ov-turb", { attr: { seed: 18 } }, 1.4167); tl.set("#ov-grain", { x: 9, y: 1 }, 1.4167);
+    tl.set("#ov-turb", { attr: { seed: 19 } }, 1.5000); tl.set("#ov-grain", { x: 6, y: 14 }, 1.5000);
+    tl.set("#ov-turb", { attr: { seed: 20 } }, 1.5833); tl.set("#ov-grain", { x: 3, y: -13 }, 1.5833);
+    tl.set("#ov-turb", { attr: { seed: 21 } }, 1.6667); tl.set("#ov-grain", { x: 0, y: 0 }, 1.6667);
+    tl.set("#ov-turb", { attr: { seed: 22 } }, 1.7500); tl.set("#ov-grain", { x: -3, y: 13 }, 1.7500);
+    tl.set("#ov-turb", { attr: { seed: 23 } }, 1.8333); tl.set("#ov-grain", { x: -6, y: -14 }, 1.8333);
+    tl.set("#ov-turb", { attr: { seed: 24 } }, 1.9167); tl.set("#ov-grain", { x: -9, y: -1 }, 1.9167);
+    tl.set("#ov-turb", { attr: { seed: 25 } }, 2.0000); tl.set("#ov-grain", { x: -12, y: 12 }, 2.0000);
+    tl.set("#ov-turb", { attr: { seed: 26 } }, 2.0833); tl.set("#ov-grain", { x: -15, y: -15 }, 2.0833);
+    tl.set("#ov-turb", { attr: { seed: 27 } }, 2.1667); tl.set("#ov-grain", { x: -18, y: -2 }, 2.1667);
+    tl.set("#ov-turb", { attr: { seed: 28 } }, 2.2500); tl.set("#ov-grain", { x: 19, y: 11 }, 2.2500);
+    tl.set("#ov-turb", { attr: { seed: 29 } }, 2.3333); tl.set("#ov-grain", { x: 16, y: -16 }, 2.3333);
+    tl.set("#ov-turb", { attr: { seed: 30 } }, 2.4167); tl.set("#ov-grain", { x: 13, y: -3 }, 2.4167);
+    tl.set("#ov-turb", { attr: { seed: 31 } }, 2.5000); tl.set("#ov-grain", { x: 10, y: 10 }, 2.5000);
+    tl.set("#ov-turb", { attr: { seed: 32 } }, 2.5833); tl.set("#ov-grain", { x: 7, y: -17 }, 2.5833);
+    tl.set("#ov-turb", { attr: { seed: 33 } }, 2.6667); tl.set("#ov-grain", { x: 4, y: -4 }, 2.6667);
+    tl.set("#ov-turb", { attr: { seed: 34 } }, 2.7500); tl.set("#ov-grain", { x: 1, y: 9 }, 2.7500);
+    tl.set("#ov-turb", { attr: { seed: 35 } }, 2.8333); tl.set("#ov-grain", { x: -2, y: -18 }, 2.8333);
+    tl.set("#ov-turb", { attr: { seed: 36 } }, 2.9167); tl.set("#ov-grain", { x: -5, y: -5 }, 2.9167);
+    tl.set("#ov-turb", { attr: { seed: 37 } }, 3.0000); tl.set("#ov-grain", { x: -8, y: 8 }, 3.0000);
+    tl.set("#ov-turb", { attr: { seed: 38 } }, 3.0833); tl.set("#ov-grain", { x: -11, y: -19 }, 3.0833);
+    tl.set("#ov-turb", { attr: { seed: 39 } }, 3.1667); tl.set("#ov-grain", { x: -14, y: -6 }, 3.1667);
+    tl.set("#ov-turb", { attr: { seed: 40 } }, 3.2500); tl.set("#ov-grain", { x: -17, y: 7 }, 3.2500);
+    tl.set("#ov-turb", { attr: { seed: 41 } }, 3.3333); tl.set("#ov-grain", { x: -20, y: -20 }, 3.3333);
+    tl.set("#ov-turb", { attr: { seed: 42 } }, 3.4167); tl.set("#ov-grain", { x: 17, y: -7 }, 3.4167);
+    tl.set("#ov-turb", { attr: { seed: 43 } }, 3.5000); tl.set("#ov-grain", { x: 14, y: 6 }, 3.5000);
+    tl.set("#ov-turb", { attr: { seed: 44 } }, 3.5833); tl.set("#ov-grain", { x: 11, y: 19 }, 3.5833);
+    tl.set("#ov-turb", { attr: { seed: 45 } }, 3.6667); tl.set("#ov-grain", { x: 8, y: -8 }, 3.6667);
+    tl.set("#ov-turb", { attr: { seed: 46 } }, 3.7500); tl.set("#ov-grain", { x: 5, y: 5 }, 3.7500);
+    tl.set("#ov-turb", { attr: { seed: 47 } }, 3.8333); tl.set("#ov-grain", { x: 2, y: 18 }, 3.8333);
+    tl.set("#ov-turb", { attr: { seed: 48 } }, 3.9167); tl.set("#ov-grain", { x: -1, y: -9 }, 3.9167);
+    tl.set("#ov-turb", { attr: { seed: 49 } }, 4.0000); tl.set("#ov-grain", { x: -4, y: 4 }, 4.0000);
+    tl.set("#ov-turb", { attr: { seed: 50 } }, 4.0833); tl.set("#ov-grain", { x: -7, y: 17 }, 4.0833);
+    tl.set("#ov-turb", { attr: { seed: 51 } }, 4.1667); tl.set("#ov-grain", { x: -10, y: -10 }, 4.1667);
+    tl.set("#ov-turb", { attr: { seed: 52 } }, 4.2500); tl.set("#ov-grain", { x: -13, y: 3 }, 4.2500);
+    tl.set("#ov-turb", { attr: { seed: 53 } }, 4.3333); tl.set("#ov-grain", { x: -16, y: 16 }, 4.3333);
+    tl.set("#ov-turb", { attr: { seed: 54 } }, 4.4167); tl.set("#ov-grain", { x: -19, y: -11 }, 4.4167);
+    tl.set("#ov-turb", { attr: { seed: 55 } }, 4.5000); tl.set("#ov-grain", { x: 18, y: 2 }, 4.5000);
+    tl.set("#ov-turb", { attr: { seed: 56 } }, 4.5833); tl.set("#ov-grain", { x: 15, y: 15 }, 4.5833);
+    tl.set("#ov-turb", { attr: { seed: 57 } }, 4.6667); tl.set("#ov-grain", { x: 12, y: -12 }, 4.6667);
+    tl.set("#ov-turb", { attr: { seed: 58 } }, 4.7500); tl.set("#ov-grain", { x: 9, y: 1 }, 4.7500);
+    tl.set("#ov-turb", { attr: { seed: 59 } }, 4.8333); tl.set("#ov-grain", { x: 6, y: 14 }, 4.8333);
+    tl.set("#ov-turb", { attr: { seed: 60 } }, 4.9167); tl.set("#ov-grain", { x: 3, y: -13 }, 4.9167);
+    tl.set("#ov-turb", { attr: { seed: 61 } }, 5.0000); tl.set("#ov-grain", { x: 0, y: 0 }, 5.0000);
+    tl.set("#ov-turb", { attr: { seed: 62 } }, 5.0833); tl.set("#ov-grain", { x: -3, y: 13 }, 5.0833);
+    tl.set("#ov-turb", { attr: { seed: 63 } }, 5.1667); tl.set("#ov-grain", { x: -6, y: -14 }, 5.1667);
+    tl.set("#ov-turb", { attr: { seed: 64 } }, 5.2500); tl.set("#ov-grain", { x: -9, y: -1 }, 5.2500);
+    tl.set("#ov-turb", { attr: { seed: 65 } }, 5.3333); tl.set("#ov-grain", { x: -12, y: 12 }, 5.3333);
+    tl.set("#ov-turb", { attr: { seed: 66 } }, 5.4167); tl.set("#ov-grain", { x: -15, y: -15 }, 5.4167);
+    tl.set("#ov-turb", { attr: { seed: 67 } }, 5.5000); tl.set("#ov-grain", { x: -18, y: -2 }, 5.5000);
+    tl.set("#ov-turb", { attr: { seed: 68 } }, 5.5833); tl.set("#ov-grain", { x: 19, y: 11 }, 5.5833);
+    tl.set("#ov-turb", { attr: { seed: 69 } }, 5.6667); tl.set("#ov-grain", { x: 16, y: -16 }, 5.6667);
+    tl.set("#ov-turb", { attr: { seed: 70 } }, 5.7500); tl.set("#ov-grain", { x: 13, y: -3 }, 5.7500);
+    tl.set("#ov-turb", { attr: { seed: 71 } }, 5.8333); tl.set("#ov-grain", { x: 10, y: 10 }, 5.8333);
+    tl.set("#ov-turb", { attr: { seed: 72 } }, 5.9167); tl.set("#ov-grain", { x: 7, y: -17 }, 5.9167);
+    tl.set("#ov-turb", { attr: { seed: 73 } }, 6.0000); tl.set("#ov-grain", { x: 4, y: -4 }, 6.0000);
+    tl.set("#ov-turb", { attr: { seed: 74 } }, 6.0833); tl.set("#ov-grain", { x: 1, y: 9 }, 6.0833);
+    tl.set("#ov-turb", { attr: { seed: 75 } }, 6.1667); tl.set("#ov-grain", { x: -2, y: -18 }, 6.1667);
+    tl.set("#ov-turb", { attr: { seed: 76 } }, 6.2500); tl.set("#ov-grain", { x: -5, y: -5 }, 6.2500);
+    tl.set("#ov-turb", { attr: { seed: 77 } }, 6.3333); tl.set("#ov-grain", { x: -8, y: 8 }, 6.3333);
+    tl.set("#ov-turb", { attr: { seed: 78 } }, 6.4167); tl.set("#ov-grain", { x: -11, y: -19 }, 6.4167);
+    tl.set("#ov-turb", { attr: { seed: 79 } }, 6.5000); tl.set("#ov-grain", { x: -14, y: -6 }, 6.5000);
+    tl.set("#ov-turb", { attr: { seed: 80 } }, 6.5833); tl.set("#ov-grain", { x: -17, y: 7 }, 6.5833);
+    tl.set("#ov-turb", { attr: { seed: 81 } }, 6.6667); tl.set("#ov-grain", { x: -20, y: -20 }, 6.6667);
+    tl.set("#ov-turb", { attr: { seed: 82 } }, 6.7500); tl.set("#ov-grain", { x: 17, y: -7 }, 6.7500);
+    tl.set("#ov-turb", { attr: { seed: 83 } }, 6.8333); tl.set("#ov-grain", { x: 14, y: 6 }, 6.8333);
+    tl.set("#ov-turb", { attr: { seed: 84 } }, 6.9167); tl.set("#ov-grain", { x: 11, y: 19 }, 6.9167);
+    tl.set("#ov-turb", { attr: { seed: 85 } }, 7.0000); tl.set("#ov-grain", { x: 8, y: -8 }, 7.0000);
+    tl.set("#ov-turb", { attr: { seed: 86 } }, 7.0833); tl.set("#ov-grain", { x: 5, y: 5 }, 7.0833);
+    tl.set("#ov-turb", { attr: { seed: 87 } }, 7.1667); tl.set("#ov-grain", { x: 2, y: 18 }, 7.1667);
+    tl.set("#ov-turb", { attr: { seed: 88 } }, 7.2500); tl.set("#ov-grain", { x: -1, y: -9 }, 7.2500);
+    tl.set("#ov-turb", { attr: { seed: 89 } }, 7.3333); tl.set("#ov-grain", { x: -4, y: 4 }, 7.3333);
+    tl.set("#ov-turb", { attr: { seed: 90 } }, 7.4167); tl.set("#ov-grain", { x: -7, y: 17 }, 7.4167);
+    tl.set("#ov-turb", { attr: { seed: 91 } }, 7.5000); tl.set("#ov-grain", { x: -10, y: -10 }, 7.5000);
+    tl.set("#ov-turb", { attr: { seed: 92 } }, 7.5833); tl.set("#ov-grain", { x: -13, y: 3 }, 7.5833);
+    tl.set("#ov-turb", { attr: { seed: 93 } }, 7.6667); tl.set("#ov-grain", { x: -16, y: 16 }, 7.6667);
+    tl.set("#ov-turb", { attr: { seed: 94 } }, 7.7500); tl.set("#ov-grain", { x: -19, y: -11 }, 7.7500);
+    tl.set("#ov-turb", { attr: { seed: 95 } }, 7.8333); tl.set("#ov-grain", { x: 18, y: 2 }, 7.8333);
+    tl.set("#ov-turb", { attr: { seed: 96 } }, 7.9167); tl.set("#ov-grain", { x: 15, y: 15 }, 7.9167);
+    tl.set("#ov-turb", { attr: { seed: 97 } }, 8.0000); tl.set("#ov-grain", { x: 12, y: -12 }, 8.0000);
+    tl.set("#ov-turb", { attr: { seed: 1 } }, 8.0833); tl.set("#ov-grain", { x: 9, y: 1 }, 8.0833);
+    tl.set("#ov-turb", { attr: { seed: 2 } }, 8.1667); tl.set("#ov-grain", { x: 6, y: 14 }, 8.1667);
+    tl.set("#ov-turb", { attr: { seed: 3 } }, 8.2500); tl.set("#ov-grain", { x: 3, y: -13 }, 8.2500);
+    tl.set("#ov-turb", { attr: { seed: 4 } }, 8.3333); tl.set("#ov-grain", { x: 0, y: 0 }, 8.3333);
+    tl.set("#ov-turb", { attr: { seed: 5 } }, 8.4167); tl.set("#ov-grain", { x: -3, y: 13 }, 8.4167);
+    tl.set("#ov-turb", { attr: { seed: 6 } }, 8.5000); tl.set("#ov-grain", { x: -6, y: -14 }, 8.5000);
+    tl.set("#ov-turb", { attr: { seed: 7 } }, 8.5833); tl.set("#ov-grain", { x: -9, y: -1 }, 8.5833);
+    tl.set("#ov-turb", { attr: { seed: 8 } }, 8.6667); tl.set("#ov-grain", { x: -12, y: 12 }, 8.6667);
+    tl.set("#ov-turb", { attr: { seed: 9 } }, 8.7500); tl.set("#ov-grain", { x: -15, y: -15 }, 8.7500);
+    tl.set("#ov-turb", { attr: { seed: 10 } }, 8.8333); tl.set("#ov-grain", { x: -18, y: -2 }, 8.8333);
+    tl.set("#ov-turb", { attr: { seed: 11 } }, 8.9167); tl.set("#ov-grain", { x: 19, y: 11 }, 8.9167);
+    tl.set("#ov-turb", { attr: { seed: 12 } }, 9.0000); tl.set("#ov-grain", { x: 16, y: -16 }, 9.0000);
+    tl.set("#ov-turb", { attr: { seed: 13 } }, 9.0833); tl.set("#ov-grain", { x: 13, y: -3 }, 9.0833);
+    tl.set("#ov-turb", { attr: { seed: 14 } }, 9.1667); tl.set("#ov-grain", { x: 10, y: 10 }, 9.1667);
+    tl.set("#ov-turb", { attr: { seed: 15 } }, 9.2500); tl.set("#ov-grain", { x: 7, y: -17 }, 9.2500);
+    tl.set("#ov-turb", { attr: { seed: 16 } }, 9.3333); tl.set("#ov-grain", { x: 4, y: -4 }, 9.3333);
+    tl.set("#ov-turb", { attr: { seed: 17 } }, 9.4167); tl.set("#ov-grain", { x: 1, y: 9 }, 9.4167);
+    tl.set("#ov-turb", { attr: { seed: 18 } }, 9.5000); tl.set("#ov-grain", { x: -2, y: -18 }, 9.5000);
+    tl.set("#ov-turb", { attr: { seed: 19 } }, 9.5833); tl.set("#ov-grain", { x: -5, y: -5 }, 9.5833);
+    tl.set("#ov-turb", { attr: { seed: 20 } }, 9.6667); tl.set("#ov-grain", { x: -8, y: 8 }, 9.6667);
+    tl.set("#ov-turb", { attr: { seed: 21 } }, 9.7500); tl.set("#ov-grain", { x: -11, y: -19 }, 9.7500);
+    tl.set("#ov-turb", { attr: { seed: 22 } }, 9.8333); tl.set("#ov-grain", { x: -14, y: -6 }, 9.8333);
+    tl.set("#ov-turb", { attr: { seed: 23 } }, 9.9167); tl.set("#ov-grain", { x: -17, y: 7 }, 9.9167);
+    tl.set("#ov-turb", { attr: { seed: 24 } }, 10.0000); tl.set("#ov-grain", { x: -20, y: -20 }, 10.0000);
+    tl.set("#ov-turb", { attr: { seed: 25 } }, 10.0833); tl.set("#ov-grain", { x: 17, y: -7 }, 10.0833);
+    tl.set("#ov-turb", { attr: { seed: 26 } }, 10.1667); tl.set("#ov-grain", { x: 14, y: 6 }, 10.1667);
+    tl.set("#ov-turb", { attr: { seed: 27 } }, 10.2500); tl.set("#ov-grain", { x: 11, y: 19 }, 10.2500);
+    tl.set("#ov-turb", { attr: { seed: 28 } }, 10.3333); tl.set("#ov-grain", { x: 8, y: -8 }, 10.3333);
+    tl.set("#ov-turb", { attr: { seed: 29 } }, 10.4167); tl.set("#ov-grain", { x: 5, y: 5 }, 10.4167);
+    tl.set("#ov-turb", { attr: { seed: 30 } }, 10.5000); tl.set("#ov-grain", { x: 2, y: 18 }, 10.5000);
+    tl.set("#ov-turb", { attr: { seed: 31 } }, 10.5833); tl.set("#ov-grain", { x: -1, y: -9 }, 10.5833);
+    tl.set("#ov-turb", { attr: { seed: 32 } }, 10.6667); tl.set("#ov-grain", { x: -4, y: 4 }, 10.6667);
+    tl.set("#ov-turb", { attr: { seed: 33 } }, 10.7500); tl.set("#ov-grain", { x: -7, y: 17 }, 10.7500);
+    tl.set("#ov-turb", { attr: { seed: 34 } }, 10.8333); tl.set("#ov-grain", { x: -10, y: -10 }, 10.8333);
+    tl.set("#ov-turb", { attr: { seed: 35 } }, 10.9167); tl.set("#ov-grain", { x: -13, y: 3 }, 10.9167);
+    tl.set("#ov-turb", { attr: { seed: 36 } }, 11.0000); tl.set("#ov-grain", { x: -16, y: 16 }, 11.0000);
+    tl.set("#ov-turb", { attr: { seed: 37 } }, 11.0833); tl.set("#ov-grain", { x: -19, y: -11 }, 11.0833);
+    tl.set("#ov-turb", { attr: { seed: 38 } }, 11.1667); tl.set("#ov-grain", { x: 18, y: 2 }, 11.1667);
+    tl.set("#ov-turb", { attr: { seed: 39 } }, 11.2500); tl.set("#ov-grain", { x: 15, y: 15 }, 11.2500);
+    tl.set("#ov-turb", { attr: { seed: 40 } }, 11.3333); tl.set("#ov-grain", { x: 12, y: -12 }, 11.3333);
+    tl.set("#ov-turb", { attr: { seed: 41 } }, 11.4167); tl.set("#ov-grain", { x: 9, y: 1 }, 11.4167);
+    tl.set("#ov-turb", { attr: { seed: 42 } }, 11.5000); tl.set("#ov-grain", { x: 6, y: 14 }, 11.5000);
+    tl.set("#ov-turb", { attr: { seed: 43 } }, 11.5833); tl.set("#ov-grain", { x: 3, y: -13 }, 11.5833);
+    tl.set("#ov-turb", { attr: { seed: 44 } }, 11.6667); tl.set("#ov-grain", { x: 0, y: 0 }, 11.6667);
+    tl.set("#ov-turb", { attr: { seed: 45 } }, 11.7500); tl.set("#ov-grain", { x: -3, y: 13 }, 11.7500);
+    tl.set("#ov-turb", { attr: { seed: 46 } }, 11.8333); tl.set("#ov-grain", { x: -6, y: -14 }, 11.8333);
+    tl.set("#ov-turb", { attr: { seed: 47 } }, 11.9167); tl.set("#ov-grain", { x: -9, y: -1 }, 11.9167);
+    tl.set("#ov-turb", { attr: { seed: 48 } }, 12.0000); tl.set("#ov-grain", { x: -12, y: 12 }, 12.0000);
+    tl.set("#ov-turb", { attr: { seed: 49 } }, 12.0833); tl.set("#ov-grain", { x: -15, y: -15 }, 12.0833);
+    tl.set("#ov-turb", { attr: { seed: 50 } }, 12.1667); tl.set("#ov-grain", { x: -18, y: -2 }, 12.1667);
+    tl.set("#ov-turb", { attr: { seed: 51 } }, 12.2500); tl.set("#ov-grain", { x: 19, y: 11 }, 12.2500);
+    tl.set("#ov-turb", { attr: { seed: 52 } }, 12.3333); tl.set("#ov-grain", { x: 16, y: -16 }, 12.3333);
+    tl.set("#ov-turb", { attr: { seed: 53 } }, 12.4167); tl.set("#ov-grain", { x: 13, y: -3 }, 12.4167);
+    tl.set("#ov-turb", { attr: { seed: 54 } }, 12.5000); tl.set("#ov-grain", { x: 10, y: 10 }, 12.5000);
+    tl.set("#ov-turb", { attr: { seed: 55 } }, 12.5833); tl.set("#ov-grain", { x: 7, y: -17 }, 12.5833);
+    tl.set("#ov-turb", { attr: { seed: 56 } }, 12.6667); tl.set("#ov-grain", { x: 4, y: -4 }, 12.6667);
+    tl.set("#ov-turb", { attr: { seed: 57 } }, 12.7500); tl.set("#ov-grain", { x: 1, y: 9 }, 12.7500);
+    tl.set("#ov-turb", { attr: { seed: 58 } }, 12.8333); tl.set("#ov-grain", { x: -2, y: -18 }, 12.8333);
+    tl.set("#ov-turb", { attr: { seed: 59 } }, 12.9167); tl.set("#ov-grain", { x: -5, y: -5 }, 12.9167);
+    tl.set("#ov-turb", { attr: { seed: 60 } }, 13.0000); tl.set("#ov-grain", { x: -8, y: 8 }, 13.0000);
+    tl.set("#ov-turb", { attr: { seed: 61 } }, 13.0833); tl.set("#ov-grain", { x: -11, y: -19 }, 13.0833);
+    tl.set("#ov-turb", { attr: { seed: 62 } }, 13.1667); tl.set("#ov-grain", { x: -14, y: -6 }, 13.1667);
+    tl.set("#ov-turb", { attr: { seed: 63 } }, 13.2500); tl.set("#ov-grain", { x: -17, y: 7 }, 13.2500);
+    tl.set("#ov-turb", { attr: { seed: 64 } }, 13.3333); tl.set("#ov-grain", { x: -20, y: -20 }, 13.3333);
+    tl.set("#ov-turb", { attr: { seed: 65 } }, 13.4167); tl.set("#ov-grain", { x: 17, y: -7 }, 13.4167);
+    tl.set("#ov-turb", { attr: { seed: 66 } }, 13.5000); tl.set("#ov-grain", { x: 14, y: 6 }, 13.5000);
+    tl.set("#ov-turb", { attr: { seed: 67 } }, 13.5833); tl.set("#ov-grain", { x: 11, y: 19 }, 13.5833);
+    tl.set("#ov-turb", { attr: { seed: 68 } }, 13.6667); tl.set("#ov-grain", { x: 8, y: -8 }, 13.6667);
+    tl.set("#ov-turb", { attr: { seed: 69 } }, 13.7500); tl.set("#ov-grain", { x: 5, y: 5 }, 13.7500);
+    tl.set("#ov-turb", { attr: { seed: 70 } }, 13.8333); tl.set("#ov-grain", { x: 2, y: 18 }, 13.8333);
+    tl.set("#ov-turb", { attr: { seed: 71 } }, 13.9167); tl.set("#ov-grain", { x: -1, y: -9 }, 13.9167);
+    tl.set("#ov-turb", { attr: { seed: 72 } }, 14.0000); tl.set("#ov-grain", { x: -4, y: 4 }, 14.0000);
+    tl.set("#ov-turb", { attr: { seed: 73 } }, 14.0833); tl.set("#ov-grain", { x: -7, y: 17 }, 14.0833);
+    tl.set("#ov-turb", { attr: { seed: 74 } }, 14.1667); tl.set("#ov-grain", { x: -10, y: -10 }, 14.1667);
+    tl.set("#ov-turb", { attr: { seed: 75 } }, 14.2500); tl.set("#ov-grain", { x: -13, y: 3 }, 14.2500);
+    tl.set("#ov-turb", { attr: { seed: 76 } }, 14.3333); tl.set("#ov-grain", { x: -16, y: 16 }, 14.3333);
+    tl.set("#ov-turb", { attr: { seed: 77 } }, 14.4167); tl.set("#ov-grain", { x: -19, y: -11 }, 14.4167);
+    tl.set("#ov-turb", { attr: { seed: 78 } }, 14.5000); tl.set("#ov-grain", { x: 18, y: 2 }, 14.5000);
+    tl.set("#ov-turb", { attr: { seed: 79 } }, 14.5833); tl.set("#ov-grain", { x: 15, y: 15 }, 14.5833);
+    tl.set("#ov-turb", { attr: { seed: 80 } }, 14.6667); tl.set("#ov-grain", { x: 12, y: -12 }, 14.6667);
+    tl.set("#ov-turb", { attr: { seed: 81 } }, 14.7500); tl.set("#ov-grain", { x: 9, y: 1 }, 14.7500);
+    tl.set("#ov-turb", { attr: { seed: 82 } }, 14.8333); tl.set("#ov-grain", { x: 6, y: 14 }, 14.8333);
+    tl.set("#ov-turb", { attr: { seed: 83 } }, 14.9167); tl.set("#ov-grain", { x: 3, y: -13 }, 14.9167);
+    tl.fromTo("#ov-bar", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.0);
+    tl.to("#ov-bar", { opacity: 0, duration: 0.15 }, 14.4);
+
+    window.__timelines["overlay"] = tl;
+  </script>
+</template>
