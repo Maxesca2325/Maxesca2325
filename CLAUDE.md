@@ -16,3 +16,5 @@ The workflow is the skill in `.claude/skills/animated-shorts/SKILL.md`. Read it 
 - 3D: real three.js worlds inside HyperFrames (`hf/scene3d.js` = example: one continuous camera, sub-frame motion blur on fast moves). The user renders on their own PC with a GPU (see `PC-SETUP.md`); in the cloud container 15 s of 3D takes ~26 min.
 - Always check stills before rendering: `node scripts/stills.mjs <shot ids>`.
 - New video, new chat.
+
+- **Second project: `tyolika/`** (TikTok @tyolika, Creole digital-skills Shorts, user's own voice, no music). Its rules are in `tyolika/CLAUDE.md` and `styles/tyolika.md`; Creole text always goes through the `kreyol-writer` skill. The horror rules above (niche, 3D, ai33 voice) do not apply there; the motion, no-dead-air and SFX rules do.

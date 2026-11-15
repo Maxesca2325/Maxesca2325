@@ -1,0 +1,11 @@
+{
+  "name": "tyolika",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/hf.mjs preview",
+    "check": "node tools/hf.mjs check",
+    "render": "node tools/hf.mjs render --fps 60 --quality delivery",
+    "snapshot": "node tools/hf.mjs snapshot"
+  }
+}

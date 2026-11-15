@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="ht" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:1080px; height:1920px; overflow:hidden; background:#121212; }
+#bg { position:absolute; inset:0; background:
+   radial-gradient(ellipse 70% 55% at 50% 38%, rgba(57,255,20,.07), rgba(0,0,0,0) 70%),
+   linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px) 0 0/60px 60px,
+   linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0/60px 60px, #121212; }
+#vig { position:absolute; inset:0; background:radial-gradient(ellipse 85% 70% at 50% 45%, rgba(0,0,0,0) 55%, rgba(7,7,7,.92) 100%); pointer-events:none; }
+#grain { position:absolute; inset:-40px; opacity:.07; mix-blend-mode:overlay; }
+#cam { position:absolute; inset:0; transform-origin:50% 36%; }
+.sc { position:absolute; inset:0; opacity:0; }
+.ico { width:44px; height:44px; flex:none; }
+/* flyer */
+#fly { left:270px; top:250px; }
+.fly { position:absolute; width:540px; height:760px; border-radius:28px; overflow:hidden; box-shadow:0 40px 110px rgba(0,0,0,.65), 0 0 0 2px rgba(255,255,255,.06); }
+.fly .art { position:absolute; inset:0; width:100%; height:100%; }
+.fly-txt { position:absolute; inset:0; padding:70px 40px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+.f1 { font-family:'Montserrat'; font-weight:900; font-size:92px; line-height:.92; color:#fff; letter-spacing:-.02em; text-shadow:0 6px 30px rgba(0,0,0,.55); }
+.f2 { margin-top:26px; font-family:'Inter'; font-weight:700; font-size:26px; color:#39FF14; letter-spacing:.06em; }
+.f3 { margin-top:10px; font-family:'Inter'; font-weight:700; font-size:24px; color:#fff; letter-spacing:.2em; }
+.f4 { position:absolute; left:0; right:0; bottom:56px; font-family:'Playfair Display'; font-style:italic; font-weight:700; font-size:44px; color:#fff; }
+.fly.low .f1, .fly.low .f3, .fly.low .f4 { color:#8d7a9a; text-shadow:none; } .fly.low .f2 { color:#a0789a; }
+.fly.low .art { filter:saturate(.35) brightness(1.25); }
+/* phone */
+#pwrap { position:absolute; left:0; top:0; width:1080px; height:1920px; transform:scale(.86); transform-origin:540px 305px; }
+#phone { position:absolute; left:280px; top:305px; width:520px; height:880px; border-radius:66px; background:#050505; box-shadow:0 0 0 3px #2c2c2c, 0 0 0 12px #141414, 0 50px 140px rgba(0,0,0,.75); opacity:0; }
+#screen { position:absolute; inset:14px; border-radius:54px; overflow:hidden; background:#171717; }
+.notch { position:absolute; top:16px; left:50%; width:120px; margin-left:-60px; height:30px; border-radius:16px; background:#050505; z-index:9; }
+.pane { position:absolute; inset:0; opacity:0; }
+/* chat */
+.bar { position:absolute; left:0; right:0; top:0; height:118px; padding:62px 30px 0; font-family:'Inter'; font-weight:700; font-size:26px; color:#fff; border-bottom:1px solid #2a2a2a; display:flex; gap:12px; align-items:center; }
+.dot { width:14px; height:14px; border-radius:7px; background:#39FF14; }
+#inp { position:absolute; left:20px; right:20px; bottom:26px; min-height:120px; border-radius:30px; background:#262626; padding:22px 96px 22px 24px; font-family:'Inter'; font-weight:400; font-size:23px; line-height:1.35; color:#eee; }
+.ch { opacity:0; }
+#send { position:absolute; right:34px; bottom:44px; width:64px; height:64px; border-radius:32px; background:#39FF14; }
+#send:after { content:''; position:absolute; left:22px; top:18px; border:12px solid transparent; border-left:20px solid #0b0b0b; transform:rotate(-90deg); transform-origin:10px 14px; }
+#umsg { position:absolute; right:22px; top:150px; width:380px; border-radius:26px 26px 6px 26px; background:#2f2f2f; padding:18px 22px; font-family:'Inter'; font-size:21px; line-height:1.35; color:#ddd; opacity:0; }
+#bot { position:absolute; left:22px; top:330px; width:430px; display:flex; flex-direction:column; gap:16px; }
+.bl { display:flex; align-items:center; gap:14px; font-family:'Inter'; font-weight:700; font-size:25px; color:#fff; opacity:0; }
+.bl .ico { width:34px; height:34px; }
+/* step number */
+.step { position:absolute; left:0; right:0; top:560px; text-align:center; font-family:'Montserrat'; font-weight:900; font-size:330px; line-height:1; color:#39FF14; text-shadow:0 0 60px rgba(57,255,20,.45); opacity:0; }
+.steplab { position:absolute; left:0; right:0; top:500px; text-align:center; font-family:'Inter'; font-weight:700; font-size:40px; letter-spacing:.5em; color:#fff; opacity:0; }
+.pill { position:absolute; left:0; right:0; margin:0 auto; width:380px; text-align:center; top:236px; padding:10px 0; border-radius:40px; border:2px solid #39FF14; font-family:'Inter'; font-weight:700; font-size:26px; letter-spacing:.18em; color:#39FF14; background:rgba(18,18,18,.85); opacity:0; }
+/* chips */
+.chip { position:absolute; padding:16px 26px; border-radius:22px; background:rgba(28,28,28,.92); border:2px solid #333; font-family:'Montserrat'; font-weight:900; font-size:34px; color:#fff; opacity:0; display:flex; gap:12px; align-items:center; }
+.chip b { color:#39FF14; }
+/* image generation */
+#gen { position:absolute; left:150px; top:300px; width:720px; height:720px; border-radius:36px; background:#1b1b1b; border:2px solid #2d2d2d; overflow:hidden; }
+#gen .head { position:absolute; left:28px; right:28px; top:24px; font-family:'Inter'; font-weight:700; font-size:24px; color:#9A9A9A; display:flex; justify-content:space-between; }
+#genq { position:absolute; left:28px; right:28px; top:70px; padding:14px 20px; border-radius:18px; background:#262626; font-family:'Inter'; font-size:23px; color:#eee; }
+#genart { position:absolute; left:28px; right:28px; top:150px; height:480px; border-radius:22px; overflow:hidden; background:#222; }
+#genart .art { position:absolute; inset:0; width:100%; height:100%; }
+#genbar { position:absolute; left:28px; right:28px; bottom:34px; height:12px; border-radius:6px; background:#2b2b2b; overflow:hidden; }
+#genfill { position:absolute; left:0; top:0; bottom:0; width:100%; background:#39FF14; transform-origin:0 50%; }
+.badge { position:absolute; left:-20px; right:-20px; padding:12px 0; white-space:nowrap; display:flex; gap:10px; justify-content:center; align-items:center; font-family:'Inter'; font-weight:700; font-size:22px; letter-spacing:.06em; color:#fff; }
+.badge .ico { width:34px; height:34px; }
+.squig { position:absolute; height:10px; background:repeating-linear-gradient(135deg, #FF3B3B 0 6px, transparent 6px 12px); opacity:0; }
+#stamp { position:absolute; left:0; right:0; top:880px; text-align:center; font-family:'Montserrat'; font-weight:900; font-size:120px; color:#FF3B3B; -webkit-text-stroke:8px #121212; paint-order:stroke fill; letter-spacing:.04em; opacity:0; }
+/* editor */
+#edbar { position:absolute; left:0; right:0; top:0; height:118px; padding:62px 30px 0; font-family:'Inter'; font-weight:700; font-size:26px; color:#fff; display:flex; justify-content:space-between; background:linear-gradient(90deg,#1d1640,#13263a); }
+#edbar i { font-style:normal; color:#39FF14; }
+#canvas { position:absolute; left:56px; top:160px; width:380px; height:535px; border:3px dashed #444; border-radius:8px; overflow:hidden; background:#202020; }
+#cart { position:absolute; inset:0; opacity:0; } #cart .art { width:100%; height:100%; }
+.ct { position:absolute; left:0; right:0; text-align:center; color:#fff; opacity:0; }
+#ct1 { top:46px; font-family:'Montserrat'; font-weight:900; font-size:62px; line-height:.92; letter-spacing:-.02em; text-shadow:0 4px 18px rgba(0,0,0,.6); }
+#ct2 { top:200px; font-family:'Inter'; font-weight:700; font-size:18px; color:#39FF14; letter-spacing:.06em; }
+#ct3 { top:232px; font-family:'Inter'; font-weight:700; font-size:17px; letter-spacing:.2em; }
+#tray { position:absolute; left:20px; right:20px; bottom:24px; height:130px; border-radius:24px; background:#232323; }
+#thumb { position:absolute; left:36px; bottom:40px; width:70px; height:98px; border-radius:10px; overflow:hidden; }
+#thumb .art { width:100%; height:100%; }
+#tbtn { position:absolute; left:130px; bottom:46px; width:86px; height:86px; border-radius:20px; background:#333; font-family:'Playfair Display'; font-weight:700; font-size:50px; color:#fff; text-align:center; line-height:86px; }
+#dl { position:absolute; right:40px; bottom:52px; padding:18px 28px; border-radius:20px; background:#39FF14; font-family:'Inter'; font-weight:700; font-size:24px; color:#0b0b0b; opacity:0; }
+#drag { position:absolute; left:36px; top:714px; width:70px; height:98px; border-radius:10px; overflow:hidden; opacity:0; transform-origin:0 0; }
+#drag .art { width:100%; height:100%; }
+/* fonts */
+.fc { position:absolute; left:555px; width:330px; padding:22px 26px; border-radius:24px; background:#1c1c1c; border:2px solid #333; display:flex; justify-content:space-between; align-items:center; opacity:0; }
+.fc .nm { color:#fff; } .fc small { display:block; margin-top:6px; font-family:'Inter'; font-weight:700; font-size:20px; letter-spacing:.14em; color:#9A9A9A; }
+/* contrast */
+#cmpL, #cmpR { position:absolute; top:380px; width:360px; height:507px; }
+#cmpL { left:130px; } #cmpR { left:530px; }
+#cmpL .fly, #cmpR .fly { transform:scale(.6667); transform-origin:0 0; }
+.cmpb { position:absolute; left:0; right:0; top:-74px; }
+/* end */
+#counter { position:absolute; left:0; right:0; top:500px; text-align:center; font-family:'Montserrat'; font-weight:900; color:#fff; }
+#cA, #cB { font-size:140px; line-height:1.02; opacity:0; } #cB { color:#39FF14; text-shadow:0 0 50px rgba(57,255,20,.4); }
+#file { position:absolute; left:330px; top:960px; padding:16px 24px; border-radius:18px; background:#232323; border:2px solid #39FF14; font-family:'JetBrains Mono'; font-weight:700; font-size:24px; color:#fff; opacity:0; }
+#save { position:absolute; left:760px; top:560px; width:130px; height:130px; border-radius:65px; background:#1d1d1d; border:2px solid #333; opacity:0; }
+#save svg { position:absolute; left:33px; top:30px; width:64px; height:72px; }
+#handle { position:absolute; left:0; right:0; top:930px; text-align:center; font-family:'Montserrat'; font-weight:900; font-size:56px; color:#fff; opacity:0; }
+#handle span { color:#39FF14; }
+#p2 { position:absolute; left:50%; top:1000px; margin-left:-150px; width:300px; text-align:center; padding:14px 0; border-radius:40px; background:#39FF14; font-family:'Montserrat'; font-weight:900; font-size:34px; color:#0b0b0b; opacity:0; }
+/* finger */
+.finger { position:absolute; left:0; top:0; width:84px; height:84px; margin:-42px 0 0 -42px; border-radius:42px; background:rgba(255,255,255,.88); box-shadow:0 10px 30px rgba(0,0,0,.5); opacity:0; z-index:50; }
+.finger .ring { position:absolute; inset:-14px; border-radius:60px; border:4px solid #39FF14; opacity:0; }
+#flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; }
+#cap { position:absolute; inset:0; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="50.4" data-width="1080" data-height="1920" data-fps="60">
+ <div id="bg"></div>
+ <div id="cam" data-layout-allow-overlap>
+
+  <!-- 1-2 hook: the result first -->
+  <div id="sc1" class="sc" style="z-index:5">
+   <div id="fly" class="fly" data-layout-allow-overlap><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="fly-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="fly-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#fly-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#fly-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg>
+      <div class="fly-txt" data-layout-ignore><div class="f1">BÈL<br>FÈT<br>LAKAY</div><div class="f2">SAMDI 20 DESANM · 8È DISWA</div><div class="f3">PÉTION-VILLE</div><div class="f4">VIN DANSE AK NOU!</div></div></div>
+   <div id="tag" style="position:absolute;left:600px;top:640px;width:250px;padding:18px 0;border-radius:20px;background:#FF3B3B;text-align:center;font-family:'Montserrat';font-weight:900;font-size:54px;color:#fff;box-shadow:0 18px 50px rgba(0,0,0,.5)">PRI: $$$</div>
+  </div>
+
+  <!-- phone (shots 2-4, 8-11) -->
+  <div id="pwrap" data-layout-allow-overlap><div id="phone"><div id="screen"><div class="notch"></div>
+    <div id="pChat" class="pane">
+      <div class="bar"><div class="dot"></div>ChatGPT</div>
+      <div id="umsg">Flyer pou: BÈL FÈT LAKAY, samdi 20 desanm, Pétion-Ville. Ban m 3 liy kout.</div>
+      <div id="bot">
+        <div class="bl" id="bl1"><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#39FF14"/><path d="M6.5 12.5l3.6 3.6 7.4-8" stroke="#0b0b0b" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>BÈL FÈT LAKAY</div>
+        <div class="bl" id="bl2"><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#39FF14"/><path d="M6.5 12.5l3.6 3.6 7.4-8" stroke="#0b0b0b" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Samdi 20 desanm · 8è diswa</div>
+        <div class="bl" id="bl3"><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#39FF14"/><path d="M6.5 12.5l3.6 3.6 7.4-8" stroke="#0b0b0b" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Vin danse ak nou!</div>
+      </div>
+      <div id="inp"><span class="ch" id="pc0">F</span><span class="ch" id="pc1">l</span><span class="ch" id="pc2">y</span><span class="ch" id="pc3">e</span><span class="ch" id="pc4">r</span><span class="ch" id="pc5">&nbsp;</span><span class="ch" id="pc6">p</span><span class="ch" id="pc7">o</span><span class="ch" id="pc8">u</span><span class="ch" id="pc9">:</span><span class="ch" id="pc10">&nbsp;</span><span class="ch" id="pc11">B</span><span class="ch" id="pc12">È</span><span class="ch" id="pc13">L</span><span class="ch" id="pc14">&nbsp;</span><span class="ch" id="pc15">F</span><span class="ch" id="pc16">È</span><span class="ch" id="pc17">T</span><span class="ch" id="pc18">&nbsp;</span><span class="ch" id="pc19">L</span><span class="ch" id="pc20">A</span><span class="ch" id="pc21">K</span><span class="ch" id="pc22">A</span><span class="ch" id="pc23">Y</span><span class="ch" id="pc24">,</span><span class="ch" id="pc25">&nbsp;</span><span class="ch" id="pc26">s</span><span class="ch" id="pc27">a</span><span class="ch" id="pc28">m</span><span class="ch" id="pc29">d</span><span class="ch" id="pc30">i</span><span class="ch" id="pc31">&nbsp;</span><span class="ch" id="pc32">2</span><span class="ch" id="pc33">0</span><span class="ch" id="pc34">&nbsp;</span><span class="ch" id="pc35">d</span><span class="ch" id="pc36">e</span><span class="ch" id="pc37">s</span><span class="ch" id="pc38">a</span><span class="ch" id="pc39">n</span><span class="ch" id="pc40">m</span><span class="ch" id="pc41">,</span><span class="ch" id="pc42">&nbsp;</span><span class="ch" id="pc43">P</span><span class="ch" id="pc44">é</span><span class="ch" id="pc45">t</span><span class="ch" id="pc46">i</span><span class="ch" id="pc47">o</span><span class="ch" id="pc48">n</span><span class="ch" id="pc49">-</span><span class="ch" id="pc50">V</span><span class="ch" id="pc51">i</span><span class="ch" id="pc52">l</span><span class="ch" id="pc53">l</span><span class="ch" id="pc54">e</span><span class="ch" id="pc55">.</span><span class="ch" id="pc56">&nbsp;</span><span class="ch" id="pc57">B</span><span class="ch" id="pc58">a</span><span class="ch" id="pc59">n</span><span class="ch" id="pc60">&nbsp;</span><span class="ch" id="pc61">m</span><span class="ch" id="pc62">&nbsp;</span><span class="ch" id="pc63">3</span><span class="ch" id="pc64">&nbsp;</span><span class="ch" id="pc65">l</span><span class="ch" id="pc66">i</span><span class="ch" id="pc67">y</span><span class="ch" id="pc68">&nbsp;</span><span class="ch" id="pc69">k</span><span class="ch" id="pc70">o</span><span class="ch" id="pc71">u</span><span class="ch" id="pc72">t</span><span class="ch" id="pc73">.</span></div><div id="send"></div>
+    </div>
+    <div id="pEd" class="pane">
+      <div id="edbar"><span>Canva</span><i>Flyer</i></div>
+      <div id="canvas"><div id="cart"><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="cart-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="cart-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#cart-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#cart-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg></div>
+        <div class="ct" id="ct1">BÈL FÈT<br>LAKAY</div><div class="ct" id="ct2">SAMDI 20 DESANM · 8È DISWA</div><div class="ct" id="ct3">PÉTION-VILLE</div></div>
+      <div id="tray"></div><div id="thumb"><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="thumb-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="thumb-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#thumb-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#thumb-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg></div><div id="tbtn">T</div><div id="dl">Telechaje · PNG</div>
+      <div id="drag"><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="drag-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="drag-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#drag-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#drag-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg></div>
+    </div>
+  </div></div></div>
+
+  <div class="chip" id="chIA" style="left:140px;top:400px"><b>IA</b></div>
+  <div class="chip" id="chMin" style="left:670px;top:520px">3 <b>MIN</b></div>
+  <div class="chip" id="chTel" style="left:130px;top:760px;font-size:28px">TELEFÒN</div>
+
+  <div class="steplab" id="lab1">ETAP</div><div class="step" id="n1">01</div>
+  <div class="steplab" id="lab2">ETAP</div><div class="step" id="n2">02</div>
+  <div class="steplab" id="lab3">ETAP</div><div class="step" id="n3">03</div>
+  <div class="pill" id="pill1">ETAP 1 · TÈKS</div>
+  <div class="pill" id="pill2">ETAP 2 · IMAJ</div>
+  <div class="pill" id="pill3">ETAP 3 · CANVA</div>
+
+  <!-- 5 image generation -->
+  <div id="sc5" class="sc">
+   <div id="gen"><div class="head"><span>IA · Imaj</span><span id="pct">100%</span></div>
+     <div id="genq">Background fèt, nwit, palmis, neon vèt</div>
+     <div id="genart"><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="gen-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="gen-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#gen-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#gen-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg></div><div id="genbar"><div id="genfill"></div></div></div>
+  </div>
+
+  <!-- 6-7 background only vs full flyer -->
+  <div id="sc6" class="sc">
+   <div id="cardA" style="position:absolute;left:130px;top:380px;width:360px;height:507px">
+     <div class="badge" style="top:-74px;color:#39FF14"><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#39FF14"/><path d="M6.5 12.5l3.6 3.6 7.4-8" stroke="#0b0b0b" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>BACKGROUND SÈLMAN</div>
+     <div style="position:absolute;inset:0;border-radius:24px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)"><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="ca-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="ca-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#ca-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#ca-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg></div>
+     <div id="ringA" style="position:absolute;inset:-10px;border-radius:32px;border:5px solid #39FF14;opacity:0"></div></div>
+   <div id="cardB" style="position:absolute;left:530px;top:380px;width:360px;height:507px;transform-origin:50% 40%">
+     <div class="badge" style="top:-74px;color:#FF3B3B"><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#FF3B3B"/><path d="M7.5 7.5l9 9M16.5 7.5l-9 9" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/></svg>FLYER KONPLÈ</div>
+     <div style="position:absolute;left:0;top:0;width:540px;height:760px;transform:scale(.6667);transform-origin:0 0"><div id="flyB" class="fly" data-layout-allow-overlap><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="flyB-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="flyB-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#flyB-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#flyB-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg>
+      <div class="fly-txt" data-layout-ignore><div class="f1">BÈL FÈTT LAKYA</div><div class="f2">SAMDDI 2O DSANM · 8È DSWA</div><div class="f3">PÉTOIN-VLIE</div><div class="f4">VIN DASNE AK NUO!</div></div></div></div>
+     <div class="squig" id="sq1" style="left:30px;top:96px;width:300px"></div>
+     <div class="squig" id="sq2" style="left:30px;top:206px;width:300px"></div>
+     <div class="squig" id="sq3" style="left:70px;top:482px;width:220px"></div></div>
+   <div id="stamp">FOT!</div>
+  </div>
+
+  <!-- 9 fonts -->
+  <div class="fc" id="fc1" style="top:300px"><div class="nm" style="font-family:'Montserrat';font-weight:900;font-size:44px">Aa Gwo<small>TIT</small></div><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#39FF14"/><path d="M6.5 12.5l3.6 3.6 7.4-8" stroke="#0b0b0b" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="fc" id="fc2" style="top:460px"><div class="nm" style="font-family:'Inter';font-weight:400;font-size:40px">Aa Senp<small>RÈS LA</small></div><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#39FF14"/><path d="M6.5 12.5l3.6 3.6 7.4-8" stroke="#0b0b0b" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="fc" id="fc3" style="top:620px"><div class="nm" style="font-family:'Playfair Display';font-style:italic;font-size:40px">Aa Fancy<small>3YÈM FONT</small></div><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#FF3B3B"/><path d="M7.5 7.5l9 9M16.5 7.5l-9 9" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/></svg></div>
+
+  <!-- 10 contrast -->
+  <div id="sc10" class="sc">
+   <div id="cmpL"><div class="badge cmpb" style="color:#FF3B3B"><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#FF3B3B"/><path d="M7.5 7.5l9 9M16.5 7.5l-9 9" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/></svg>KONTRAS FÈB</div><div id="flyL" class="fly low" data-layout-allow-overlap><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="flyL-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="flyL-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#flyL-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#flyL-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg>
+      <div class="fly-txt" data-layout-ignore><div class="f1">BÈL<br>FÈT<br>LAKAY</div><div class="f2">SAMDI 20 DESANM · 8È DISWA</div><div class="f3">PÉTION-VILLE</div><div class="f4">VIN DANSE AK NOU!</div></div></div></div>
+   <div id="cmpR"><div class="badge cmpb" style="color:#39FF14"><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="11" fill="#39FF14"/><path d="M6.5 12.5l3.6 3.6 7.4-8" stroke="#0b0b0b" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>KONTRAS FÒ</div><div id="flyR" class="fly" data-layout-allow-overlap><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="flyR-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="flyR-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#flyR-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#flyR-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg>
+      <div class="fly-txt" data-layout-ignore><div class="f1">BÈL<br>FÈT<br>LAKAY</div><div class="f2">SAMDI 20 DESANM · 8È DISWA</div><div class="f3">PÉTION-VILLE</div><div class="f4">VIN DANSE AK NOU!</div></div></div></div>
+  </div>
+
+  <!-- 11-12 end -->
+  <div id="file">bel-fet-lakay.png</div>
+  <div id="counter"><div id="cA">3 MINIT</div><div id="cB">0 GOUD</div></div>
+  <div id="sc12" class="sc">
+   <div style="position:absolute;left:315px;top:290px;width:450px;height:633px"><div style="position:absolute;left:0;top:0;width:540px;height:760px;transform:scale(.8333);transform-origin:0 0"><div id="flyE" class="fly" data-layout-allow-overlap><svg class="art" viewBox="0 0 540 760" preserveAspectRatio="xMidYMid slice" data-layout-ignore>
+      <defs><linearGradient id="flyE-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b24"/><stop offset=".45" stop-color="#3b1460"/><stop offset=".72" stop-color="#c2366a"/><stop offset="1" stop-color="#ff9a4a"/></linearGradient>
+      <radialGradient id="flyE-sun"><stop offset="0" stop-color="#ffd86b"/><stop offset=".6" stop-color="#ff7a45"/><stop offset="1" stop-color="#ff7a45" stop-opacity="0"/></radialGradient></defs>
+      <rect width="540" height="760" fill="url(#flyE-sky)"/><circle cx="70" cy="120" r="26" fill="#39FF14" opacity="0.25"/><circle cx="430" cy="90" r="18" fill="#ff6ad5" opacity="0.35"/><circle cx="360" cy="210" r="34" fill="#ffd36a" opacity="0.18"/><circle cx="120" cy="300" r="14" fill="#ff6ad5" opacity="0.4"/><circle cx="480" cy="330" r="22" fill="#39FF14" opacity="0.22"/><circle cx="250" cy="60" r="12" fill="#ffffff" opacity="0.5"/>
+      <circle cx="270" cy="560" r="170" fill="url(#flyE-sun)"/>
+      <rect y="600" width="540" height="160" fill="#0b0716"/>
+      <path d="M0 600 Q270 585 540 600" stroke="#39FF14" stroke-width="4" fill="none" opacity=".9"/>
+      <g transform="translate(70,560) scale(1.1,1.1)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(470,560) scale(-1.25,1.25)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g><g transform="translate(400,560) scale(0.8,0.8)" fill="#08060f"><path d="M-6 0 Q4 -120 -2 -230 L8 -230 Q14 -120 6 0 Z"/><path d="M2 -230 Q-70 -270 -130 -220 Q-70 -250 2 -222 Z"/><path d="M2 -230 Q70 -280 140 -230 Q70 -255 2 -222 Z"/><path d="M2 -232 Q-40 -300 -100 -300 Q-40 -285 2 -226 Z"/><path d="M2 -232 Q50 -310 110 -300 Q50 -288 2 -226 Z"/></g>
+    </svg>
+      <div class="fly-txt" data-layout-ignore><div class="f1">BÈL<br>FÈT<br>LAKAY</div><div class="f2">SAMDI 20 DESANM · 8È DISWA</div><div class="f3">PÉTION-VILLE</div><div class="f4">VIN DANSE AK NOU!</div></div></div></div></div>
+   <div id="save"><svg viewBox="0 0 64 72"><path id="savep" d="M8 4h48v64L32 50 8 68Z" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"/></svg></div>
+   <div id="handle">SWIV <span>@tyolika</span></div>
+   <div id="p2">PATI 2 →</div>
+  </div>
+
+  <div class="finger" id="fg"><div class="ring"></div></div>
+ </div>
+ <svg id="grain" viewBox="0 0 1160 2000" data-layout-ignore><filter id="gnoise"><feTurbulence id="gturb" type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="1"/></filter><rect width="100%" height="100%" filter="url(#gnoise)"/></svg>
+ <div id="vig" data-layout-ignore></div>
+ <div id="flash" data-layout-ignore></div>
+ <div id="cap" data-composition-id="captions" data-composition-src="compositions/captions.html" data-start="0" data-duration="50.4" data-track-index="3" data-track-kind="captions" data-width="1080" data-height="1920" style="z-index:20"></div>
+ <audio id="mix" class="clip" src="assets/v01_mix.wav" data-start="0" data-duration="50.4" data-track-index="4" data-volume="1"></audio>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#cam", {scale:1.0, x:6, y:0}, {scale:1.035, x:-6, y:-8, duration:1.713, ease:"sine.inOut", immediateRender:true}, 0.000);
+tl.fromTo("#cam", {scale:1.035, x:-6, y:0}, {scale:1.0, x:6, y:-8, duration:5.149, ease:"sine.inOut", immediateRender:false}, 1.713);
+tl.fromTo("#cam", {scale:1.0, x:-6, y:0}, {scale:1.035, x:6, y:-8, duration:2.651, ease:"sine.inOut", immediateRender:false}, 6.862);
+tl.fromTo("#cam", {scale:1.035, x:6, y:0}, {scale:1.0, x:-6, y:-8, duration:7.024, ease:"sine.inOut", immediateRender:false}, 9.513);
+tl.fromTo("#cam", {scale:1.0, x:-6, y:0}, {scale:1.035, x:6, y:-8, duration:2.650, ease:"sine.inOut", immediateRender:false}, 16.537);
+tl.fromTo("#cam", {scale:1.035, x:-6, y:0}, {scale:1.0, x:6, y:-8, duration:3.588, ease:"sine.inOut", immediateRender:false}, 19.187);
+tl.fromTo("#cam", {scale:1.0, x:6, y:0}, {scale:1.035, x:-6, y:-8, duration:3.900, ease:"sine.inOut", immediateRender:false}, 22.775);
+tl.fromTo("#cam", {scale:1.035, x:-6, y:0}, {scale:1.0, x:6, y:-8, duration:3.900, ease:"sine.inOut", immediateRender:false}, 26.675);
+tl.fromTo("#cam", {scale:1.0, x:-6, y:0}, {scale:1.035, x:6, y:-8, duration:4.525, ease:"sine.inOut", immediateRender:false}, 30.575);
+tl.fromTo("#cam", {scale:1.035, x:6, y:0}, {scale:1.0, x:-6, y:-8, duration:4.837, ease:"sine.inOut", immediateRender:false}, 35.100);
+tl.fromTo("#cam", {scale:1.0, x:-6, y:0}, {scale:1.035, x:6, y:-8, duration:3.588, ease:"sine.inOut", immediateRender:false}, 39.937);
+tl.fromTo("#cam", {scale:1.035, x:-6, y:0}, {scale:1.0, x:6, y:-8, duration:6.875, ease:"sine.inOut", immediateRender:false}, 43.525);
+tl.set("#sc1", {opacity:1}, 0);
+tl.fromTo("#fly", {rotation:-4, scale:1.06}, {rotation:2, scale:1, duration:0.9, ease:"power2.out"}, 0);
+tl.fromTo("#tag", {rotation:12, scale:1.15}, {rotation:6, scale:1, duration:0.5, ease:"expo.out"}, 0);
+tl.set("#fg", {x:885, y:945, scale:1}, 0.160); tl.to("#fg", {opacity:1, x:725, y:685, duration:0.3, ease:"expo.out"}, 0.170);
+tl.to("#fg", {x:1100, y:200, duration:0.28, ease:"power3.in"}, 0.574);
+tl.to("#tag", {x:520, y:-180, rotation:48, opacity:0, filter:"blur(10px)", duration:0.32, ease:"power3.in"}, 0.674);
+tl.set("#fg", {opacity:0}, 0.874);
+tl.to("#fly", {scale:1.05, duration:0.12, ease:"expo.out"}, 1.128); tl.to("#fly", {scale:1, duration:0.55, ease:"power2.inOut"}, 1.248);
+tl.fromTo("#phone", {opacity:0, scale:1.35, filter:"blur(14px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.5, ease:"expo.out"}, 1.733);
+tl.to("#fly", {x:0, y:53, scale:0.77, rotation:0, duration:0.5, ease:"expo.out"}, 1.733);
+tl.fromTo("#chIA", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 2.116);
+tl.to("#fly", {scale:1.04, duration:0.12, ease:"expo.out"}, 4.616); tl.to("#fly", {scale:1, duration:0.55, ease:"power2.inOut"}, 4.736);
+tl.fromTo("#chMin", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 5.465);
+tl.fromTo("#chTel", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 6.219);
+tl.to("#chIA", {opacity:0, filter:"blur(10px)", duration:0.15, ease:"power3.in"}, 6.832);
+tl.to("#chMin", {opacity:0, filter:"blur(10px)", duration:0.15, ease:"power3.in"}, 6.832);
+tl.to("#chTel", {opacity:0, filter:"blur(10px)", duration:0.15, ease:"power3.in"}, 6.832);
+tl.to("#phone", {opacity:0.0, scale:0.92, filter:"blur(10px)", duration:0.18, ease:"power3.in"}, 6.832);
+tl.to("#fly", {opacity:0, filter:"blur(12px)", duration:0.18, ease:"power3.in"}, 6.832);
+tl.fromTo("#lab1", {opacity:0, y:20}, {opacity:1, y:0, duration:0.25, ease:"expo.out"}, 6.962);
+tl.fromTo("#n1", {opacity:0, scale:2.4, filter:"blur(20px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.32, ease:"expo.out"}, 6.962);
+tl.to("#n1", {x:0, y:-470, scale:0.15, opacity:0, duration:0.32, ease:"power3.in"}, 7.501);
+tl.to("#lab1", {opacity:0, filter:"blur(8px)", duration:0.15, ease:"power3.in"}, 7.501);
+tl.fromTo("#pill1", {opacity:0, scale:0.7}, {opacity:1, scale:1, duration:0.3, ease:"back.out(1.7)"}, 7.761);
+tl.set("#pChat", {opacity:1}, 7.551);
+tl.to("#phone", {opacity:1, scale:1, filter:"blur(0px)", duration:0.4, ease:"expo.out"}, 7.551);
+tl.set("#fg", {x:683, y:1234, scale:1}, 8.393); tl.to("#fg", {opacity:1, x:523, y:974, duration:0.3, ease:"expo.out"}, 8.403);
+tl.to("#fg", {scale:0.8, duration:0.07, ease:"power2.in"}, 8.744); tl.to("#fg", {scale:1, duration:0.18, ease:"expo.out"}, 8.814);
+tl.fromTo("#fg .ring", {opacity:0.9, scale:0.6}, {opacity:0, scale:1.5, duration:0.35, ease:"power2.out", immediateRender:false}, 8.794);
+tl.set("#pc0", {opacity:1}, 8.971);
+tl.set("#pc1", {opacity:1}, 9.021);
+tl.set("#pc2", {opacity:1}, 9.072);
+tl.set("#pc3", {opacity:1}, 9.122);
+tl.set("#pc4", {opacity:1}, 9.173);
+tl.set("#pc5", {opacity:1}, 9.223);
+tl.set("#pc6", {opacity:1}, 9.274);
+tl.set("#pc7", {opacity:1}, 9.324);
+tl.set("#pc8", {opacity:1}, 9.374);
+tl.set("#pc9", {opacity:1}, 9.425);
+tl.set("#pc10", {opacity:1}, 9.475);
+tl.set("#pc11", {opacity:1}, 9.526);
+tl.set("#pc12", {opacity:1}, 9.576);
+tl.set("#pc13", {opacity:1}, 9.626);
+tl.set("#pc14", {opacity:1}, 9.677);
+tl.set("#pc15", {opacity:1}, 9.727);
+tl.set("#pc16", {opacity:1}, 9.778);
+tl.set("#pc17", {opacity:1}, 9.828);
+tl.set("#pc18", {opacity:1}, 9.879);
+tl.set("#pc19", {opacity:1}, 9.929);
+tl.set("#pc20", {opacity:1}, 9.979);
+tl.set("#pc21", {opacity:1}, 10.030);
+tl.set("#pc22", {opacity:1}, 10.080);
+tl.set("#pc23", {opacity:1}, 10.131);
+tl.set("#pc24", {opacity:1}, 10.181);
+tl.set("#pc25", {opacity:1}, 10.231);
+tl.set("#pc26", {opacity:1}, 10.282);
+tl.set("#pc27", {opacity:1}, 10.332);
+tl.set("#pc28", {opacity:1}, 10.383);
+tl.set("#pc29", {opacity:1}, 10.433);
+tl.set("#pc30", {opacity:1}, 10.484);
+tl.set("#pc31", {opacity:1}, 10.534);
+tl.set("#pc32", {opacity:1}, 10.584);
+tl.set("#pc33", {opacity:1}, 10.635);
+tl.set("#pc34", {opacity:1}, 10.685);
+tl.set("#pc35", {opacity:1}, 10.736);
+tl.set("#pc36", {opacity:1}, 10.786);
+tl.set("#pc37", {opacity:1}, 10.837);
+tl.set("#pc38", {opacity:1}, 10.887);
+tl.set("#pc39", {opacity:1}, 10.937);
+tl.set("#pc40", {opacity:1}, 10.988);
+tl.set("#pc41", {opacity:1}, 11.038);
+tl.set("#pc42", {opacity:1}, 11.089);
+tl.set("#pc43", {opacity:1}, 11.139);
+tl.set("#pc44", {opacity:1}, 11.189);
+tl.set("#pc45", {opacity:1}, 11.240);
+tl.set("#pc46", {opacity:1}, 11.290);
+tl.set("#pc47", {opacity:1}, 11.341);
+tl.set("#pc48", {opacity:1}, 11.391);
+tl.set("#pc49", {opacity:1}, 11.442);
+tl.set("#pc50", {opacity:1}, 11.492);
+tl.set("#pc51", {opacity:1}, 11.542);
+tl.set("#pc52", {opacity:1}, 11.593);
+tl.set("#pc53", {opacity:1}, 11.643);
+tl.set("#pc54", {opacity:1}, 11.694);
+tl.set("#pc55", {opacity:1}, 11.744);
+tl.set("#pc56", {opacity:1}, 11.794);
+tl.set("#pc57", {opacity:1}, 11.845);
+tl.set("#pc58", {opacity:1}, 11.895);
+tl.set("#pc59", {opacity:1}, 11.946);
+tl.set("#pc60", {opacity:1}, 11.996);
+tl.set("#pc61", {opacity:1}, 12.047);
+tl.set("#pc62", {opacity:1}, 12.097);
+tl.set("#pc63", {opacity:1}, 12.147);
+tl.set("#pc64", {opacity:1}, 12.198);
+tl.set("#pc65", {opacity:1}, 12.248);
+tl.set("#pc66", {opacity:1}, 12.299);
+tl.set("#pc67", {opacity:1}, 12.349);
+tl.set("#pc68", {opacity:1}, 12.399);
+tl.set("#pc69", {opacity:1}, 12.450);
+tl.set("#pc70", {opacity:1}, 12.500);
+tl.set("#pc71", {opacity:1}, 12.551);
+tl.set("#pc72", {opacity:1}, 12.601);
+tl.set("#pc73", {opacity:1}, 12.652);
+tl.to("#fg", {x:480, y:965, duration:0.4, ease:"sine.inOut", yoyo:true, repeat:8}, 8.971);
+tl.to("#fg", {x:695, y:984, duration:0.3, ease:"power2.inOut"}, 12.702);
+tl.to("#fg", {scale:0.8, duration:0.07, ease:"power2.in"}, 13.022); tl.to("#fg", {scale:1, duration:0.18, ease:"expo.out"}, 13.092);
+tl.fromTo("#fg .ring", {opacity:0.9, scale:0.6}, {opacity:0, scale:1.5, duration:0.35, ease:"power2.out", immediateRender:false}, 13.072);
+tl.set("#inp .ch", {opacity:0}, 13.082);
+tl.fromTo("#umsg", {opacity:0, y:40, scale:0.9}, {opacity:1, y:0, scale:1, duration:0.35, ease:"expo.out"}, 13.082);
+tl.to("#fg", {opacity:0, y:"+=160", duration:0.2, ease:"power3.in"}, 13.252);
+tl.fromTo("#bl1", {opacity:0, x:-30, filter:"blur(6px)"}, {opacity:1, x:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 13.891);
+tl.fromTo("#bl2", {opacity:0, x:-30, filter:"blur(6px)"}, {opacity:1, x:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 14.443);
+tl.fromTo("#bl3", {opacity:0, x:-30, filter:"blur(6px)"}, {opacity:1, x:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 15.303);
+tl.to("#phone", {x:-1100, filter:"blur(16px)", duration:0.22, ease:"power3.in"}, 16.457); tl.set("#phone", {opacity:0}, 16.677);
+tl.to("#pill1", {opacity:0, x:-60, duration:0.18, ease:"power3.in"}, 16.457);
+tl.fromTo("#lab2", {opacity:0, y:20}, {opacity:1, y:0, duration:0.25, ease:"expo.out"}, 16.657);
+tl.fromTo("#n2", {opacity:0, scale:2.4, filter:"blur(20px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.32, ease:"expo.out"}, 16.657);
+tl.to("#n2", {x:0, y:-470, scale:0.15, opacity:0, duration:0.32, ease:"power3.in"}, 17.249);
+tl.to("#lab2", {opacity:0, filter:"blur(8px)", duration:0.15, ease:"power3.in"}, 17.249);
+tl.fromTo("#pill2", {opacity:0, scale:0.7}, {opacity:1, scale:1, duration:0.3, ease:"back.out(1.7)"}, 17.509);
+tl.fromTo("#sc5", {opacity:1, x:1100, filter:"blur(16px)"}, {x:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 17.299);
+tl.set("#sc5", {opacity:1}, 17.299);
+tl.fromTo("#genart .art", {opacity:0, filter:"blur(30px)", scale:1.2}, {opacity:1, filter:"blur(0px)", scale:1, duration:1.802, ease:"power2.out"}, 17.555);
+tl.fromTo("#genfill", {scaleX:0}, {scaleX:1, duration:1.802, ease:"power1.inOut"}, 17.555);
+tl.to("#sc5", {scale:0.7, opacity:0, filter:"blur(12px)", duration:0.25, ease:"power3.in"}, 19.157);
+tl.set("#sc6", {opacity:1}, 19.257);
+tl.fromTo("#cardA", {opacity:0, filter:"blur(12px)", scale:0.8, y:40}, {opacity:1, filter:"blur(0px)", scale:1, y:0, duration:0.4, ease:"expo.out"}, 19.257);
+tl.fromTo("#cardB", {opacity:0, filter:"blur(12px)", scale:0.8, y:40}, {opacity:1, filter:"blur(0px)", scale:1, y:0, duration:0.4, ease:"expo.out"}, 19.407);
+tl.set("#fg", {x:470, y:900, scale:1}, 20.489); tl.to("#fg", {opacity:1, x:310, y:640, duration:0.3, ease:"expo.out"}, 20.499);
+tl.to("#fg", {scale:0.8, duration:0.07, ease:"power2.in"}, 20.728); tl.to("#fg", {scale:1, duration:0.18, ease:"expo.out"}, 20.798);
+tl.fromTo("#fg .ring", {opacity:0.9, scale:0.6}, {opacity:0, scale:1.5, duration:0.35, ease:"power2.out", immediateRender:false}, 20.778);
+tl.fromTo("#ringA", {opacity:0, scale:1.08}, {opacity:1, scale:1, duration:0.25, ease:"expo.out"}, 20.778);
+tl.to("#cardA", {scale:1.05, duration:0.12, ease:"expo.out"}, 20.778); tl.to("#cardA", {scale:1, duration:0.55, ease:"power2.inOut"}, 20.898);
+tl.to("#fg", {x:710, y:640, duration:0.3, ease:"power2.inOut"}, 21.828);
+tl.to("#fg", {scale:0.8, duration:0.07, ease:"power2.in"}, 22.378); tl.to("#fg", {scale:1, duration:0.18, ease:"expo.out"}, 22.448);
+tl.fromTo("#fg .ring", {opacity:0.9, scale:0.6}, {opacity:0, scale:1.5, duration:0.35, ease:"power2.out", immediateRender:false}, 22.428);
+tl.to("#fg", {opacity:0, y:"+=160", duration:0.2, ease:"power3.in"}, 22.678);
+tl.to("#cardA", {opacity:0, x:-300, filter:"blur(10px)", duration:0.25, ease:"power3.in"}, 22.795);
+tl.to("#cardB", {x:-200, y:30, scale:1.25, duration:0.5, ease:"power3.inOut"}, 22.795);
+tl.to(["#cardB .badge", "#pill2"], {opacity:0, filter:"blur(8px)", duration:0.16, ease:"power3.in"}, 22.795);
+tl.fromTo("#sq1", {opacity:0, scaleX:0, transformOrigin:"0 50%"}, {opacity:1, scaleX:1, duration:0.25, ease:"power2.out"}, 24.309);
+tl.fromTo("#sq2", {opacity:0, scaleX:0, transformOrigin:"0 50%"}, {opacity:1, scaleX:1, duration:0.25, ease:"power2.out"}, 24.555);
+tl.fromTo("#sq3", {opacity:0, scaleX:0, transformOrigin:"0 50%"}, {opacity:1, scaleX:1, duration:0.25, ease:"power2.out"}, 25.600);
+tl.fromTo("#stamp", {opacity:0, scale:2, rotation:-8}, {opacity:1, scale:1, rotation:-8, duration:0.25, ease:"expo.out"}, 24.555);
+tl.fromTo("#cardB", {rotation:0}, {rotation:1.5, duration:0.05, yoyo:true, repeat:5, ease:"none"}, 24.555);
+tl.to("#sc6", {opacity:0, scale:1.3, filter:"blur(16px)", duration:0.22, ease:"power3.in"}, 26.595);
+tl.fromTo("#lab3", {opacity:0, y:20}, {opacity:1, y:0, duration:0.25, ease:"expo.out"}, 26.795);
+tl.fromTo("#n3", {opacity:0, scale:2.4, filter:"blur(20px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.32, ease:"expo.out"}, 26.795);
+tl.to("#n3", {x:0, y:-470, scale:0.15, opacity:0, duration:0.32, ease:"power3.in"}, 27.305);
+tl.to("#lab3", {opacity:0, filter:"blur(8px)", duration:0.15, ease:"power3.in"}, 27.305);
+tl.fromTo("#pill3", {opacity:0, scale:0.7}, {opacity:1, scale:1, duration:0.3, ease:"back.out(1.7)"}, 27.565);
+tl.set("#pChat", {opacity:0}, 27.355); tl.set("#pEd", {opacity:1}, 27.355);
+tl.fromTo("#phone", {opacity:1, x:1100, scale:1, filter:"blur(16px)"}, {opacity:1, x:0, filter:"blur(0px)", duration:0.3, ease:"expo.out", immediateRender:false}, 27.355);
+tl.set("#fg", {x:550, y:1233, scale:1}, 27.928); tl.to("#fg", {opacity:1, x:390, y:973, duration:0.3, ease:"expo.out"}, 27.938);
+tl.to("#fg", {scale:0.8, duration:0.07, ease:"power2.in"}, 28.118); tl.to("#fg", {scale:1, duration:0.18, ease:"expo.out"}, 28.188);
+tl.fromTo("#fg .ring", {opacity:0.9, scale:0.6}, {opacity:0, scale:1.5, duration:0.35, ease:"power2.out", immediateRender:false}, 28.168);
+tl.set("#drag", {opacity:1}, 28.138);
+tl.to("#drag", {x:20, y:-554, scaleX:5.43, scaleY:5.46, duration:0.5, ease:"power3.inOut"}, 28.188);
+tl.to("#fg", {x:540, y:687, duration:0.5, ease:"power2.inOut"}, 28.188);
+tl.set("#cart", {opacity:1}, 28.688); tl.set("#drag", {opacity:0}, 28.698);
+tl.to("#fg", {x:477, y:973, duration:0.3, ease:"power2.inOut"}, 29.034);
+tl.to("#fg", {scale:0.8, duration:0.07, ease:"power2.in"}, 29.314); tl.to("#fg", {scale:1, duration:0.18, ease:"expo.out"}, 29.384);
+tl.fromTo("#fg .ring", {opacity:0.9, scale:0.6}, {opacity:0, scale:1.5, duration:0.35, ease:"power2.out", immediateRender:false}, 29.364);
+tl.fromTo("#ct1", {opacity:0, y:-30, filter:"blur(6px)"}, {opacity:1, y:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 29.781);
+tl.fromTo("#ct2", {opacity:0, y:-30, filter:"blur(6px)"}, {opacity:1, y:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 30.117);
+tl.fromTo("#ct3", {opacity:0, y:-30, filter:"blur(6px)"}, {opacity:1, y:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 30.341);
+tl.to("#fg", {opacity:0, y:"+=160", duration:0.2, ease:"power3.in"}, 30.545);
+tl.to("#phone", {x:-245, duration:0.45, ease:"power3.inOut"}, 30.595);
+tl.fromTo("#fc1", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 31.200);
+tl.fromTo("#fc2", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 31.524);
+tl.to("#ct1", {scale:1.12, duration:0.12, ease:"expo.out"}, 32.546); tl.to("#ct1", {scale:1, duration:0.55, ease:"power2.inOut"}, 32.666);
+tl.fromTo("#fc3", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 33.362);
+tl.to("#fc3", {opacity:0.35, duration:0.2}, 33.948);
+tl.to("#ct2", {scale:1.12, duration:0.12, ease:"expo.out"}, 33.948); tl.to("#ct2", {scale:1, duration:0.55, ease:"power2.inOut"}, 34.068);
+tl.to("#fc1", {opacity:0, filter:"blur(10px)", duration:0.15, ease:"power3.in"}, 35.020);
+tl.to("#fc2", {opacity:0, filter:"blur(10px)", duration:0.15, ease:"power3.in"}, 35.020);
+tl.to("#fc3", {opacity:0, filter:"blur(10px)", duration:0.15, ease:"power3.in"}, 35.020);
+tl.to("#pill3", {opacity:0, filter:"blur(10px)", duration:0.15, ease:"power3.in"}, 35.020);
+tl.to("#phone", {x:-1100, filter:"blur(16px)", duration:0.22, ease:"power3.in"}, 35.020); tl.set("#phone", {opacity:0}, 35.240);
+tl.set("#sc10", {opacity:1}, 35.200);
+tl.fromTo("#cmpL", {opacity:1, x:1100, filter:"blur(16px)"}, {x:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 35.200);
+tl.fromTo("#cmpR", {opacity:1, x:1100, filter:"blur(16px)"}, {x:0, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 35.280);
+tl.to("#cmpR", {scale:1.05, duration:0.12, ease:"expo.out"}, 36.067); tl.to("#cmpR", {scale:1, duration:0.55, ease:"power2.inOut"}, 36.187);
+tl.to(["#cmpL", "#cmpR"], {scale:0.55, y:120, duration:0.6, ease:"power2.inOut"}, 38.157);
+tl.to("#cmpL .fly", {filter:"blur(2.5px)", duration:0.6}, 38.157);
+tl.to("#sc10", {opacity:0, filter:"blur(12px)", scale:1.2, duration:0.2, ease:"power3.in"}, 39.907);
+tl.set("#phone", {x:0}, 39.907);
+tl.fromTo("#phone", {opacity:0, scale:1.25, filter:"blur(14px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.4, ease:"expo.out", immediateRender:false}, 40.007);
+tl.set("#canvas", {borderColor:"rgba(0,0,0,0)"}, 40.007);
+tl.fromTo("#dl", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 40.157);
+tl.set("#fg", {x:761, y:1235, scale:1}, 40.678); tl.to("#fg", {opacity:1, x:601, y:975, duration:0.3, ease:"expo.out"}, 40.688);
+tl.to("#fg", {scale:0.8, duration:0.07, ease:"power2.in"}, 41.146); tl.to("#fg", {scale:1, duration:0.18, ease:"expo.out"}, 41.216);
+tl.fromTo("#fg .ring", {opacity:0.9, scale:0.6}, {opacity:0, scale:1.5, duration:0.35, ease:"power2.out", immediateRender:false}, 41.196);
+tl.fromTo("#file", {opacity:0, y:40, scale:0.8}, {opacity:1, y:0, scale:1, duration:0.3, ease:"back.out(1.7)"}, 41.246);
+tl.to("#fg", {opacity:0, y:"+=160", duration:0.2, ease:"power3.in"}, 41.432);
+tl.to("#file", {y:-120, opacity:0, filter:"blur(8px)", duration:0.3, ease:"power3.in"}, 41.948);
+tl.to("#phone", {opacity:0.0, scale:0.85, filter:"blur(14px)", duration:0.3, ease:"power3.in"}, 42.142);
+tl.fromTo("#cA", {opacity:0, scale:1.6, filter:"blur(14px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 42.292);
+tl.fromTo("#cB", {opacity:0, scale:1.6, filter:"blur(14px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.3, ease:"expo.out"}, 42.922);
+tl.fromTo("#flash", {opacity:0.25}, {opacity:0, duration:0.25, immediateRender:false}, 42.922);
+tl.to("#counter", {opacity:0, scale:0.8, filter:"blur(10px)", duration:0.18, ease:"power3.in"}, 43.525);
+tl.set("#sc12", {opacity:1}, 43.595);
+tl.fromTo("#sc12 .fly", {opacity:0, filter:"blur(12px)", scale:0.85, y:0}, {opacity:1, filter:"blur(0px)", scale:1, y:0, duration:0.4, ease:"expo.out"}, 43.595);
+tl.fromTo("#save", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 43.795);
+tl.set("#fg", {x:985, y:885, scale:1}, 43.835); tl.to("#fg", {opacity:1, x:825, y:625, duration:0.3, ease:"expo.out"}, 43.845);
+tl.to("#fg", {scale:0.8, duration:0.07, ease:"power2.in"}, 44.145); tl.to("#fg", {scale:1, duration:0.18, ease:"expo.out"}, 44.215);
+tl.fromTo("#fg .ring", {opacity:0.9, scale:0.6}, {opacity:0, scale:1.5, duration:0.35, ease:"power2.out", immediateRender:false}, 44.195);
+tl.set("#savep", {attr:{fill:"#39FF14", stroke:"#39FF14"}}, 44.195);
+tl.to("#save", {scale:1.2, duration:0.12, ease:"expo.out"}, 44.195); tl.to("#save", {scale:1, duration:0.55, ease:"power2.inOut"}, 44.315);
+tl.to("#fg", {opacity:0, y:"+=160", duration:0.2, ease:"power3.in"}, 44.978);
+tl.fromTo("#handle", {opacity:0, y:30, filter:"blur(8px)"}, {opacity:1, y:0, filter:"blur(0px)", duration:0.35, ease:"expo.out"}, 47.145);
+tl.fromTo("#p2", {opacity:0, scale:0.6, filter:"blur(6px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.28, ease:"back.out(1.6)"}, 47.478);
+tl.set("#gturb", {attr:{seed:1}}, 0.000); tl.set("#grain", {x:-20, y:-20}, 0.000);
+tl.set("#gturb", {attr:{seed:2}}, 0.083); tl.set("#grain", {x:17, y:3}, 0.083);
+tl.set("#gturb", {attr:{seed:3}}, 0.167); tl.set("#grain", {x:14, y:-14}, 0.167);
+tl.set("#gturb", {attr:{seed:4}}, 0.250); tl.set("#grain", {x:11, y:9}, 0.250);
+tl.set("#gturb", {attr:{seed:5}}, 0.333); tl.set("#grain", {x:8, y:-8}, 0.333);
+tl.set("#gturb", {attr:{seed:6}}, 0.417); tl.set("#grain", {x:5, y:15}, 0.417);
+tl.set("#gturb", {attr:{seed:7}}, 0.500); tl.set("#grain", {x:2, y:-2}, 0.500);
+tl.set("#gturb", {attr:{seed:8}}, 0.583); tl.set("#grain", {x:-1, y:-19}, 0.583);
+tl.set("#gturb", {attr:{seed:9}}, 0.667); tl.set("#grain", {x:-4, y:4}, 0.667);
+tl.set("#gturb", {attr:{seed:10}}, 0.750); tl.set("#grain", {x:-7, y:-13}, 0.750);
+tl.set("#gturb", {attr:{seed:11}}, 0.833); tl.set("#grain", {x:-10, y:10}, 0.833);
+tl.set("#gturb", {attr:{seed:12}}, 0.917); tl.set("#grain", {x:-13, y:-7}, 0.917);
+tl.set("#gturb", {attr:{seed:13}}, 1.000); tl.set("#grain", {x:-16, y:16}, 1.000);
+tl.set("#gturb", {attr:{seed:14}}, 1.083); tl.set("#grain", {x:-19, y:-1}, 1.083);
+tl.set("#gturb", {attr:{seed:15}}, 1.167); tl.set("#grain", {x:18, y:-18}, 1.167);
+tl.set("#gturb", {attr:{seed:16}}, 1.250); tl.set("#grain", {x:15, y:5}, 1.250);
+tl.set("#gturb", {attr:{seed:17}}, 1.333); tl.set("#grain", {x:12, y:-12}, 1.333);
+tl.set("#gturb", {attr:{seed:18}}, 1.417); tl.set("#grain", {x:9, y:11}, 1.417);
+tl.set("#gturb", {attr:{seed:19}}, 1.500); tl.set("#grain", {x:6, y:-6}, 1.500);
+tl.set("#gturb", {attr:{seed:20}}, 1.583); tl.set("#grain", {x:3, y:17}, 1.583);
+tl.set("#gturb", {attr:{seed:21}}, 1.667); tl.set("#grain", {x:0, y:0}, 1.667);
+tl.set("#gturb", {attr:{seed:22}}, 1.750); tl.set("#grain", {x:-3, y:-17}, 1.750);
+tl.set("#gturb", {attr:{seed:23}}, 1.833); tl.set("#grain", {x:-6, y:6}, 1.833);
+tl.set("#gturb", {attr:{seed:24}}, 1.917); tl.set("#grain", {x:-9, y:-11}, 1.917);
+tl.set("#gturb", {attr:{seed:25}}, 2.000); tl.set("#grain", {x:-12, y:12}, 2.000);
+tl.set("#gturb", {attr:{seed:26}}, 2.083); tl.set("#grain", {x:-15, y:-5}, 2.083);
+tl.set("#gturb", {attr:{seed:27}}, 2.167); tl.set("#grain", {x:-18, y:18}, 2.167);
+tl.set("#gturb", {attr:{seed:28}}, 2.250); tl.set("#grain", {x:19, y:1}, 2.250);
+tl.set("#gturb", {attr:{seed:29}}, 2.333); tl.set("#grain", {x:16, y:-16}, 2.333);
+tl.set("#gturb", {attr:{seed:30}}, 2.417); tl.set("#grain", {x:13, y:7}, 2.417);
+tl.set("#gturb", {attr:{seed:31}}, 2.500); tl.set("#grain", {x:10, y:-10}, 2.500);
+tl.set("#gturb", {attr:{seed:32}}, 2.583); tl.set("#grain", {x:7, y:13}, 2.583);
+tl.set("#gturb", {attr:{seed:33}}, 2.667); tl.set("#grain", {x:4, y:-4}, 2.667);
+tl.set("#gturb", {attr:{seed:34}}, 2.750); tl.set("#grain", {x:1, y:19}, 2.750);
+tl.set("#gturb", {attr:{seed:35}}, 2.833); tl.set("#grain", {x:-2, y:2}, 2.833);
+tl.set("#gturb", {attr:{seed:36}}, 2.917); tl.set("#grain", {x:-5, y:-15}, 2.917);
+tl.set("#gturb", {attr:{seed:37}}, 3.000); tl.set("#grain", {x:-8, y:8}, 3.000);
+tl.set("#gturb", {attr:{seed:38}}, 3.083); tl.set("#grain", {x:-11, y:-9}, 3.083);
+tl.set("#gturb", {attr:{seed:39}}, 3.167); tl.set("#grain", {x:-14, y:14}, 3.167);
+tl.set("#gturb", {attr:{seed:40}}, 3.250); tl.set("#grain", {x:-17, y:-3}, 3.250);
+tl.set("#gturb", {attr:{seed:1}}, 3.333); tl.set("#grain", {x:-20, y:-20}, 3.333);
+tl.set("#gturb", {attr:{seed:2}}, 3.417); tl.set("#grain", {x:17, y:3}, 3.417);
+tl.set("#gturb", {attr:{seed:3}}, 3.500); tl.set("#grain", {x:14, y:-14}, 3.500);
+tl.set("#gturb", {attr:{seed:4}}, 3.583); tl.set("#grain", {x:11, y:9}, 3.583);
+tl.set("#gturb", {attr:{seed:5}}, 3.667); tl.set("#grain", {x:8, y:-8}, 3.667);
+tl.set("#gturb", {attr:{seed:6}}, 3.750); tl.set("#grain", {x:5, y:15}, 3.750);
+tl.set("#gturb", {attr:{seed:7}}, 3.833); tl.set("#grain", {x:2, y:-2}, 3.833);
+tl.set("#gturb", {attr:{seed:8}}, 3.917); tl.set("#grain", {x:-1, y:-19}, 3.917);
+tl.set("#gturb", {attr:{seed:9}}, 4.000); tl.set("#grain", {x:-4, y:4}, 4.000);
+tl.set("#gturb", {attr:{seed:10}}, 4.083); tl.set("#grain", {x:-7, y:-13}, 4.083);
+tl.set("#gturb", {attr:{seed:11}}, 4.167); tl.set("#grain", {x:-10, y:10}, 4.167);
+tl.set("#gturb", {attr:{seed:12}}, 4.250); tl.set("#grain", {x:-13, y:-7}, 4.250);
+tl.set("#gturb", {attr:{seed:13}}, 4.333); tl.set("#grain", {x:-16, y:16}, 4.333);
+tl.set("#gturb", {attr:{seed:14}}, 4.417); tl.set("#grain", {x:-19, y:-1}, 4.417);
+tl.set("#gturb", {attr:{seed:15}}, 4.500); tl.set("#grain", {x:18, y:-18}, 4.500);
+tl.set("#gturb", {attr:{seed:16}}, 4.583); tl.set("#grain", {x:15, y:5}, 4.583);
+tl.set("#gturb", {attr:{seed:17}}, 4.667); tl.set("#grain", {x:12, y:-12}, 4.667);
+tl.set("#gturb", {attr:{seed:18}}, 4.750); tl.set("#grain", {x:9, y:11}, 4.750);
+tl.set("#gturb", {attr:{seed:19}}, 4.833); tl.set("#grain", {x:6, y:-6}, 4.833);
+tl.set("#gturb", {attr:{seed:20}}, 4.917); tl.set("#grain", {x:3, y:17}, 4.917);
+tl.set("#gturb", {attr:{seed:21}}, 5.000); tl.set("#grain", {x:0, y:0}, 5.000);
+tl.set("#gturb", {attr:{seed:22}}, 5.083); tl.set("#grain", {x:-3, y:-17}, 5.083);
+tl.set("#gturb", {attr:{seed:23}}, 5.167); tl.set("#grain", {x:-6, y:6}, 5.167);
+tl.set("#gturb", {attr:{seed:24}}, 5.250); tl.set("#grain", {x:-9, y:-11}, 5.250);
+tl.set("#gturb", {attr:{seed:25}}, 5.333); tl.set("#grain", {x:-12, y:12}, 5.333);
+tl.set("#gturb", {attr:{seed:26}}, 5.417); tl.set("#grain", {x:-15, y:-5}, 5.417);
+tl.set("#gturb", {attr:{seed:27}}, 5.500); tl.set("#grain", {x:-18, y:18}, 5.500);
+tl.set("#gturb", {attr:{seed:28}}, 5.583); tl.set("#grain", {x:19, y:1}, 5.583);
+tl.set("#gturb", {attr:{seed:29}}, 5.667); tl.set("#grain", {x:16, y:-16}, 5.667);
+tl.set("#gturb", {attr:{seed:30}}, 5.750); tl.set("#grain", {x:13, y:7}, 5.750);
+tl.set("#gturb", {attr:{seed:31}}, 5.833); tl.set("#grain", {x:10, y:-10}, 5.833);
+tl.set("#gturb", {attr:{seed:32}}, 5.917); tl.set("#grain", {x:7, y:13}, 5.917);
+tl.set("#gturb", {attr:{seed:33}}, 6.000); tl.set("#grain", {x:4, y:-4}, 6.000);
+tl.set("#gturb", {attr:{seed:34}}, 6.083); tl.set("#grain", {x:1, y:19}, 6.083);
+tl.set("#gturb", {attr:{seed:35}}, 6.167); tl.set("#grain", {x:-2, y:2}, 6.167);
+tl.set("#gturb", {attr:{seed:36}}, 6.250); tl.set("#grain", {x:-5, y:-15}, 6.250);
+tl.set("#gturb", {attr:{seed:37}}, 6.333); tl.set("#grain", {x:-8, y:8}, 6.333);
+tl.set("#gturb", {attr:{seed:38}}, 6.417); tl.set("#grain", {x:-11, y:-9}, 6.417);
+tl.set("#gturb", {attr:{seed:39}}, 6.500); tl.set("#grain", {x:-14, y:14}, 6.500);
+tl.set("#gturb", {attr:{seed:40}}, 6.583); tl.set("#grain", {x:-17, y:-3}, 6.583);
+tl.set("#gturb", {attr:{seed:1}}, 6.667); tl.set("#grain", {x:-20, y:-20}, 6.667);
+tl.set("#gturb", {attr:{seed:2}}, 6.750); tl.set("#grain", {x:17, y:3}, 6.750);
+tl.set("#gturb", {attr:{seed:3}}, 6.833); tl.set("#grain", {x:14, y:-14}, 6.833);
+tl.set("#gturb", {attr:{seed:4}}, 6.917); tl.set("#grain", {x:11, y:9}, 6.917);
+tl.set("#gturb", {attr:{seed:5}}, 7.000); tl.set("#grain", {x:8, y:-8}, 7.000);
+tl.set("#gturb", {attr:{seed:6}}, 7.083); tl.set("#grain", {x:5, y:15}, 7.083);
+tl.set("#gturb", {attr:{seed:7}}, 7.167); tl.set("#grain", {x:2, y:-2}, 7.167);
+tl.set("#gturb", {attr:{seed:8}}, 7.250); tl.set("#grain", {x:-1, y:-19}, 7.250);
+tl.set("#gturb", {attr:{seed:9}}, 7.333); tl.set("#grain", {x:-4, y:4}, 7.333);
+tl.set("#gturb", {attr:{seed:10}}, 7.417); tl.set("#grain", {x:-7, y:-13}, 7.417);
+tl.set("#gturb", {attr:{seed:11}}, 7.500); tl.set("#grain", {x:-10, y:10}, 7.500);
+tl.set("#gturb", {attr:{seed:12}}, 7.583); tl.set("#grain", {x:-13, y:-7}, 7.583);
+tl.set("#gturb", {attr:{seed:13}}, 7.667); tl.set("#grain", {x:-16, y:16}, 7.667);
+tl.set("#gturb", {attr:{seed:14}}, 7.750); tl.set("#grain", {x:-19, y:-1}, 7.750);
+tl.set("#gturb", {attr:{seed:15}}, 7.833); tl.set("#grain", {x:18, y:-18}, 7.833);
+tl.set("#gturb", {attr:{seed:16}}, 7.917); tl.set("#grain", {x:15, y:5}, 7.917);
+tl.set("#gturb", {attr:{seed:17}}, 8.000); tl.set("#grain", {x:12, y:-12}, 8.000);
+tl.set("#gturb", {attr:{seed:18}}, 8.083); tl.set("#grain", {x:9, y:11}, 8.083);
+tl.set("#gturb", {attr:{seed:19}}, 8.167); tl.set("#grain", {x:6, y:-6}, 8.167);
+tl.set("#gturb", {attr:{seed:20}}, 8.250); tl.set("#grain", {x:3, y:17}, 8.250);
+tl.set("#gturb", {attr:{seed:21}}, 8.333); tl.set("#grain", {x:0, y:0}, 8.333);
+tl.set("#gturb", {attr:{seed:22}}, 8.417); tl.set("#grain", {x:-3, y:-17}, 8.417);
+tl.set("#gturb", {attr:{seed:23}}, 8.500); tl.set("#grain", {x:-6, y:6}, 8.500);
+tl.set("#gturb", {attr:{seed:24}}, 8.583); tl.set("#grain", {x:-9, y:-11}, 8.583);
+tl.set("#gturb", {attr:{seed:25}}, 8.667); tl.set("#grain", {x:-12, y:12}, 8.667);
+tl.set("#gturb", {attr:{seed:26}}, 8.750); tl.set("#grain", {x:-15, y:-5}, 8.750);
+tl.set("#gturb", {attr:{seed:27}}, 8.833); tl.set("#grain", {x:-18, y:18}, 8.833);
+tl.set("#gturb", {attr:{seed:28}}, 8.917); tl.set("#grain", {x:19, y:1}, 8.917);
+tl.set("#gturb", {attr:{seed:29}}, 9.000); tl.set("#grain", {x:16, y:-16}, 9.000);
+tl.set("#gturb", {attr:{seed:30}}, 9.083); tl.set("#grain", {x:13, y:7}, 9.083);
+tl.set("#gturb", {attr:{seed:31}}, 9.167); tl.set("#grain", {x:10, y:-10}, 9.167);
+tl.set("#gturb", {attr:{seed:32}}, 9.250); tl.set("#grain", {x:7, y:13}, 9.250);
+tl.set("#gturb", {attr:{seed:33}}, 9.333); tl.set("#grain", {x:4, y:-4}, 9.333);
+tl.set("#gturb", {attr:{seed:34}}, 9.417); tl.set("#grain", {x:1, y:19}, 9.417);
+tl.set("#gturb", {attr:{seed:35}}, 9.500); tl.set("#grain", {x:-2, y:2}, 9.500);
+tl.set("#gturb", {attr:{seed:36}}, 9.583); tl.set("#grain", {x:-5, y:-15}, 9.583);
+tl.set("#gturb", {attr:{seed:37}}, 9.667); tl.set("#grain", {x:-8, y:8}, 9.667);
+tl.set("#gturb", {attr:{seed:38}}, 9.750); tl.set("#grain", {x:-11, y:-9}, 9.750);
+tl.set("#gturb", {attr:{seed:39}}, 9.833); tl.set("#grain", {x:-14, y:14}, 9.833);
+tl.set("#gturb", {attr:{seed:40}}, 9.917); tl.set("#grain", {x:-17, y:-3}, 9.917);
+tl.set("#gturb", {attr:{seed:1}}, 10.000); tl.set("#grain", {x:-20, y:-20}, 10.000);
+tl.set("#gturb", {attr:{seed:2}}, 10.083); tl.set("#grain", {x:17, y:3}, 10.083);
+tl.set("#gturb", {attr:{seed:3}}, 10.167); tl.set("#grain", {x:14, y:-14}, 10.167);
+tl.set("#gturb", {attr:{seed:4}}, 10.250); tl.set("#grain", {x:11, y:9}, 10.250);
+tl.set("#gturb", {attr:{seed:5}}, 10.333); tl.set("#grain", {x:8, y:-8}, 10.333);
+tl.set("#gturb", {attr:{seed:6}}, 10.417); tl.set("#grain", {x:5, y:15}, 10.417);
+tl.set("#gturb", {attr:{seed:7}}, 10.500); tl.set("#grain", {x:2, y:-2}, 10.500);
+tl.set("#gturb", {attr:{seed:8}}, 10.583); tl.set("#grain", {x:-1, y:-19}, 10.583);
+tl.set("#gturb", {attr:{seed:9}}, 10.667); tl.set("#grain", {x:-4, y:4}, 10.667);
+tl.set("#gturb", {attr:{seed:10}}, 10.750); tl.set("#grain", {x:-7, y:-13}, 10.750);
+tl.set("#gturb", {attr:{seed:11}}, 10.833); tl.set("#grain", {x:-10, y:10}, 10.833);
+tl.set("#gturb", {attr:{seed:12}}, 10.917); tl.set("#grain", {x:-13, y:-7}, 10.917);
+tl.set("#gturb", {attr:{seed:13}}, 11.000); tl.set("#grain", {x:-16, y:16}, 11.000);
+tl.set("#gturb", {attr:{seed:14}}, 11.083); tl.set("#grain", {x:-19, y:-1}, 11.083);
+tl.set("#gturb", {attr:{seed:15}}, 11.167); tl.set("#grain", {x:18, y:-18}, 11.167);
+tl.set("#gturb", {attr:{seed:16}}, 11.250); tl.set("#grain", {x:15, y:5}, 11.250);
+tl.set("#gturb", {attr:{seed:17}}, 11.333); tl.set("#grain", {x:12, y:-12}, 11.333);
+tl.set("#gturb", {attr:{seed:18}}, 11.417); tl.set("#grain", {x:9, y:11}, 11.417);
+tl.set("#gturb", {attr:{seed:19}}, 11.500); tl.set("#grain", {x:6, y:-6}, 11.500);
+tl.set("#gturb", {attr:{seed:20}}, 11.583); tl.set("#grain", {x:3, y:17}, 11.583);
+tl.set("#gturb", {attr:{seed:21}}, 11.667); tl.set("#grain", {x:0, y:0}, 11.667);
+tl.set("#gturb", {attr:{seed:22}}, 11.750); tl.set("#grain", {x:-3, y:-17}, 11.750);
+tl.set("#gturb", {attr:{seed:23}}, 11.833); tl.set("#grain", {x:-6, y:6}, 11.833);
+tl.set("#gturb", {attr:{seed:24}}, 11.917); tl.set("#grain", {x:-9, y:-11}, 11.917);
+tl.set("#gturb", {attr:{seed:25}}, 12.000); tl.set("#grain", {x:-12, y:12}, 12.000);
+tl.set("#gturb", {attr:{seed:26}}, 12.083); tl.set("#grain", {x:-15, y:-5}, 12.083);
+tl.set("#gturb", {attr:{seed:27}}, 12.167); tl.set("#grain", {x:-18, y:18}, 12.167);
+tl.set("#gturb", {attr:{seed:28}}, 12.250); tl.set("#grain", {x:19, y:1}, 12.250);
+tl.set("#gturb", {attr:{seed:29}}, 12.333); tl.set("#grain", {x:16, y:-16}, 12.333);
+tl.set("#gturb", {attr:{seed:30}}, 12.417); tl.set("#grain", {x:13, y:7}, 12.417);
+tl.set("#gturb", {attr:{seed:31}}, 12.500); tl.set("#grain", {x:10, y:-10}, 12.500);
+tl.set("#gturb", {attr:{seed:32}}, 12.583); tl.set("#grain", {x:7, y:13}, 12.583);
+tl.set("#gturb", {attr:{seed:33}}, 12.667); tl.set("#grain", {x:4, y:-4}, 12.667);
+tl.set("#gturb", {attr:{seed:34}}, 12.750); tl.set("#grain", {x:1, y:19}, 12.750);
+tl.set("#gturb", {attr:{seed:35}}, 12.833); tl.set("#grain", {x:-2, y:2}, 12.833);
+tl.set("#gturb", {attr:{seed:36}}, 12.917); tl.set("#grain", {x:-5, y:-15}, 12.917);
+tl.set("#gturb", {attr:{seed:37}}, 13.000); tl.set("#grain", {x:-8, y:8}, 13.000);
+tl.set("#gturb", {attr:{seed:38}}, 13.083); tl.set("#grain", {x:-11, y:-9}, 13.083);
+tl.set("#gturb", {attr:{seed:39}}, 13.167); tl.set("#grain", {x:-14, y:14}, 13.167);
+tl.set("#gturb", {attr:{seed:40}}, 13.250); tl.set("#grain", {x:-17, y:-3}, 13.250);
+tl.set("#gturb", {attr:{seed:1}}, 13.333); tl.set("#grain", {x:-20, y:-20}, 13.333);
+tl.set("#gturb", {attr:{seed:2}}, 13.417); tl.set("#grain", {x:17, y:3}, 13.417);
+tl.set("#gturb", {attr:{seed:3}}, 13.500); tl.set("#grain", {x:14, y:-14}, 13.500);
+tl.set("#gturb", {attr:{seed:4}}, 13.583); tl.set("#grain", {x:11, y:9}, 13.583);
+tl.set("#gturb", {attr:{seed:5}}, 13.667); tl.set("#grain", {x:8, y:-8}, 13.667);
+tl.set("#gturb", {attr:{seed:6}}, 13.750); tl.set("#grain", {x:5, y:15}, 13.750);
+tl.set("#gturb", {attr:{seed:7}}, 13.833); tl.set("#grain", {x:2, y:-2}, 13.833);
+tl.set("#gturb", {attr:{seed:8}}, 13.917); tl.set("#grain", {x:-1, y:-19}, 13.917);
+tl.set("#gturb", {attr:{seed:9}}, 14.000); tl.set("#grain", {x:-4, y:4}, 14.000);
+tl.set("#gturb", {attr:{seed:10}}, 14.083); tl.set("#grain", {x:-7, y:-13}, 14.083);
+tl.set("#gturb", {attr:{seed:11}}, 14.167); tl.set("#grain", {x:-10, y:10}, 14.167);
+tl.set("#gturb", {attr:{seed:12}}, 14.250); tl.set("#grain", {x:-13, y:-7}, 14.250);
+tl.set("#gturb", {attr:{seed:13}}, 14.333); tl.set("#grain", {x:-16, y:16}, 14.333);
+tl.set("#gturb", {attr:{seed:14}}, 14.417); tl.set("#grain", {x:-19, y:-1}, 14.417);
+tl.set("#gturb", {attr:{seed:15}}, 14.500); tl.set("#grain", {x:18, y:-18}, 14.500);
+tl.set("#gturb", {attr:{seed:16}}, 14.583); tl.set("#grain", {x:15, y:5}, 14.583);
+tl.set("#gturb", {attr:{seed:17}}, 14.667); tl.set("#grain", {x:12, y:-12}, 14.667);
+tl.set("#gturb", {attr:{seed:18}}, 14.750); tl.set("#grain", {x:9, y:11}, 14.750);
+tl.set("#gturb", {attr:{seed:19}}, 14.833); tl.set("#grain", {x:6, y:-6}, 14.833);
+tl.set("#gturb", {attr:{seed:20}}, 14.917); tl.set("#grain", {x:3, y:17}, 14.917);
+tl.set("#gturb", {attr:{seed:21}}, 15.000); tl.set("#grain", {x:0, y:0}, 15.000);
+tl.set("#gturb", {attr:{seed:22}}, 15.083); tl.set("#grain", {x:-3, y:-17}, 15.083);
+tl.set("#gturb", {attr:{seed:23}}, 15.167); tl.set("#grain", {x:-6, y:6}, 15.167);
+tl.set("#gturb", {attr:{seed:24}}, 15.250); tl.set("#grain", {x:-9, y:-11}, 15.250);
+tl.set("#gturb", {attr:{seed:25}}, 15.333); tl.set("#grain", {x:-12, y:12}, 15.333);
+tl.set("#gturb", {attr:{seed:26}}, 15.417); tl.set("#grain", {x:-15, y:-5}, 15.417);
+tl.set("#gturb", {attr:{seed:27}}, 15.500); tl.set("#grain", {x:-18, y:18}, 15.500);
+tl.set("#gturb", {attr:{seed:28}}, 15.583); tl.set("#grain", {x:19, y:1}, 15.583);
+tl.set("#gturb", {attr:{seed:29}}, 15.667); tl.set("#grain", {x:16, y:-16}, 15.667);
+tl.set("#gturb", {attr:{seed:30}}, 15.750); tl.set("#grain", {x:13, y:7}, 15.750);
+tl.set("#gturb", {attr:{seed:31}}, 15.833); tl.set("#grain", {x:10, y:-10}, 15.833);
+tl.set("#gturb", {attr:{seed:32}}, 15.917); tl.set("#grain", {x:7, y:13}, 15.917);
+tl.set("#gturb", {attr:{seed:33}}, 16.000); tl.set("#grain", {x:4, y:-4}, 16.000);
+tl.set("#gturb", {attr:{seed:34}}, 16.083); tl.set("#grain", {x:1, y:19}, 16.083);
+tl.set("#gturb", {attr:{seed:35}}, 16.167); tl.set("#grain", {x:-2, y:2}, 16.167);
+tl.set("#gturb", {attr:{seed:36}}, 16.250); tl.set("#grain", {x:-5, y:-15}, 16.250);
+tl.set("#gturb", {attr:{seed:37}}, 16.333); tl.set("#grain", {x:-8, y:8}, 16.333);
+tl.set("#gturb", {attr:{seed:38}}, 16.417); tl.set("#grain", {x:-11, y:-9}, 16.417);
+tl.set("#gturb", {attr:{seed:39}}, 16.500); tl.set("#grain", {x:-14, y:14}, 16.500);
+tl.set("#gturb", {attr:{seed:40}}, 16.583); tl.set("#grain", {x:-17, y:-3}, 16.583);
+tl.set("#gturb", {attr:{seed:1}}, 16.667); tl.set("#grain", {x:-20, y:-20}, 16.667);
+tl.set("#gturb", {attr:{seed:2}}, 16.750); tl.set("#grain", {x:17, y:3}, 16.750);
+tl.set("#gturb", {attr:{seed:3}}, 16.833); tl.set("#grain", {x:14, y:-14}, 16.833);
+tl.set("#gturb", {attr:{seed:4}}, 16.917); tl.set("#grain", {x:11, y:9}, 16.917);
+tl.set("#gturb", {attr:{seed:5}}, 17.000); tl.set("#grain", {x:8, y:-8}, 17.000);
+tl.set("#gturb", {attr:{seed:6}}, 17.083); tl.set("#grain", {x:5, y:15}, 17.083);
+tl.set("#gturb", {attr:{seed:7}}, 17.167); tl.set("#grain", {x:2, y:-2}, 17.167);
+tl.set("#gturb", {attr:{seed:8}}, 17.250); tl.set("#grain", {x:-1, y:-19}, 17.250);
+tl.set("#gturb", {attr:{seed:9}}, 17.333); tl.set("#grain", {x:-4, y:4}, 17.333);
+tl.set("#gturb", {attr:{seed:10}}, 17.417); tl.set("#grain", {x:-7, y:-13}, 17.417);
+tl.set("#gturb", {attr:{seed:11}}, 17.500); tl.set("#grain", {x:-10, y:10}, 17.500);
+tl.set("#gturb", {attr:{seed:12}}, 17.583); tl.set("#grain", {x:-13, y:-7}, 17.583);
+tl.set("#gturb", {attr:{seed:13}}, 17.667); tl.set("#grain", {x:-16, y:16}, 17.667);
+tl.set("#gturb", {attr:{seed:14}}, 17.750); tl.set("#grain", {x:-19, y:-1}, 17.750);
+tl.set("#gturb", {attr:{seed:15}}, 17.833); tl.set("#grain", {x:18, y:-18}, 17.833);
+tl.set("#gturb", {attr:{seed:16}}, 17.917); tl.set("#grain", {x:15, y:5}, 17.917);
+tl.set("#gturb", {attr:{seed:17}}, 18.000); tl.set("#grain", {x:12, y:-12}, 18.000);
+tl.set("#gturb", {attr:{seed:18}}, 18.083); tl.set("#grain", {x:9, y:11}, 18.083);
+tl.set("#gturb", {attr:{seed:19}}, 18.167); tl.set("#grain", {x:6, y:-6}, 18.167);
+tl.set("#gturb", {attr:{seed:20}}, 18.250); tl.set("#grain", {x:3, y:17}, 18.250);
+tl.set("#gturb", {attr:{seed:21}}, 18.333); tl.set("#grain", {x:0, y:0}, 18.333);
+tl.set("#gturb", {attr:{seed:22}}, 18.417); tl.set("#grain", {x:-3, y:-17}, 18.417);
+tl.set("#gturb", {attr:{seed:23}}, 18.500); tl.set("#grain", {x:-6, y:6}, 18.500);
+tl.set("#gturb", {attr:{seed:24}}, 18.583); tl.set("#grain", {x:-9, y:-11}, 18.583);
+tl.set("#gturb", {attr:{seed:25}}, 18.667); tl.set("#grain", {x:-12, y:12}, 18.667);
+tl.set("#gturb", {attr:{seed:26}}, 18.750); tl.set("#grain", {x:-15, y:-5}, 18.750);
+tl.set("#gturb", {attr:{seed:27}}, 18.833); tl.set("#grain", {x:-18, y:18}, 18.833);
+tl.set("#gturb", {attr:{seed:28}}, 18.917); tl.set("#grain", {x:19, y:1}, 18.917);
+tl.set("#gturb", {attr:{seed:29}}, 19.000); tl.set("#grain", {x:16, y:-16}, 19.000);
+tl.set("#gturb", {attr:{seed:30}}, 19.083); tl.set("#grain", {x:13, y:7}, 19.083);
+tl.set("#gturb", {attr:{seed:31}}, 19.167); tl.set("#grain", {x:10, y:-10}, 19.167);
+tl.set("#gturb", {attr:{seed:32}}, 19.250); tl.set("#grain", {x:7, y:13}, 19.250);
+tl.set("#gturb", {attr:{seed:33}}, 19.333); tl.set("#grain", {x:4, y:-4}, 19.333);
+tl.set("#gturb", {attr:{seed:34}}, 19.417); tl.set("#grain", {x:1, y:19}, 19.417);
+tl.set("#gturb", {attr:{seed:35}}, 19.500); tl.set("#grain", {x:-2, y:2}, 19.500);
+tl.set("#gturb", {attr:{seed:36}}, 19.583); tl.set("#grain", {x:-5, y:-15}, 19.583);
+tl.set("#gturb", {attr:{seed:37}}, 19.667); tl.set("#grain", {x:-8, y:8}, 19.667);
+tl.set("#gturb", {attr:{seed:38}}, 19.750); tl.set("#grain", {x:-11, y:-9}, 19.750);
+tl.set("#gturb", {attr:{seed:39}}, 19.833); tl.set("#grain", {x:-14, y:14}, 19.833);
+tl.set("#gturb", {attr:{seed:40}}, 19.917); tl.set("#grain", {x:-17, y:-3}, 19.917);
+tl.set("#gturb", {attr:{seed:1}}, 20.000); tl.set("#grain", {x:-20, y:-20}, 20.000);
+tl.set("#gturb", {attr:{seed:2}}, 20.083); tl.set("#grain", {x:17, y:3}, 20.083);
+tl.set("#gturb", {attr:{seed:3}}, 20.167); tl.set("#grain", {x:14, y:-14}, 20.167);
+tl.set("#gturb", {attr:{seed:4}}, 20.250); tl.set("#grain", {x:11, y:9}, 20.250);
+tl.set("#gturb", {attr:{seed:5}}, 20.333); tl.set("#grain", {x:8, y:-8}, 20.333);
+tl.set("#gturb", {attr:{seed:6}}, 20.417); tl.set("#grain", {x:5, y:15}, 20.417);
+tl.set("#gturb", {attr:{seed:7}}, 20.500); tl.set("#grain", {x:2, y:-2}, 20.500);
+tl.set("#gturb", {attr:{seed:8}}, 20.583); tl.set("#grain", {x:-1, y:-19}, 20.583);
+tl.set("#gturb", {attr:{seed:9}}, 20.667); tl.set("#grain", {x:-4, y:4}, 20.667);
+tl.set("#gturb", {attr:{seed:10}}, 20.750); tl.set("#grain", {x:-7, y:-13}, 20.750);
+tl.set("#gturb", {attr:{seed:11}}, 20.833); tl.set("#grain", {x:-10, y:10}, 20.833);
+tl.set("#gturb", {attr:{seed:12}}, 20.917); tl.set("#grain", {x:-13, y:-7}, 20.917);
+tl.set("#gturb", {attr:{seed:13}}, 21.000); tl.set("#grain", {x:-16, y:16}, 21.000);
+tl.set("#gturb", {attr:{seed:14}}, 21.083); tl.set("#grain", {x:-19, y:-1}, 21.083);
+tl.set("#gturb", {attr:{seed:15}}, 21.167); tl.set("#grain", {x:18, y:-18}, 21.167);
+tl.set("#gturb", {attr:{seed:16}}, 21.250); tl.set("#grain", {x:15, y:5}, 21.250);
+tl.set("#gturb", {attr:{seed:17}}, 21.333); tl.set("#grain", {x:12, y:-12}, 21.333);
+tl.set("#gturb", {attr:{seed:18}}, 21.417); tl.set("#grain", {x:9, y:11}, 21.417);
+tl.set("#gturb", {attr:{seed:19}}, 21.500); tl.set("#grain", {x:6, y:-6}, 21.500);
+tl.set("#gturb", {attr:{seed:20}}, 21.583); tl.set("#grain", {x:3, y:17}, 21.583);
+tl.set("#gturb", {attr:{seed:21}}, 21.667); tl.set("#grain", {x:0, y:0}, 21.667);
+tl.set("#gturb", {attr:{seed:22}}, 21.750); tl.set("#grain", {x:-3, y:-17}, 21.750);
+tl.set("#gturb", {attr:{seed:23}}, 21.833); tl.set("#grain", {x:-6, y:6}, 21.833);
+tl.set("#gturb", {attr:{seed:24}}, 21.917); tl.set("#grain", {x:-9, y:-11}, 21.917);
+tl.set("#gturb", {attr:{seed:25}}, 22.000); tl.set("#grain", {x:-12, y:12}, 22.000);
+tl.set("#gturb", {attr:{seed:26}}, 22.083); tl.set("#grain", {x:-15, y:-5}, 22.083);
+tl.set("#gturb", {attr:{seed:27}}, 22.167); tl.set("#grain", {x:-18, y:18}, 22.167);
+tl.set("#gturb", {attr:{seed:28}}, 22.250); tl.set("#grain", {x:19, y:1}, 22.250);
+tl.set("#gturb", {attr:{seed:29}}, 22.333); tl.set("#grain", {x:16, y:-16}, 22.333);
+tl.set("#gturb", {attr:{seed:30}}, 22.417); tl.set("#grain", {x:13, y:7}, 22.417);
+tl.set("#gturb", {attr:{seed:31}}, 22.500); tl.set("#grain", {x:10, y:-10}, 22.500);
+tl.set("#gturb", {attr:{seed:32}}, 22.583); tl.set("#grain", {x:7, y:13}, 22.583);
+tl.set("#gturb", {attr:{seed:33}}, 22.667); tl.set("#grain", {x:4, y:-4}, 22.667);
+tl.set("#gturb", {attr:{seed:34}}, 22.750); tl.set("#grain", {x:1, y:19}, 22.750);
+tl.set("#gturb", {attr:{seed:35}}, 22.833); tl.set("#grain", {x:-2, y:2}, 22.833);
+tl.set("#gturb", {attr:{seed:36}}, 22.917); tl.set("#grain", {x:-5, y:-15}, 22.917);
+tl.set("#gturb", {attr:{seed:37}}, 23.000); tl.set("#grain", {x:-8, y:8}, 23.000);
+tl.set("#gturb", {attr:{seed:38}}, 23.083); tl.set("#grain", {x:-11, y:-9}, 23.083);
+tl.set("#gturb", {attr:{seed:39}}, 23.167); tl.set("#grain", {x:-14, y:14}, 23.167);
+tl.set("#gturb", {attr:{seed:40}}, 23.250); tl.set("#grain", {x:-17, y:-3}, 23.250);
+tl.set("#gturb", {attr:{seed:1}}, 23.333); tl.set("#grain", {x:-20, y:-20}, 23.333);
+tl.set("#gturb", {attr:{seed:2}}, 23.417); tl.set("#grain", {x:17, y:3}, 23.417);
+tl.set("#gturb", {attr:{seed:3}}, 23.500); tl.set("#grain", {x:14, y:-14}, 23.500);
+tl.set("#gturb", {attr:{seed:4}}, 23.583); tl.set("#grain", {x:11, y:9}, 23.583);
+tl.set("#gturb", {attr:{seed:5}}, 23.667); tl.set("#grain", {x:8, y:-8}, 23.667);
+tl.set("#gturb", {attr:{seed:6}}, 23.750); tl.set("#grain", {x:5, y:15}, 23.750);
+tl.set("#gturb", {attr:{seed:7}}, 23.833); tl.set("#grain", {x:2, y:-2}, 23.833);
+tl.set("#gturb", {attr:{seed:8}}, 23.917); tl.set("#grain", {x:-1, y:-19}, 23.917);
+tl.set("#gturb", {attr:{seed:9}}, 24.000); tl.set("#grain", {x:-4, y:4}, 24.000);
+tl.set("#gturb", {attr:{seed:10}}, 24.083); tl.set("#grain", {x:-7, y:-13}, 24.083);
+tl.set("#gturb", {attr:{seed:11}}, 24.167); tl.set("#grain", {x:-10, y:10}, 24.167);
+tl.set("#gturb", {attr:{seed:12}}, 24.250); tl.set("#grain", {x:-13, y:-7}, 24.250);
+tl.set("#gturb", {attr:{seed:13}}, 24.333); tl.set("#grain", {x:-16, y:16}, 24.333);
+tl.set("#gturb", {attr:{seed:14}}, 24.417); tl.set("#grain", {x:-19, y:-1}, 24.417);
+tl.set("#gturb", {attr:{seed:15}}, 24.500); tl.set("#grain", {x:18, y:-18}, 24.500);
+tl.set("#gturb", {attr:{seed:16}}, 24.583); tl.set("#grain", {x:15, y:5}, 24.583);
+tl.set("#gturb", {attr:{seed:17}}, 24.667); tl.set("#grain", {x:12, y:-12}, 24.667);
+tl.set("#gturb", {attr:{seed:18}}, 24.750); tl.set("#grain", {x:9, y:11}, 24.750);
+tl.set("#gturb", {attr:{seed:19}}, 24.833); tl.set("#grain", {x:6, y:-6}, 24.833);
+tl.set("#gturb", {attr:{seed:20}}, 24.917); tl.set("#grain", {x:3, y:17}, 24.917);
+tl.set("#gturb", {attr:{seed:21}}, 25.000); tl.set("#grain", {x:0, y:0}, 25.000);
+tl.set("#gturb", {attr:{seed:22}}, 25.083); tl.set("#grain", {x:-3, y:-17}, 25.083);
+tl.set("#gturb", {attr:{seed:23}}, 25.167); tl.set("#grain", {x:-6, y:6}, 25.167);
+tl.set("#gturb", {attr:{seed:24}}, 25.250); tl.set("#grain", {x:-9, y:-11}, 25.250);
+tl.set("#gturb", {attr:{seed:25}}, 25.333); tl.set("#grain", {x:-12, y:12}, 25.333);
+tl.set("#gturb", {attr:{seed:26}}, 25.417); tl.set("#grain", {x:-15, y:-5}, 25.417);
+tl.set("#gturb", {attr:{seed:27}}, 25.500); tl.set("#grain", {x:-18, y:18}, 25.500);
+tl.set("#gturb", {attr:{seed:28}}, 25.583); tl.set("#grain", {x:19, y:1}, 25.583);
+tl.set("#gturb", {attr:{seed:29}}, 25.667); tl.set("#grain", {x:16, y:-16}, 25.667);
+tl.set("#gturb", {attr:{seed:30}}, 25.750); tl.set("#grain", {x:13, y:7}, 25.750);
+tl.set("#gturb", {attr:{seed:31}}, 25.833); tl.set("#grain", {x:10, y:-10}, 25.833);
+tl.set("#gturb", {attr:{seed:32}}, 25.917); tl.set("#grain", {x:7, y:13}, 25.917);
+tl.set("#gturb", {attr:{seed:33}}, 26.000); tl.set("#grain", {x:4, y:-4}, 26.000);
+tl.set("#gturb", {attr:{seed:34}}, 26.083); tl.set("#grain", {x:1, y:19}, 26.083);
+tl.set("#gturb", {attr:{seed:35}}, 26.167); tl.set("#grain", {x:-2, y:2}, 26.167);
+tl.set("#gturb", {attr:{seed:36}}, 26.250); tl.set("#grain", {x:-5, y:-15}, 26.250);
+tl.set("#gturb", {attr:{seed:37}}, 26.333); tl.set("#grain", {x:-8, y:8}, 26.333);
+tl.set("#gturb", {attr:{seed:38}}, 26.417); tl.set("#grain", {x:-11, y:-9}, 26.417);
+tl.set("#gturb", {attr:{seed:39}}, 26.500); tl.set("#grain", {x:-14, y:14}, 26.500);
+tl.set("#gturb", {attr:{seed:40}}, 26.583); tl.set("#grain", {x:-17, y:-3}, 26.583);
+tl.set("#gturb", {attr:{seed:1}}, 26.667); tl.set("#grain", {x:-20, y:-20}, 26.667);
+tl.set("#gturb", {attr:{seed:2}}, 26.750); tl.set("#grain", {x:17, y:3}, 26.750);
+tl.set("#gturb", {attr:{seed:3}}, 26.833); tl.set("#grain", {x:14, y:-14}, 26.833);
+tl.set("#gturb", {attr:{seed:4}}, 26.917); tl.set("#grain", {x:11, y:9}, 26.917);
+tl.set("#gturb", {attr:{seed:5}}, 27.000); tl.set("#grain", {x:8, y:-8}, 27.000);
+tl.set("#gturb", {attr:{seed:6}}, 27.083); tl.set("#grain", {x:5, y:15}, 27.083);
+tl.set("#gturb", {attr:{seed:7}}, 27.167); tl.set("#grain", {x:2, y:-2}, 27.167);
+tl.set("#gturb", {attr:{seed:8}}, 27.250); tl.set("#grain", {x:-1, y:-19}, 27.250);
+tl.set("#gturb", {attr:{seed:9}}, 27.333); tl.set("#grain", {x:-4, y:4}, 27.333);
+tl.set("#gturb", {attr:{seed:10}}, 27.417); tl.set("#grain", {x:-7, y:-13}, 27.417);
+tl.set("#gturb", {attr:{seed:11}}, 27.500); tl.set("#grain", {x:-10, y:10}, 27.500);
+tl.set("#gturb", {attr:{seed:12}}, 27.583); tl.set("#grain", {x:-13, y:-7}, 27.583);
+tl.set("#gturb", {attr:{seed:13}}, 27.667); tl.set("#grain", {x:-16, y:16}, 27.667);
+tl.set("#gturb", {attr:{seed:14}}, 27.750); tl.set("#grain", {x:-19, y:-1}, 27.750);
+tl.set("#gturb", {attr:{seed:15}}, 27.833); tl.set("#grain", {x:18, y:-18}, 27.833);
+tl.set("#gturb", {attr:{seed:16}}, 27.917); tl.set("#grain", {x:15, y:5}, 27.917);
+tl.set("#gturb", {attr:{seed:17}}, 28.000); tl.set("#grain", {x:12, y:-12}, 28.000);
+tl.set("#gturb", {attr:{seed:18}}, 28.083); tl.set("#grain", {x:9, y:11}, 28.083);
+tl.set("#gturb", {attr:{seed:19}}, 28.167); tl.set("#grain", {x:6, y:-6}, 28.167);
+tl.set("#gturb", {attr:{seed:20}}, 28.250); tl.set("#grain", {x:3, y:17}, 28.250);
+tl.set("#gturb", {attr:{seed:21}}, 28.333); tl.set("#grain", {x:0, y:0}, 28.333);
+tl.set("#gturb", {attr:{seed:22}}, 28.417); tl.set("#grain", {x:-3, y:-17}, 28.417);
+tl.set("#gturb", {attr:{seed:23}}, 28.500); tl.set("#grain", {x:-6, y:6}, 28.500);
+tl.set("#gturb", {attr:{seed:24}}, 28.583); tl.set("#grain", {x:-9, y:-11}, 28.583);
+tl.set("#gturb", {attr:{seed:25}}, 28.667); tl.set("#grain", {x:-12, y:12}, 28.667);
+tl.set("#gturb", {attr:{seed:26}}, 28.750); tl.set("#grain", {x:-15, y:-5}, 28.750);
+tl.set("#gturb", {attr:{seed:27}}, 28.833); tl.set("#grain", {x:-18, y:18}, 28.833);
+tl.set("#gturb", {attr:{seed:28}}, 28.917); tl.set("#grain", {x:19, y:1}, 28.917);
+tl.set("#gturb", {attr:{seed:29}}, 29.000); tl.set("#grain", {x:16, y:-16}, 29.000);
+tl.set("#gturb", {attr:{seed:30}}, 29.083); tl.set("#grain", {x:13, y:7}, 29.083);
+tl.set("#gturb", {attr:{seed:31}}, 29.167); tl.set("#grain", {x:10, y:-10}, 29.167);
+tl.set("#gturb", {attr:{seed:32}}, 29.250); tl.set("#grain", {x:7, y:13}, 29.250);
+tl.set("#gturb", {attr:{seed:33}}, 29.333); tl.set("#grain", {x:4, y:-4}, 29.333);
+tl.set("#gturb", {attr:{seed:34}}, 29.417); tl.set("#grain", {x:1, y:19}, 29.417);
+tl.set("#gturb", {attr:{seed:35}}, 29.500); tl.set("#grain", {x:-2, y:2}, 29.500);
+tl.set("#gturb", {attr:{seed:36}}, 29.583); tl.set("#grain", {x:-5, y:-15}, 29.583);
+tl.set("#gturb", {attr:{seed:37}}, 29.667); tl.set("#grain", {x:-8, y:8}, 29.667);
+tl.set("#gturb", {attr:{seed:38}}, 29.750); tl.set("#grain", {x:-11, y:-9}, 29.750);
+tl.set("#gturb", {attr:{seed:39}}, 29.833); tl.set("#grain", {x:-14, y:14}, 29.833);
+tl.set("#gturb", {attr:{seed:40}}, 29.917); tl.set("#grain", {x:-17, y:-3}, 29.917);
+tl.set("#gturb", {attr:{seed:1}}, 30.000); tl.set("#grain", {x:-20, y:-20}, 30.000);
+tl.set("#gturb", {attr:{seed:2}}, 30.083); tl.set("#grain", {x:17, y:3}, 30.083);
+tl.set("#gturb", {attr:{seed:3}}, 30.167); tl.set("#grain", {x:14, y:-14}, 30.167);
+tl.set("#gturb", {attr:{seed:4}}, 30.250); tl.set("#grain", {x:11, y:9}, 30.250);
+tl.set("#gturb", {attr:{seed:5}}, 30.333); tl.set("#grain", {x:8, y:-8}, 30.333);
+tl.set("#gturb", {attr:{seed:6}}, 30.417); tl.set("#grain", {x:5, y:15}, 30.417);
+tl.set("#gturb", {attr:{seed:7}}, 30.500); tl.set("#grain", {x:2, y:-2}, 30.500);
+tl.set("#gturb", {attr:{seed:8}}, 30.583); tl.set("#grain", {x:-1, y:-19}, 30.583);
+tl.set("#gturb", {attr:{seed:9}}, 30.667); tl.set("#grain", {x:-4, y:4}, 30.667);
+tl.set("#gturb", {attr:{seed:10}}, 30.750); tl.set("#grain", {x:-7, y:-13}, 30.750);
+tl.set("#gturb", {attr:{seed:11}}, 30.833); tl.set("#grain", {x:-10, y:10}, 30.833);
+tl.set("#gturb", {attr:{seed:12}}, 30.917); tl.set("#grain", {x:-13, y:-7}, 30.917);
+tl.set("#gturb", {attr:{seed:13}}, 31.000); tl.set("#grain", {x:-16, y:16}, 31.000);
+tl.set("#gturb", {attr:{seed:14}}, 31.083); tl.set("#grain", {x:-19, y:-1}, 31.083);
+tl.set("#gturb", {attr:{seed:15}}, 31.167); tl.set("#grain", {x:18, y:-18}, 31.167);
+tl.set("#gturb", {attr:{seed:16}}, 31.250); tl.set("#grain", {x:15, y:5}, 31.250);
+tl.set("#gturb", {attr:{seed:17}}, 31.333); tl.set("#grain", {x:12, y:-12}, 31.333);
+tl.set("#gturb", {attr:{seed:18}}, 31.417); tl.set("#grain", {x:9, y:11}, 31.417);
+tl.set("#gturb", {attr:{seed:19}}, 31.500); tl.set("#grain", {x:6, y:-6}, 31.500);
+tl.set("#gturb", {attr:{seed:20}}, 31.583); tl.set("#grain", {x:3, y:17}, 31.583);
+tl.set("#gturb", {attr:{seed:21}}, 31.667); tl.set("#grain", {x:0, y:0}, 31.667);
+tl.set("#gturb", {attr:{seed:22}}, 31.750); tl.set("#grain", {x:-3, y:-17}, 31.750);
+tl.set("#gturb", {attr:{seed:23}}, 31.833); tl.set("#grain", {x:-6, y:6}, 31.833);
+tl.set("#gturb", {attr:{seed:24}}, 31.917); tl.set("#grain", {x:-9, y:-11}, 31.917);
+tl.set("#gturb", {attr:{seed:25}}, 32.000); tl.set("#grain", {x:-12, y:12}, 32.000);
+tl.set("#gturb", {attr:{seed:26}}, 32.083); tl.set("#grain", {x:-15, y:-5}, 32.083);
+tl.set("#gturb", {attr:{seed:27}}, 32.167); tl.set("#grain", {x:-18, y:18}, 32.167);
+tl.set("#gturb", {attr:{seed:28}}, 32.250); tl.set("#grain", {x:19, y:1}, 32.250);
+tl.set("#gturb", {attr:{seed:29}}, 32.333); tl.set("#grain", {x:16, y:-16}, 32.333);
+tl.set("#gturb", {attr:{seed:30}}, 32.417); tl.set("#grain", {x:13, y:7}, 32.417);
+tl.set("#gturb", {attr:{seed:31}}, 32.500); tl.set("#grain", {x:10, y:-10}, 32.500);
+tl.set("#gturb", {attr:{seed:32}}, 32.583); tl.set("#grain", {x:7, y:13}, 32.583);
+tl.set("#gturb", {attr:{seed:33}}, 32.667); tl.set("#grain", {x:4, y:-4}, 32.667);
+tl.set("#gturb", {attr:{seed:34}}, 32.750); tl.set("#grain", {x:1, y:19}, 32.750);
+tl.set("#gturb", {attr:{seed:35}}, 32.833); tl.set("#grain", {x:-2, y:2}, 32.833);
+tl.set("#gturb", {attr:{seed:36}}, 32.917); tl.set("#grain", {x:-5, y:-15}, 32.917);
+tl.set("#gturb", {attr:{seed:37}}, 33.000); tl.set("#grain", {x:-8, y:8}, 33.000);
+tl.set("#gturb", {attr:{seed:38}}, 33.083); tl.set("#grain", {x:-11, y:-9}, 33.083);
+tl.set("#gturb", {attr:{seed:39}}, 33.167); tl.set("#grain", {x:-14, y:14}, 33.167);
+tl.set("#gturb", {attr:{seed:40}}, 33.250); tl.set("#grain", {x:-17, y:-3}, 33.250);
+tl.set("#gturb", {attr:{seed:1}}, 33.333); tl.set("#grain", {x:-20, y:-20}, 33.333);
+tl.set("#gturb", {attr:{seed:2}}, 33.417); tl.set("#grain", {x:17, y:3}, 33.417);
+tl.set("#gturb", {attr:{seed:3}}, 33.500); tl.set("#grain", {x:14, y:-14}, 33.500);
+tl.set("#gturb", {attr:{seed:4}}, 33.583); tl.set("#grain", {x:11, y:9}, 33.583);
+tl.set("#gturb", {attr:{seed:5}}, 33.667); tl.set("#grain", {x:8, y:-8}, 33.667);
+tl.set("#gturb", {attr:{seed:6}}, 33.750); tl.set("#grain", {x:5, y:15}, 33.750);
+tl.set("#gturb", {attr:{seed:7}}, 33.833); tl.set("#grain", {x:2, y:-2}, 33.833);
+tl.set("#gturb", {attr:{seed:8}}, 33.917); tl.set("#grain", {x:-1, y:-19}, 33.917);
+tl.set("#gturb", {attr:{seed:9}}, 34.000); tl.set("#grain", {x:-4, y:4}, 34.000);
+tl.set("#gturb", {attr:{seed:10}}, 34.083); tl.set("#grain", {x:-7, y:-13}, 34.083);
+tl.set("#gturb", {attr:{seed:11}}, 34.167); tl.set("#grain", {x:-10, y:10}, 34.167);
+tl.set("#gturb", {attr:{seed:12}}, 34.250); tl.set("#grain", {x:-13, y:-7}, 34.250);
+tl.set("#gturb", {attr:{seed:13}}, 34.333); tl.set("#grain", {x:-16, y:16}, 34.333);
+tl.set("#gturb", {attr:{seed:14}}, 34.417); tl.set("#grain", {x:-19, y:-1}, 34.417);
+tl.set("#gturb", {attr:{seed:15}}, 34.500); tl.set("#grain", {x:18, y:-18}, 34.500);
+tl.set("#gturb", {attr:{seed:16}}, 34.583); tl.set("#grain", {x:15, y:5}, 34.583);
+tl.set("#gturb", {attr:{seed:17}}, 34.667); tl.set("#grain", {x:12, y:-12}, 34.667);
+tl.set("#gturb", {attr:{seed:18}}, 34.750); tl.set("#grain", {x:9, y:11}, 34.750);
+tl.set("#gturb", {attr:{seed:19}}, 34.833); tl.set("#grain", {x:6, y:-6}, 34.833);
+tl.set("#gturb", {attr:{seed:20}}, 34.917); tl.set("#grain", {x:3, y:17}, 34.917);
+tl.set("#gturb", {attr:{seed:21}}, 35.000); tl.set("#grain", {x:0, y:0}, 35.000);
+tl.set("#gturb", {attr:{seed:22}}, 35.083); tl.set("#grain", {x:-3, y:-17}, 35.083);
+tl.set("#gturb", {attr:{seed:23}}, 35.167); tl.set("#grain", {x:-6, y:6}, 35.167);
+tl.set("#gturb", {attr:{seed:24}}, 35.250); tl.set("#grain", {x:-9, y:-11}, 35.250);
+tl.set("#gturb", {attr:{seed:25}}, 35.333); tl.set("#grain", {x:-12, y:12}, 35.333);
+tl.set("#gturb", {attr:{seed:26}}, 35.417); tl.set("#grain", {x:-15, y:-5}, 35.417);
+tl.set("#gturb", {attr:{seed:27}}, 35.500); tl.set("#grain", {x:-18, y:18}, 35.500);
+tl.set("#gturb", {attr:{seed:28}}, 35.583); tl.set("#grain", {x:19, y:1}, 35.583);
+tl.set("#gturb", {attr:{seed:29}}, 35.667); tl.set("#grain", {x:16, y:-16}, 35.667);
+tl.set("#gturb", {attr:{seed:30}}, 35.750); tl.set("#grain", {x:13, y:7}, 35.750);
+tl.set("#gturb", {attr:{seed:31}}, 35.833); tl.set("#grain", {x:10, y:-10}, 35.833);
+tl.set("#gturb", {attr:{seed:32}}, 35.917); tl.set("#grain", {x:7, y:13}, 35.917);
+tl.set("#gturb", {attr:{seed:33}}, 36.000); tl.set("#grain", {x:4, y:-4}, 36.000);
+tl.set("#gturb", {attr:{seed:34}}, 36.083); tl.set("#grain", {x:1, y:19}, 36.083);
+tl.set("#gturb", {attr:{seed:35}}, 36.167); tl.set("#grain", {x:-2, y:2}, 36.167);
+tl.set("#gturb", {attr:{seed:36}}, 36.250); tl.set("#grain", {x:-5, y:-15}, 36.250);
+tl.set("#gturb", {attr:{seed:37}}, 36.333); tl.set("#grain", {x:-8, y:8}, 36.333);
+tl.set("#gturb", {attr:{seed:38}}, 36.417); tl.set("#grain", {x:-11, y:-9}, 36.417);
+tl.set("#gturb", {attr:{seed:39}}, 36.500); tl.set("#grain", {x:-14, y:14}, 36.500);
+tl.set("#gturb", {attr:{seed:40}}, 36.583); tl.set("#grain", {x:-17, y:-3}, 36.583);
+tl.set("#gturb", {attr:{seed:1}}, 36.667); tl.set("#grain", {x:-20, y:-20}, 36.667);
+tl.set("#gturb", {attr:{seed:2}}, 36.750); tl.set("#grain", {x:17, y:3}, 36.750);
+tl.set("#gturb", {attr:{seed:3}}, 36.833); tl.set("#grain", {x:14, y:-14}, 36.833);
+tl.set("#gturb", {attr:{seed:4}}, 36.917); tl.set("#grain", {x:11, y:9}, 36.917);
+tl.set("#gturb", {attr:{seed:5}}, 37.000); tl.set("#grain", {x:8, y:-8}, 37.000);
+tl.set("#gturb", {attr:{seed:6}}, 37.083); tl.set("#grain", {x:5, y:15}, 37.083);
+tl.set("#gturb", {attr:{seed:7}}, 37.167); tl.set("#grain", {x:2, y:-2}, 37.167);
+tl.set("#gturb", {attr:{seed:8}}, 37.250); tl.set("#grain", {x:-1, y:-19}, 37.250);
+tl.set("#gturb", {attr:{seed:9}}, 37.333); tl.set("#grain", {x:-4, y:4}, 37.333);
+tl.set("#gturb", {attr:{seed:10}}, 37.417); tl.set("#grain", {x:-7, y:-13}, 37.417);
+tl.set("#gturb", {attr:{seed:11}}, 37.500); tl.set("#grain", {x:-10, y:10}, 37.500);
+tl.set("#gturb", {attr:{seed:12}}, 37.583); tl.set("#grain", {x:-13, y:-7}, 37.583);
+tl.set("#gturb", {attr:{seed:13}}, 37.667); tl.set("#grain", {x:-16, y:16}, 37.667);
+tl.set("#gturb", {attr:{seed:14}}, 37.750); tl.set("#grain", {x:-19, y:-1}, 37.750);
+tl.set("#gturb", {attr:{seed:15}}, 37.833); tl.set("#grain", {x:18, y:-18}, 37.833);
+tl.set("#gturb", {attr:{seed:16}}, 37.917); tl.set("#grain", {x:15, y:5}, 37.917);
+tl.set("#gturb", {attr:{seed:17}}, 38.000); tl.set("#grain", {x:12, y:-12}, 38.000);
+tl.set("#gturb", {attr:{seed:18}}, 38.083); tl.set("#grain", {x:9, y:11}, 38.083);
+tl.set("#gturb", {attr:{seed:19}}, 38.167); tl.set("#grain", {x:6, y:-6}, 38.167);
+tl.set("#gturb", {attr:{seed:20}}, 38.250); tl.set("#grain", {x:3, y:17}, 38.250);
+tl.set("#gturb", {attr:{seed:21}}, 38.333); tl.set("#grain", {x:0, y:0}, 38.333);
+tl.set("#gturb", {attr:{seed:22}}, 38.417); tl.set("#grain", {x:-3, y:-17}, 38.417);
+tl.set("#gturb", {attr:{seed:23}}, 38.500); tl.set("#grain", {x:-6, y:6}, 38.500);
+tl.set("#gturb", {attr:{seed:24}}, 38.583); tl.set("#grain", {x:-9, y:-11}, 38.583);
+tl.set("#gturb", {attr:{seed:25}}, 38.667); tl.set("#grain", {x:-12, y:12}, 38.667);
+tl.set("#gturb", {attr:{seed:26}}, 38.750); tl.set("#grain", {x:-15, y:-5}, 38.750);
+tl.set("#gturb", {attr:{seed:27}}, 38.833); tl.set("#grain", {x:-18, y:18}, 38.833);
+tl.set("#gturb", {attr:{seed:28}}, 38.917); tl.set("#grain", {x:19, y:1}, 38.917);
+tl.set("#gturb", {attr:{seed:29}}, 39.000); tl.set("#grain", {x:16, y:-16}, 39.000);
+tl.set("#gturb", {attr:{seed:30}}, 39.083); tl.set("#grain", {x:13, y:7}, 39.083);
+tl.set("#gturb", {attr:{seed:31}}, 39.167); tl.set("#grain", {x:10, y:-10}, 39.167);
+tl.set("#gturb", {attr:{seed:32}}, 39.250); tl.set("#grain", {x:7, y:13}, 39.250);
+tl.set("#gturb", {attr:{seed:33}}, 39.333); tl.set("#grain", {x:4, y:-4}, 39.333);
+tl.set("#gturb", {attr:{seed:34}}, 39.417); tl.set("#grain", {x:1, y:19}, 39.417);
+tl.set("#gturb", {attr:{seed:35}}, 39.500); tl.set("#grain", {x:-2, y:2}, 39.500);
+tl.set("#gturb", {attr:{seed:36}}, 39.583); tl.set("#grain", {x:-5, y:-15}, 39.583);
+tl.set("#gturb", {attr:{seed:37}}, 39.667); tl.set("#grain", {x:-8, y:8}, 39.667);
+tl.set("#gturb", {attr:{seed:38}}, 39.750); tl.set("#grain", {x:-11, y:-9}, 39.750);
+tl.set("#gturb", {attr:{seed:39}}, 39.833); tl.set("#grain", {x:-14, y:14}, 39.833);
+tl.set("#gturb", {attr:{seed:40}}, 39.917); tl.set("#grain", {x:-17, y:-3}, 39.917);
+tl.set("#gturb", {attr:{seed:1}}, 40.000); tl.set("#grain", {x:-20, y:-20}, 40.000);
+tl.set("#gturb", {attr:{seed:2}}, 40.083); tl.set("#grain", {x:17, y:3}, 40.083);
+tl.set("#gturb", {attr:{seed:3}}, 40.167); tl.set("#grain", {x:14, y:-14}, 40.167);
+tl.set("#gturb", {attr:{seed:4}}, 40.250); tl.set("#grain", {x:11, y:9}, 40.250);
+tl.set("#gturb", {attr:{seed:5}}, 40.333); tl.set("#grain", {x:8, y:-8}, 40.333);
+tl.set("#gturb", {attr:{seed:6}}, 40.417); tl.set("#grain", {x:5, y:15}, 40.417);
+tl.set("#gturb", {attr:{seed:7}}, 40.500); tl.set("#grain", {x:2, y:-2}, 40.500);
+tl.set("#gturb", {attr:{seed:8}}, 40.583); tl.set("#grain", {x:-1, y:-19}, 40.583);
+tl.set("#gturb", {attr:{seed:9}}, 40.667); tl.set("#grain", {x:-4, y:4}, 40.667);
+tl.set("#gturb", {attr:{seed:10}}, 40.750); tl.set("#grain", {x:-7, y:-13}, 40.750);
+tl.set("#gturb", {attr:{seed:11}}, 40.833); tl.set("#grain", {x:-10, y:10}, 40.833);
+tl.set("#gturb", {attr:{seed:12}}, 40.917); tl.set("#grain", {x:-13, y:-7}, 40.917);
+tl.set("#gturb", {attr:{seed:13}}, 41.000); tl.set("#grain", {x:-16, y:16}, 41.000);
+tl.set("#gturb", {attr:{seed:14}}, 41.083); tl.set("#grain", {x:-19, y:-1}, 41.083);
+tl.set("#gturb", {attr:{seed:15}}, 41.167); tl.set("#grain", {x:18, y:-18}, 41.167);
+tl.set("#gturb", {attr:{seed:16}}, 41.250); tl.set("#grain", {x:15, y:5}, 41.250);
+tl.set("#gturb", {attr:{seed:17}}, 41.333); tl.set("#grain", {x:12, y:-12}, 41.333);
+tl.set("#gturb", {attr:{seed:18}}, 41.417); tl.set("#grain", {x:9, y:11}, 41.417);
+tl.set("#gturb", {attr:{seed:19}}, 41.500); tl.set("#grain", {x:6, y:-6}, 41.500);
+tl.set("#gturb", {attr:{seed:20}}, 41.583); tl.set("#grain", {x:3, y:17}, 41.583);
+tl.set("#gturb", {attr:{seed:21}}, 41.667); tl.set("#grain", {x:0, y:0}, 41.667);
+tl.set("#gturb", {attr:{seed:22}}, 41.750); tl.set("#grain", {x:-3, y:-17}, 41.750);
+tl.set("#gturb", {attr:{seed:23}}, 41.833); tl.set("#grain", {x:-6, y:6}, 41.833);
+tl.set("#gturb", {attr:{seed:24}}, 41.917); tl.set("#grain", {x:-9, y:-11}, 41.917);
+tl.set("#gturb", {attr:{seed:25}}, 42.000); tl.set("#grain", {x:-12, y:12}, 42.000);
+tl.set("#gturb", {attr:{seed:26}}, 42.083); tl.set("#grain", {x:-15, y:-5}, 42.083);
+tl.set("#gturb", {attr:{seed:27}}, 42.167); tl.set("#grain", {x:-18, y:18}, 42.167);
+tl.set("#gturb", {attr:{seed:28}}, 42.250); tl.set("#grain", {x:19, y:1}, 42.250);
+tl.set("#gturb", {attr:{seed:29}}, 42.333); tl.set("#grain", {x:16, y:-16}, 42.333);
+tl.set("#gturb", {attr:{seed:30}}, 42.417); tl.set("#grain", {x:13, y:7}, 42.417);
+tl.set("#gturb", {attr:{seed:31}}, 42.500); tl.set("#grain", {x:10, y:-10}, 42.500);
+tl.set("#gturb", {attr:{seed:32}}, 42.583); tl.set("#grain", {x:7, y:13}, 42.583);
+tl.set("#gturb", {attr:{seed:33}}, 42.667); tl.set("#grain", {x:4, y:-4}, 42.667);
+tl.set("#gturb", {attr:{seed:34}}, 42.750); tl.set("#grain", {x:1, y:19}, 42.750);
+tl.set("#gturb", {attr:{seed:35}}, 42.833); tl.set("#grain", {x:-2, y:2}, 42.833);
+tl.set("#gturb", {attr:{seed:36}}, 42.917); tl.set("#grain", {x:-5, y:-15}, 42.917);
+tl.set("#gturb", {attr:{seed:37}}, 43.000); tl.set("#grain", {x:-8, y:8}, 43.000);
+tl.set("#gturb", {attr:{seed:38}}, 43.083); tl.set("#grain", {x:-11, y:-9}, 43.083);
+tl.set("#gturb", {attr:{seed:39}}, 43.167); tl.set("#grain", {x:-14, y:14}, 43.167);
+tl.set("#gturb", {attr:{seed:40}}, 43.250); tl.set("#grain", {x:-17, y:-3}, 43.250);
+tl.set("#gturb", {attr:{seed:1}}, 43.333); tl.set("#grain", {x:-20, y:-20}, 43.333);
+tl.set("#gturb", {attr:{seed:2}}, 43.417); tl.set("#grain", {x:17, y:3}, 43.417);
+tl.set("#gturb", {attr:{seed:3}}, 43.500); tl.set("#grain", {x:14, y:-14}, 43.500);
+tl.set("#gturb", {attr:{seed:4}}, 43.583); tl.set("#grain", {x:11, y:9}, 43.583);
+tl.set("#gturb", {attr:{seed:5}}, 43.667); tl.set("#grain", {x:8, y:-8}, 43.667);
+tl.set("#gturb", {attr:{seed:6}}, 43.750); tl.set("#grain", {x:5, y:15}, 43.750);
+tl.set("#gturb", {attr:{seed:7}}, 43.833); tl.set("#grain", {x:2, y:-2}, 43.833);
+tl.set("#gturb", {attr:{seed:8}}, 43.917); tl.set("#grain", {x:-1, y:-19}, 43.917);
+tl.set("#gturb", {attr:{seed:9}}, 44.000); tl.set("#grain", {x:-4, y:4}, 44.000);
+tl.set("#gturb", {attr:{seed:10}}, 44.083); tl.set("#grain", {x:-7, y:-13}, 44.083);
+tl.set("#gturb", {attr:{seed:11}}, 44.167); tl.set("#grain", {x:-10, y:10}, 44.167);
+tl.set("#gturb", {attr:{seed:12}}, 44.250); tl.set("#grain", {x:-13, y:-7}, 44.250);
+tl.set("#gturb", {attr:{seed:13}}, 44.333); tl.set("#grain", {x:-16, y:16}, 44.333);
+tl.set("#gturb", {attr:{seed:14}}, 44.417); tl.set("#grain", {x:-19, y:-1}, 44.417);
+tl.set("#gturb", {attr:{seed:15}}, 44.500); tl.set("#grain", {x:18, y:-18}, 44.500);
+tl.set("#gturb", {attr:{seed:16}}, 44.583); tl.set("#grain", {x:15, y:5}, 44.583);
+tl.set("#gturb", {attr:{seed:17}}, 44.667); tl.set("#grain", {x:12, y:-12}, 44.667);
+tl.set("#gturb", {attr:{seed:18}}, 44.750); tl.set("#grain", {x:9, y:11}, 44.750);
+tl.set("#gturb", {attr:{seed:19}}, 44.833); tl.set("#grain", {x:6, y:-6}, 44.833);
+tl.set("#gturb", {attr:{seed:20}}, 44.917); tl.set("#grain", {x:3, y:17}, 44.917);
+tl.set("#gturb", {attr:{seed:21}}, 45.000); tl.set("#grain", {x:0, y:0}, 45.000);
+tl.set("#gturb", {attr:{seed:22}}, 45.083); tl.set("#grain", {x:-3, y:-17}, 45.083);
+tl.set("#gturb", {attr:{seed:23}}, 45.167); tl.set("#grain", {x:-6, y:6}, 45.167);
+tl.set("#gturb", {attr:{seed:24}}, 45.250); tl.set("#grain", {x:-9, y:-11}, 45.250);
+tl.set("#gturb", {attr:{seed:25}}, 45.333); tl.set("#grain", {x:-12, y:12}, 45.333);
+tl.set("#gturb", {attr:{seed:26}}, 45.417); tl.set("#grain", {x:-15, y:-5}, 45.417);
+tl.set("#gturb", {attr:{seed:27}}, 45.500); tl.set("#grain", {x:-18, y:18}, 45.500);
+tl.set("#gturb", {attr:{seed:28}}, 45.583); tl.set("#grain", {x:19, y:1}, 45.583);
+tl.set("#gturb", {attr:{seed:29}}, 45.667); tl.set("#grain", {x:16, y:-16}, 45.667);
+tl.set("#gturb", {attr:{seed:30}}, 45.750); tl.set("#grain", {x:13, y:7}, 45.750);
+tl.set("#gturb", {attr:{seed:31}}, 45.833); tl.set("#grain", {x:10, y:-10}, 45.833);
+tl.set("#gturb", {attr:{seed:32}}, 45.917); tl.set("#grain", {x:7, y:13}, 45.917);
+tl.set("#gturb", {attr:{seed:33}}, 46.000); tl.set("#grain", {x:4, y:-4}, 46.000);
+tl.set("#gturb", {attr:{seed:34}}, 46.083); tl.set("#grain", {x:1, y:19}, 46.083);
+tl.set("#gturb", {attr:{seed:35}}, 46.167); tl.set("#grain", {x:-2, y:2}, 46.167);
+tl.set("#gturb", {attr:{seed:36}}, 46.250); tl.set("#grain", {x:-5, y:-15}, 46.250);
+tl.set("#gturb", {attr:{seed:37}}, 46.333); tl.set("#grain", {x:-8, y:8}, 46.333);
+tl.set("#gturb", {attr:{seed:38}}, 46.417); tl.set("#grain", {x:-11, y:-9}, 46.417);
+tl.set("#gturb", {attr:{seed:39}}, 46.500); tl.set("#grain", {x:-14, y:14}, 46.500);
+tl.set("#gturb", {attr:{seed:40}}, 46.583); tl.set("#grain", {x:-17, y:-3}, 46.583);
+tl.set("#gturb", {attr:{seed:1}}, 46.667); tl.set("#grain", {x:-20, y:-20}, 46.667);
+tl.set("#gturb", {attr:{seed:2}}, 46.750); tl.set("#grain", {x:17, y:3}, 46.750);
+tl.set("#gturb", {attr:{seed:3}}, 46.833); tl.set("#grain", {x:14, y:-14}, 46.833);
+tl.set("#gturb", {attr:{seed:4}}, 46.917); tl.set("#grain", {x:11, y:9}, 46.917);
+tl.set("#gturb", {attr:{seed:5}}, 47.000); tl.set("#grain", {x:8, y:-8}, 47.000);
+tl.set("#gturb", {attr:{seed:6}}, 47.083); tl.set("#grain", {x:5, y:15}, 47.083);
+tl.set("#gturb", {attr:{seed:7}}, 47.167); tl.set("#grain", {x:2, y:-2}, 47.167);
+tl.set("#gturb", {attr:{seed:8}}, 47.250); tl.set("#grain", {x:-1, y:-19}, 47.250);
+tl.set("#gturb", {attr:{seed:9}}, 47.333); tl.set("#grain", {x:-4, y:4}, 47.333);
+tl.set("#gturb", {attr:{seed:10}}, 47.417); tl.set("#grain", {x:-7, y:-13}, 47.417);
+tl.set("#gturb", {attr:{seed:11}}, 47.500); tl.set("#grain", {x:-10, y:10}, 47.500);
+tl.set("#gturb", {attr:{seed:12}}, 47.583); tl.set("#grain", {x:-13, y:-7}, 47.583);
+tl.set("#gturb", {attr:{seed:13}}, 47.667); tl.set("#grain", {x:-16, y:16}, 47.667);
+tl.set("#gturb", {attr:{seed:14}}, 47.750); tl.set("#grain", {x:-19, y:-1}, 47.750);
+tl.set("#gturb", {attr:{seed:15}}, 47.833); tl.set("#grain", {x:18, y:-18}, 47.833);
+tl.set("#gturb", {attr:{seed:16}}, 47.917); tl.set("#grain", {x:15, y:5}, 47.917);
+tl.set("#gturb", {attr:{seed:17}}, 48.000); tl.set("#grain", {x:12, y:-12}, 48.000);
+tl.set("#gturb", {attr:{seed:18}}, 48.083); tl.set("#grain", {x:9, y:11}, 48.083);
+tl.set("#gturb", {attr:{seed:19}}, 48.167); tl.set("#grain", {x:6, y:-6}, 48.167);
+tl.set("#gturb", {attr:{seed:20}}, 48.250); tl.set("#grain", {x:3, y:17}, 48.250);
+tl.set("#gturb", {attr:{seed:21}}, 48.333); tl.set("#grain", {x:0, y:0}, 48.333);
+tl.set("#gturb", {attr:{seed:22}}, 48.417); tl.set("#grain", {x:-3, y:-17}, 48.417);
+tl.set("#gturb", {attr:{seed:23}}, 48.500); tl.set("#grain", {x:-6, y:6}, 48.500);
+tl.set("#gturb", {attr:{seed:24}}, 48.583); tl.set("#grain", {x:-9, y:-11}, 48.583);
+tl.set("#gturb", {attr:{seed:25}}, 48.667); tl.set("#grain", {x:-12, y:12}, 48.667);
+tl.set("#gturb", {attr:{seed:26}}, 48.750); tl.set("#grain", {x:-15, y:-5}, 48.750);
+tl.set("#gturb", {attr:{seed:27}}, 48.833); tl.set("#grain", {x:-18, y:18}, 48.833);
+tl.set("#gturb", {attr:{seed:28}}, 48.917); tl.set("#grain", {x:19, y:1}, 48.917);
+tl.set("#gturb", {attr:{seed:29}}, 49.000); tl.set("#grain", {x:16, y:-16}, 49.000);
+tl.set("#gturb", {attr:{seed:30}}, 49.083); tl.set("#grain", {x:13, y:7}, 49.083);
+tl.set("#gturb", {attr:{seed:31}}, 49.167); tl.set("#grain", {x:10, y:-10}, 49.167);
+tl.set("#gturb", {attr:{seed:32}}, 49.250); tl.set("#grain", {x:7, y:13}, 49.250);
+tl.set("#gturb", {attr:{seed:33}}, 49.333); tl.set("#grain", {x:4, y:-4}, 49.333);
+tl.set("#gturb", {attr:{seed:34}}, 49.417); tl.set("#grain", {x:1, y:19}, 49.417);
+tl.set("#gturb", {attr:{seed:35}}, 49.500); tl.set("#grain", {x:-2, y:2}, 49.500);
+tl.set("#gturb", {attr:{seed:36}}, 49.583); tl.set("#grain", {x:-5, y:-15}, 49.583);
+tl.set("#gturb", {attr:{seed:37}}, 49.667); tl.set("#grain", {x:-8, y:8}, 49.667);
+tl.set("#gturb", {attr:{seed:38}}, 49.750); tl.set("#grain", {x:-11, y:-9}, 49.750);
+tl.set("#gturb", {attr:{seed:39}}, 49.833); tl.set("#grain", {x:-14, y:14}, 49.833);
+tl.set("#gturb", {attr:{seed:40}}, 49.917); tl.set("#grain", {x:-17, y:-3}, 49.917);
+tl.set("#gturb", {attr:{seed:1}}, 50.000); tl.set("#grain", {x:-20, y:-20}, 50.000);
+tl.set("#gturb", {attr:{seed:2}}, 50.083); tl.set("#grain", {x:17, y:3}, 50.083);
+tl.set("#gturb", {attr:{seed:3}}, 50.167); tl.set("#grain", {x:14, y:-14}, 50.167);
+tl.set("#gturb", {attr:{seed:4}}, 50.250); tl.set("#grain", {x:11, y:9}, 50.250);
+tl.set("#gturb", {attr:{seed:5}}, 50.333); tl.set("#grain", {x:8, y:-8}, 50.333);
+tl.set("#bg", {opacity:1}, 50.390);
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>
