@@ -3,7 +3,7 @@
 //   public/<ep>/voice.wav  +  episodes/<ep>/timing.json   (word times by scripts/import_voice.py, free, local)
 //
 // Usage:
-//   [GAP=0.45] node scripts/voice_ai33.mjs <ep> <voice_id> [speed]   e.g. node scripts/voice_ai33.mjs ep2 elevenlabs_nPczCjzI2devNBz1zQrb 1.05
+//   [TEMPO=1.1] [MAXPAUSE=0.18] node scripts/voice_ai33.mjs <ep> <voice_id> [speed]   (dead air is always cut to MAXPAUSE s)  e.g. node scripts/voice_ai33.mjs ep2 elevenlabs_nPczCjzI2devNBz1zQrb 1.05
 //   node scripts/voice_ai33.mjs --voices <provider> [search]   provider: elevenlabs | minimax | fishaudio | clone | edge | kokoro | vbee
 //   node scripts/voice_ai33.mjs --clone <sample.mp3> "<name>"  creates a cloned voice, prints its voice_id (clone_...)
 //   node scripts/voice_ai33.mjs --delete-clone <id>
@@ -19,6 +19,7 @@ const API = "https://api.ai33.pro";
 const KEY = process.env.AI33_API_KEY || "proxy-injected";
 const GAP = Number(process.env.GAP || 0.06); // seconds between lines (voice.mjs uses 0.06; horror: GAP=0.45)
 const SR = 24000;
+const PY = process.platform === "win32" ? "python" : "python3";
 
 const curl = (args) => {
   const out = execFileSync("curl", ["-sS", "--fail-with-body", "-m", "300", "-H", `xi-api-key: ${KEY}`, ...args], { maxBuffer: 1 << 28 }).toString();
@@ -101,7 +102,7 @@ async function generate(todo) {
 function check(todo) {
   const f = path.join(work, "check.json");
   fs.writeFileSync(f, JSON.stringify(todo.map((j) => ({ id: j.s.id, file: j.file, text: [j.s.text, lineText(j.s)] }))));
-  const r = JSON.parse(execFileSync("python3", ["scripts/check_lines.py", f], { stdio: ["ignore", "pipe", "ignore"] }).toString().trim().split("\n").pop());
+  const r = JSON.parse(execFileSync(PY, ["scripts/check_lines.py", f], { stdio: ["ignore", "pipe", "ignore"] }).toString().trim().split("\n").pop());
   return todo.filter((j) => r[j.s.id] < 0.75).map((j) => ({ j, ratio: r[j.s.id] }));
 }
 const fresh = jobs.filter((j) => !(cache[j.s.id] === key(j.s) && fs.existsSync(j.file)));
@@ -138,7 +139,7 @@ execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0"
 if (credits) console.log(`ai33 credits used this run: ${credits}`);
 
 // 4. word times + voice.wav + timing.json, exactly like an imported recording
-execFileSync("python3", ["scripts/import_voice.py", ep, joined], { stdio: "inherit" });
+execFileSync(PY, ["scripts/import_voice.py", ep, joined, "--max-pause", process.env.MAXPAUSE || "0.18", "--tempo", process.env.TEMPO || "1"], { stdio: "inherit" });
 const tf = path.join("episodes", ep, "timing.json");
 const t = JSON.parse(fs.readFileSync(tf, "utf8"));
 t.voice = voice; t.speed = speed;

@@ -22,6 +22,9 @@ ap.add_argument("ep")
 ap.add_argument("audio")
 ap.add_argument("--lang", default=None, help="language code (en, fr, ...). Default: detect")
 ap.add_argument("--model", default="small", help="whisper model: tiny, base, small, medium, large-v3")
+ap.add_argument("--max-pause", type=float, default=0.18,
+                help="cut every silence longer than this (s) down to it: no dead air. 0 = keep the recording's pauses")
+ap.add_argument("--tempo", type=float, default=1.0, help="speed up/down without changing pitch (e.g. 1.1); 0.5–2")
 a = ap.parse_args()
 
 ep_dir, pub_dir = Path("episodes") / a.ep, Path("public") / a.ep
@@ -32,9 +35,17 @@ src = Path(a.audio)
 if not src.exists():
     sys.exit(f"Audio file not found: {src}")
 
-# 1. convert: 24 kHz mono 16-bit, peak normalised to -1 dB
+# 1. convert: 24 kHz mono 16-bit, dead air cut, optional tempo, peak normalised to -1 dB
 tmp = pub_dir / "voice.tmp.wav"
-subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src), "-ac", "1", "-ar", str(SR), "-c:a", "pcm_s16le", str(tmp)], check=True)
+filters = []
+if a.max_pause > 0:  # trim the start, then shorten every inner pause to ~max_pause (kept = stop_duration + stop_silence)
+    keep = max(0.0, a.max_pause - 0.05)
+    filters.append("silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.03:"
+                   f"stop_periods=-1:stop_duration=0.05:stop_threshold=-40dB:stop_silence={keep:.3f}")
+if abs(a.tempo - 1.0) > 1e-3:
+    filters.append(f"atempo={min(2.0, max(0.5, a.tempo))}")
+subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src), "-ac", "1", "-ar", str(SR), *(["-af", ",".join(filters)] if filters else []),
+                "-c:a", "pcm_s16le", str(tmp)], check=True)
 peak = subprocess.run(["ffmpeg", "-i", str(tmp), "-af", "volumedetect", "-f", "null", "-"], capture_output=True, text=True).stderr
 m = re.search(r"max_volume: (-?[\d.]+) dB", peak)
 gain = -1.0 - float(m.group(1)) if m else 0.0

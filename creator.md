@@ -21,6 +21,12 @@ This file replaces `~/CLAUDE.md` for the script-writer skill (the cloud machine'
 - No fact-check table needed (fiction), but anything presented as real (places, laws) must be true or clearly invented.
 - Keep `episodes/<serie>/choices.md`: each part, the two options, the winning vote, what it leads to.
 
+## Rules from the user's feedback (2026-11-15) — non-negotiable
+1. **Rhythm keeps the viewers.** Fast, tense narration: 3.0–3.4 words/s after editing. **No dead air**: every silence in the voice is cut to ≤ 0.18 s (`import_voice.py --max-pause 0.18`, on by default; `TEMPO=1.1` if the voice is still slow). A longer pause only on purpose, at most one per part, right before the big reveal, and filled by picture + sound (sting, heartbeat), never empty.
+2. **SFX everywhere, for a clean finish.** Every visible action has its sound (knock, footsteps, door creak, paper slide, cloth rustle, breath, phone buzz, switch click…), plus a room-tone/ambience bed, whooshes on fast camera moves, risers into reveals, stingers on scares. Voice always on top and clear.
+3. **Nothing moves by itself.** Every object moves because someone moves it, on screen: the character reaches, grabs, lifts the paper; a hand opens the door; a finger hits the switch. Only exception: the supernatural thing the story is about, and then it must read as scary on purpose. Before rendering, list every moving object and its cause.
+4. The user picks the voice (they are choosing a better one). Don't spend credits on a new voice without asking.
+
 ## Caption (post text)
 "⚠️PARTIE 2 DISPONIBLE⚠️" when a next part exists · title · 1–2 line hook · the question · #horreur #creepypasta #peur #nuit #pourtoi
 

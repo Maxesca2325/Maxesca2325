@@ -3,9 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes hyperframes@0.9.50 preview",
-    "check": "HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes hyperframes@0.9.50 check",
-    "render": "HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes hyperframes@0.9.50 render",
-    "publish": "HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes hyperframes@0.9.50 publish"
+    "dev": "node tools/hf.mjs preview",
+    "check": "node tools/hf.mjs check",
+    "render": "node tools/hf.mjs render --fps 60 --quality delivery",
+    "snapshot": "node tools/hf.mjs snapshot",
+    "publish": "node tools/hf.mjs publish"
   }
 }
