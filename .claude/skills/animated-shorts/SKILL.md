@@ -36,6 +36,12 @@ Write it all into `styles/<channel>.md` with the numbers. Every rule must be a n
 ### 3. "Turn this into a skill"
 Create `.claude/skills/<channel>-style/SKILL.md` that says: use the animated-shorts workflow, with the look in `styles/<channel>.md`, and lists the exact engine settings that produce it (the `Look` values: sun, hemi, fog, exposure, aperture, ink, warm/cool, saturation; caption size and position; voice speed; shot length). Test it by building one still of a sample shot and comparing it with a frame from the channel side by side. Fix the numbers until they match.
 
+## Current niche (overrides steps 4–5 where they differ)
+Since 2026-11-15 the channel makes **French interactive horror "protocole" series** (fiction, 2nd person, the comments vote the next part), not true stories. Rules: `creator.md`; look and numbers: `styles/protocole.md`; engine: HyperFrames (`hf/`).
+- Step 4 ideas = original night-horror situations with a wrong detail + a rule + a two-way choice. Check TikTok that the same premise isn't already a hit (the reference account's stories are off-limits).
+- Step 5 script = the creator.md script rules; no fact-check table (fiction). Track votes in `episodes/<serie>/choices.md`.
+- Voice: French narration (Kokoro has no French voice): ai33 French clone/ElevenLabs, or the user's recording. Ask before spending credits.
+
 ## Helper skills (use them at these steps)
 Installed in this project (`.claude/skills/`, sources in `.claude/skills/SOURCES.md`). The creator's rules are in `creator.md` (it replaces `~/CLAUDE.md` for script-writer). The measured style file always wins over the generic advice of these skills (pace, length, opener).
 - **Ideas (step 4):** `channel-formula` once the channel has 3+ winners and 1+ flop → save the profile in `research/<channel>-formula.md`, and check every new idea against it.
