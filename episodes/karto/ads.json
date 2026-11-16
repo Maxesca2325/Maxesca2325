@@ -1,0 +1,44 @@
+[
+ {
+  "name": "01_ugc_machann",
+  "model": "gpt-image-2",
+  "aspect_ratio": "4:5",
+  "quality": "high",
+  "prompt": "Candid smartphone photo, UGC style, not an ad. A smiling Haitian woman in her 30s runs a small clothing boutique in Port-au-Prince, colorful dresses and handbags on racks behind her, warm afternoon light through the door. She holds her phone toward the camera; the screen shows a clean mobile online shop with dress photos, short Creole product names and prices in HTG (for example '2 500 HTG'), no dollar signs, and a navy blue header that reads 'Karto'. Slight grain, natural skin texture, real, documentary feel. Instagram story text at the top in white rounded font: 'Boutik mwen sou entènèt kounye a 🙌'"
+ },
+ {
+  "name": "02_avan_kounye_a",
+  "model": "gpt-image-2",
+  "aspect_ratio": "4:5",
+  "quality": "high",
+  "prompt": "Organic social media meme-style split image, two phone screens side by side on a plain off-white background. Left phone labeled 'AVAN' above it: a chaotic WhatsApp chat flooded with dozens of blurry product photos and messages 'Konbyen?' 'Li disponib?' 'Ki gwosè?'. Right phone labeled 'KOUNYE A' above it: a tidy mobile shop page in navy blue (#0b2358) titled 'Karto' with a neat grid of products, prices in HTG and a green 'Kòmande sou WhatsApp' button. Bold black sans-serif labels, simple, relatable, made-on-a-phone look. All products are generic and unbranded: no logos, no brand names, no Nike, Jordan, Lacoste or any real brand. Product names in simple Creole like 'Mayo blan', 'Tenis blan', 'Chapo nwa', 'Sak a do', 'Sandal'"
+ },
+ {
+  "name": "03_notif_komand",
+  "model": "gpt-image-2",
+  "aspect_ratio": "4:5",
+  "quality": "high",
+  "prompt": "Overhead flat lay photo on a worn wooden market table: a pair of sneakers, gold earrings, a bottle of perfume, a small handwritten price tag, and a smartphone in the center lit up with a WhatsApp notification banner: 'Nouvo kòmand sou Karto — 2 atik, 4 500 HTG'. Morning sunlight, soft shadows, authentic small-business vibe, shot on phone, slightly imperfect framing"
+ },
+ {
+  "name": "04_salon_rezevasyon",
+  "model": "gpt-image-2",
+  "aspect_ratio": "9:16",
+  "quality": "high",
+  "prompt": "Vertical candid photo inside a small Haitian hair salon, a hairstylist woman braiding a client's hair, glancing and smiling at her phone propped on the mirror shelf. The phone screen shows a booking page with a navy blue button 'Rezève' and a time list. Bright, colorful, real everyday moment, natural light, shot on smartphone, TikTok aesthetic. Caption text overlay in the upper third, white with black outline: 'Kliyan yo rezève pou kont yo 😮‍💨'"
+ },
+ {
+  "name": "05_restoran_meni",
+  "model": "gpt-image-2",
+  "aspect_ratio": "4:5",
+  "quality": "high",
+  "prompt": "Close-up smartphone photo of a plate of Haitian griot with pikliz, bannann peze and diri ak pwa on a street-food restaurant counter in Haiti, a hand holding a phone next to the plate showing a mobile menu titled 'Meni' with dish photos and prices in HTG under a small 'Karto' logo in navy blue. Appetizing, warm, real, slightly messy background with customers out of focus"
+ },
+ {
+  "name": "06_tweet",
+  "model": "gpt-image-2",
+  "aspect_ratio": "4:5",
+  "quality": "high",
+  "prompt": "A screenshot-style image of a social media text post on a white background, like a viral tweet. Round profile picture of a smiling Haitian woman, display name 'Manmzèl Boutik', handle '@manmzelboutik'. Post text in large black sans-serif font, exact text: 'Mwen sispann voye 50 foto sou WhatsApp pou chak kliyan. Kounye a se yon sèl lyen. Karto chanje lavi m 😭🇭🇹'. Below: like and repost icons with counts '2,4K' and '318'. Clean, realistic, no other text"
+ }
+]
