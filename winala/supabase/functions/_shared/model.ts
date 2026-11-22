@@ -13,7 +13,11 @@ export interface ModelOutput {
   markets: {
     btts: { prediction: "Oui" | "Non"; confidence: number };
     over_under_2_5: { prediction: "Over" | "Under"; confidence: number };
+    /** Most likely exact score and its probability. */
+    correct_score?: { prediction: string; confidence: number };
+    top_scores?: { score: string; probability: number }[];
   };
+  expected_goals?: { home: number; away: number };
   value_bet: {
     market: string;
     bookmaker_odds: number;

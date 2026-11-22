@@ -6,7 +6,7 @@ import { odds, pct, type ModelOutput } from "./model";
  * Same logic lives in supabase/functions/_shared/arguments.ts for ingestion.
  */
 export function buildArguments(
-  m: Pick<ModelOutput, "probabilities" | "markets" | "value_bet">,
+  m: Pick<ModelOutput, "probabilities" | "markets" | "value_bet" | "expected_goals">,
   home: string,
   away: string,
   opts: { valueBetAllowed: boolean },
@@ -29,15 +29,20 @@ export function buildArguments(
       : `Au moins une équipe reste muette dans ${pct(btts.confidence)} des cas simulés : une défense devrait prendre le dessus.`;
 
   const ou = m.markets.over_under_2_5;
-  let third =
+  const xg = m.expected_goals ? ` (${m.expected_goals.home.toFixed(1).replace(".", ",")} – ${m.expected_goals.away.toFixed(1).replace(".", ",")} buts attendus)` : "";
+  const goals =
     ou.prediction === "Over"
-      ? `Plus de 2,5 buts dans ${pct(ou.confidence)} des scénarios : le modèle attend un match ouvert.`
-      : `Moins de 2,5 buts dans ${pct(ou.confidence)} des scénarios : le modèle attend un match fermé.`;
+      ? `Plus de 2,5 buts dans ${pct(ou.confidence)} des scénarios${xg} : le modèle attend un match ouvert.`
+      : `Moins de 2,5 buts dans ${pct(ou.confidence)} des scénarios${xg} : le modèle attend un match fermé.`;
+  const cs = m.markets.correct_score;
+  let third = cs
+    ? `Score le plus probable : ${cs.prediction} (${pct(cs.confidence)}). Un score exact reste rare : environ 1 fois sur ${Math.max(2, Math.round(1 / cs.confidence))}.`
+    : goals;
 
   if (opts.valueBetAllowed && m.value_bet && m.value_bet.edge_percent > 0) {
     const v = m.value_bet;
     third = `Sur « ${v.market} », la cote proposée (${odds(v.bookmaker_odds)}) dépasse la cote juste du modèle (${odds(v.model_fair_odds)}) : écart de +${Math.round(v.edge_percent)} %.`;
   }
 
-  return [first, second, third];
+  return cs ? [first, goals, third] : [first, second, third];
 }

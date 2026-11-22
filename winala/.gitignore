@@ -51,3 +51,8 @@ next-env.d.ts
 
 # env (keep the example)
 !.env.example
+
+# model data cache and venv
+/model/.cache/
+/model/.venv/
+__pycache__/
