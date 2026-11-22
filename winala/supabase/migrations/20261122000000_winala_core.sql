@@ -174,9 +174,13 @@ create policy "own ledger" on public.credit_ledger for select to authenticated u
 -- model_predictions, signup_grants, waitlist, predictions_results: no client policy.
 -- Predictions are only reachable through unlock_match/get_analysis; the tracker through public_tracker.
 
+-- Supabase grants ALL on new public tables to anon/authenticated by default: start from nothing.
+revoke all on public.leagues, public.matches, public.daily_free_match, public.credit_packs,
+  public.profiles, public.user_unlocks, public.transactions, public.credit_ledger,
+  public.model_predictions, public.signup_grants, public.waitlist, public.predictions_results
+  from anon, authenticated;
 grant select on public.leagues, public.matches, public.daily_free_match, public.credit_packs to anon, authenticated;
 grant select on public.profiles, public.user_unlocks, public.transactions, public.credit_ledger to authenticated;
-revoke all on public.model_predictions, public.signup_grants, public.waitlist, public.predictions_results from anon, authenticated;
 
 -- ───────────────────────────── Helpers ─────────────────────────────
 create function public.analysis_cost(t public.analysis_type)
@@ -622,6 +626,7 @@ from public.predictions_results r
 join public.matches m on m.id = r.match_id;
 -- Owned by postgres (security definer semantics) on purpose: it is the ONLY
 -- public window on predictions_results and exposes nothing pre-kickoff.
+revoke all on public.public_tracker from anon, authenticated;
 grant select on public.public_tracker to anon, authenticated;
 
 -- ───────────────────────────── Function privileges ─────────────────────────────

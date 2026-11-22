@@ -33,7 +33,8 @@ select public.ingest_prediction(
                      'away_team', 'Brentford', 'kickoff_time', (now() + interval '1 day')::text),
   'STANDARD',
   '{"match_id":"m1","probabilities":{"home":0.58,"draw":0.23,"away":0.19},"top_pick":"Victoire Arsenal",
-    "markets":{"btts":{"prediction":"Non","confidence":0.56},"over_under_2_5":{"prediction":"Over","confidence":0.54}},
+    "markets":{"btts":{"prediction":"Non","confidence":0.56},"over_under_2_5":{"prediction":"Over","confidence":0.54},
+                "correct_score":{"prediction":"2-0","confidence":0.12}},
     "value_bet":{"market":"Victoire Arsenal","bookmaker_odds":1.8,"model_fair_odds":1.72,"edge_percent":4.7},
     "key_arguments":["a","b","c"],"risk_level":"Faible"}'::jsonb);
 select public.ingest_prediction(
@@ -45,8 +46,8 @@ select public.ingest_prediction(
     "value_bet":{"market":"Victoire Barcelone","bookmaker_odds":2.25,"model_fair_odds":2.13,"edge_percent":5.6},
     "key_arguments":["a","b","c"],"risk_level":"Moyen"}'::jsonb);
 
-select pg_temp.check((select count(*) from public.predictions_results where match_id = 'm1') = 3,
-  'tracker rows written before kickoff');
+select pg_temp.check((select count(*) from public.predictions_results where match_id = 'm1') = 4,
+  'tracker rows written before kickoff (incl. exact score)');
 select pg_temp.check((select (public.ingest_prediction(
   jsonb_build_object('id', 'm1', 'league_id', 'pl', 'league_name', 'Premier League', 'home_team', 'Arsenal',
                      'away_team', 'Brentford', 'kickoff_time', (now() + interval '1 day')::text),
@@ -84,9 +85,9 @@ do $$ begin
   raise exception 'FAILED: model_predictions readable by clients';
 exception when insufficient_privilege then raise notice 'ok: model_predictions not readable directly';
 end $$;
-select pg_temp.check((select count(*) from public.public_tracker where predicted_pick is not null) = 0,
+select pg_temp.check((select count(*) from public.get_public_tracker() where predicted_pick is not null) = 0,
   'tracker hides picks before kickoff');
-select pg_temp.check((select count(*) from public.public_tracker where length(commitment) = 64) = 6,
+select pg_temp.check((select count(*) from public.get_public_tracker() where length(commitment) = 64) = 7,
   'tracker shows hash commitments before kickoff');
 
 do $$ begin
@@ -121,7 +122,7 @@ update public.matches set status = 'SCHEDULED' where id = 'm1';
 update public.matches set status = 'CANCELLED' where id = 'm1';
 select pg_temp.check((select credits_balance from public.profiles where id = '00000000-0000-0000-0000-00000000000a') = 17,
   'refund happens once');
-select pg_temp.check((select count(*) from public.predictions_results where match_id = 'm1' and result = 'VOID') = 3,
+select pg_temp.check((select count(*) from public.predictions_results where match_id = 'm1' and result = 'VOID') = 4,
   'tracker rows voided');
 select pg_temp.check((select sum(delta) from public.credit_ledger where user_id = '00000000-0000-0000-0000-00000000000a') = 17,
   'ledger matches balance');
