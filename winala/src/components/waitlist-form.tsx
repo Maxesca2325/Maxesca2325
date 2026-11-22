@@ -2,7 +2,7 @@
 
 import { useActionState, useId } from "react";
 import { ArrowRight, Check, LoaderCircle } from "lucide-react";
-import { joinWaitlist, type WaitlistState } from "@/app/actions";
+import { joinWaitlist, type WaitlistState } from "@/lib/waitlist-action";
 
 const initial: WaitlistState = { status: "idle", message: "" };
 

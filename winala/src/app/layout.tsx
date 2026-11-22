@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
 import { ServiceWorker } from "@/components/service-worker";
+import { BASE_PATH } from "@/lib/base-path";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -21,6 +22,8 @@ export const metadata: Metadata = {
   description:
     "Analyses statistiques des matchs de Premier League, Liga, Serie A et Ligue 1 pour Haïti. Probabilités 1X2, BTTS, plus/moins 2,5 buts. Historique public, prix en HTG.",
   applicationName: "Winala",
+  // Static file with relative URLs: works at the domain root and under a sub-path.
+  manifest: `${BASE_PATH}/manifest.webmanifest`,
   appleWebApp: { capable: true, title: "Winala", statusBarStyle: "black-translucent" },
   openGraph: {
     type: "website",

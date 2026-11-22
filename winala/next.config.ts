@@ -8,9 +8,20 @@ const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
 ];
 
+// `npm run build:pages` → static test build for GitHub Pages (no server).
+const STATIC_DEMO = process.env.NEXT_PUBLIC_STATIC_DEMO === "1";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const nextConfig: NextConfig = {
-  cacheComponents: true,
-  partialPrefetching: true,
+  ...(STATIC_DEMO && {
+    output: "export",
+    basePath: BASE_PATH,
+    trailingSlash: true,
+    images: { unoptimized: true },
+  }),
+  // Static export cannot do partial prerendering, which Cache Components implies.
+  cacheComponents: !STATIC_DEMO,
+  partialPrefetching: !STATIC_DEMO,
   poweredByHeader: false,
   experimental: {
     // Unstable 3G/4G: failed navigations and server actions wait and retry
@@ -19,6 +30,13 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     root: process.cwd(),
+    // Static export cannot run server actions: swap the waitlist action for a stub.
+    resolveAlias: STATIC_DEMO
+      ? {
+          "@/lib/waitlist-action": "./src/lib/waitlist-action.static.ts",
+          "@/lib/tracker": "./src/lib/tracker.static.ts",
+        }
+      : {},
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],
@@ -27,6 +45,7 @@ const nextConfig: NextConfig = {
     },
   },
   async headers() {
+    if (STATIC_DEMO) return [];
     return [
       { source: "/:path*", headers: securityHeaders },
       {

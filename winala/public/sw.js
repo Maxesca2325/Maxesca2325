@@ -8,7 +8,10 @@
 const VERSION = "winala-v1";
 const STATIC = `${VERSION}-static`;
 const PAGES = `${VERSION}-pages`;
-const PRECACHE = ["/offline", "/icon-192.png"];
+// Works at the domain root and under a sub-path (GitHub Pages test build).
+const BASE = new URL(self.registration.scope).pathname.replace(/\/$/, "");
+const OFFLINE = new URL(self.location.href).searchParams.get("offline") || `${BASE}/offline`;
+const PRECACHE = [OFFLINE, `${BASE}/icon-192.png`];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(PAGES).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
@@ -34,7 +37,7 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
   if (req.headers.get("RSC") === "1" || url.searchParams.has("_rsc")) return;
 
-  if (url.pathname.startsWith("/_next/static/") || /\.(png|svg|ico|woff2)$/.test(url.pathname)) {
+  if (url.pathname.includes("/_next/static/") || /\.(png|svg|ico|woff2)$/.test(url.pathname)) {
     event.respondWith(
       caches.match(req).then(
         (hit) =>
@@ -61,7 +64,7 @@ self.addEventListener("fetch", (event) => {
           }
           return res;
         })
-        .catch(() => caches.match(req).then((hit) => hit || caches.match("/offline"))),
+        .catch(() => caches.match(req).then((hit) => hit || caches.match(OFFLINE))),
     );
   }
 });

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { WifiOff } from "lucide-react";
 import { Logo } from "@/components/logo";
 
@@ -14,9 +15,9 @@ export default function Offline() {
         Cette page n&apos;a pas encore été ouverte sur ce téléphone. Les pages déjà visitées restent disponibles. Réessaie dès que le
         réseau revient.
       </p>
-      <a href="/app" className="mt-2 rounded-xl bg-accent px-5 py-3 font-semibold text-on-accent">
+      <Link href="/app" className="mt-2 rounded-xl bg-accent px-5 py-3 font-semibold text-on-accent">
         Réessayer
-      </a>
+      </Link>
     </main>
   );
 }
