@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./logo";
+import { LIVE } from "@/lib/live";
 
 export function SiteHeader() {
   return (
@@ -13,11 +14,17 @@ export function SiteHeader() {
             Historique
           </Link>
           <Link href="/app" className="hidden rounded-lg px-3 py-2 text-text-2 hover:text-text sm:inline-block">
-            Démo
+            {LIVE ? "Matchs" : "Démo"}
           </Link>
-          <a href="#liste" className="rounded-lg bg-surface-2 px-3 py-2 font-semibold hover:bg-surface-3">
-            Rejoindre
-          </a>
+          {LIVE ? (
+            <Link href="/connexion" className="rounded-lg bg-surface-2 px-3 py-2 font-semibold hover:bg-surface-3">
+              Connexion
+            </Link>
+          ) : (
+            <a href="#liste" className="rounded-lg bg-surface-2 px-3 py-2 font-semibold hover:bg-surface-3">
+              Rejoindre
+            </a>
+          )}
         </nav>
       </div>
     </header>
@@ -32,7 +39,7 @@ export function SiteFooter() {
           <Logo size={22} />
           <nav className="flex flex-wrap gap-x-5 gap-y-2">
             <Link href="/tracker" className="hover:text-text">Historique public</Link>
-            <Link href="/app" className="hover:text-text">Démo de l&apos;appli</Link>
+            <Link href="/app" className="hover:text-text">{LIVE ? "Matchs" : "Démo de l'appli"}</Link>
             <Link href="/jeu-responsable" className="hover:text-text">Jeu responsable</Link>
           </nav>
         </div>

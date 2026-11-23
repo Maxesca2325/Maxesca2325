@@ -8,20 +8,19 @@ const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
 ];
 
-// `npm run build:pages` → static test build for GitHub Pages (no server).
-const STATIC_DEMO = process.env.NEXT_PUBLIC_STATIC_DEMO === "1";
+// `npm run build:pages` → static export for GitHub Pages (no server needed: data lives in Supabase).
+const STATIC_EXPORT = process.env.STATIC_EXPORT === "1";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const nextConfig: NextConfig = {
-  ...(STATIC_DEMO && {
+  ...(STATIC_EXPORT && {
     output: "export",
     basePath: BASE_PATH,
     trailingSlash: true,
     images: { unoptimized: true },
   }),
-  // Static export cannot do partial prerendering, which Cache Components implies.
-  cacheComponents: !STATIC_DEMO,
-  partialPrefetching: !STATIC_DEMO,
+  // The site is fully static: all data and rules live in Supabase and are read
+  // from the browser with the publishable key. Same build on any static host.
   poweredByHeader: false,
   experimental: {
     // Unstable 3G/4G: failed navigations and server actions wait and retry
@@ -30,13 +29,6 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     root: process.cwd(),
-    // Static export cannot run server actions: swap the waitlist action for a stub.
-    resolveAlias: STATIC_DEMO
-      ? {
-          "@/lib/waitlist-action": "./src/lib/waitlist-action.static.ts",
-          "@/lib/tracker": "./src/lib/tracker.static.ts",
-        }
-      : {},
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],
@@ -45,7 +37,7 @@ const nextConfig: NextConfig = {
     },
   },
   async headers() {
-    if (STATIC_DEMO) return [];
+    if (STATIC_EXPORT) return [];
     return [
       { source: "/:path*", headers: securityHeaders },
       {

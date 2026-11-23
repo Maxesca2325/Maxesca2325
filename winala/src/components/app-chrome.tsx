@@ -6,9 +6,19 @@ import { useOffline } from "next/offline";
 import { ChartNoAxesColumn, Coins, ListOrdered, Plus, WifiOff } from "lucide-react";
 import { LogoMark } from "./logo";
 import { useWallet } from "@/lib/demo-wallet";
+import { LIVE, useAuth, useCreditsOnFocus } from "@/lib/backend";
+
+function useBalance(): { credits: number | null; signedIn: boolean } {
+  const demo = useWallet();
+  const live = useAuth();
+  useCreditsOnFocus();
+  if (!LIVE) return { credits: demo.credits, signedIn: true };
+  return { credits: live.credits, signedIn: Boolean(live.session) };
+}
 
 export function AppHeader() {
-  const { credits } = useWallet();
+  const { credits: c, signedIn } = useBalance();
+  const credits = c ?? 0;
   const offline = useOffline();
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-bg/95 backdrop-blur-md">
@@ -17,6 +27,15 @@ export function AppHeader() {
           <LogoMark size={28} />
         </Link>
         <div className="flex-1" />
+        {!signedIn ? (
+          <Link
+            href="/connexion"
+            className="flex h-9 items-center rounded-full bg-accent px-4 text-sm font-semibold text-on-accent hover:bg-accent-press"
+          >
+            Connexion
+          </Link>
+        ) : (
+        <>
         <Link
           href="/app/credits"
           className="flex h-9 items-center gap-1.5 rounded-full border border-line bg-surface pl-2.5 pr-3 text-sm font-semibold"
@@ -33,6 +52,8 @@ export function AppHeader() {
           <Plus size={16} aria-hidden="true" />
           Recharger
         </Link>
+        </>
+        )}
       </div>
       {offline && (
         <div role="status" className="flex items-center justify-center gap-2 bg-surface-2 py-1.5 text-xs text-text-2">
@@ -44,6 +65,7 @@ export function AppHeader() {
 }
 
 export function DemoBanner() {
+  if (LIVE) return null;
   return (
     <div className="mx-auto max-w-2xl px-4 pt-3">
       <p className="rounded-lg border border-dashed border-text-3/50 px-3 py-2 text-xs leading-snug text-text-2">

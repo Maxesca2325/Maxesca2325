@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build:pages": "NEXT_PUBLIC_STATIC_DEMO=1 NEXT_PUBLIC_TRAILING_SLASH=1 NEXT_PUBLIC_BASE_PATH=${PAGES_BASE_PATH:-/Maxesca2325} next build && touch out/.nojekyll"
+    "build:pages": "STATIC_EXPORT=1 NEXT_PUBLIC_TRAILING_SLASH=1 NEXT_PUBLIC_BASE_PATH=${PAGES_BASE_PATH:-/Maxesca2325} next build && touch out/.nojekyll"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.2",

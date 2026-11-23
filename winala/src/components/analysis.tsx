@@ -196,6 +196,33 @@ export function AnalysisView({
         </div>
       </section>
 
+      {prediction.markets.top_scores && prediction.markets.top_scores.length > 0 && (
+        <section className="rounded-card border border-line bg-surface p-4">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h3 className="text-sm font-semibold text-text-2">Score exact</h3>
+            {demo && <ExampleTag />}
+          </div>
+          <ul className="space-y-2">
+            {prediction.markets.top_scores.slice(0, 5).map((t, i) => (
+              <li key={t.score} className="flex items-center gap-3">
+                <span className={`w-12 font-display text-xl ${i === 0 ? "text-text" : "text-text-2"}`}>{t.score}</span>
+                <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-3">
+                  <span
+                    className={`bar-grow block h-full rounded-full ${i === 0 ? "bg-accent" : "bg-text-3"}`}
+                    style={{ width: `${Math.min(100, (t.probability / prediction.markets.top_scores![0].probability) * 100)}%` }}
+                  />
+                </span>
+                <span className="w-12 text-right font-display text-lg">{Math.round(t.probability * 100)}%</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-text-2">
+            Même le score le plus probable n&apos;arrive qu&apos;environ 1 fois sur{" "}
+            {Math.max(2, Math.round(1 / prediction.markets.top_scores[0].probability))}. Mise prudemment.
+          </p>
+        </section>
+      )}
+
       {leagueCalibrated && vb && vb.edge_percent > 0 && deep && (
         <section className="rounded-card border border-accent/50 bg-accent/[0.07] p-4">
           <div className="flex items-center justify-between">

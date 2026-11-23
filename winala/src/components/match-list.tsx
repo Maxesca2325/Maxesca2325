@@ -84,7 +84,7 @@ export function MatchList() {
 function FreeOfTheDay({ match }: { match: DemoMatch }) {
   return (
     <Link
-      href={`/app/match/${match.id}`}
+      href={`/app/match?id=${match.id}`}
       className="group block rounded-card border border-accent/40 bg-accent/[0.08] p-4 transition-colors hover:bg-accent/[0.12]"
     >
       <div className="mb-3 flex items-center justify-between">
@@ -118,7 +118,7 @@ function MatchRow({ match, unlocked }: { match: DemoMatch; unlocked: boolean }) 
   const conf = confidenceOf(match.prediction.probabilities);
   return (
     <Link
-      href={`/app/match/${match.id}`}
+      href={`/app/match?id=${match.id}`}
       className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2"
     >
       <span className={`w-11 shrink-0 text-sm font-semibold ${postponed ? "text-bad" : "text-text-2"}`}>

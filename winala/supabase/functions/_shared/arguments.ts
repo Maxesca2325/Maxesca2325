@@ -18,9 +18,11 @@ export function buildArguments(
   const first =
     pd >= Math.max(ph, pa)
       ? `Match très serré : le nul est l'issue la plus probable (${pct(pd)}), devant ${home} (${pct(ph)}) et ${away} (${pct(pa)}).`
-      : gap >= 0.25
+      : gap >= 0.2
         ? `${fav.name} gagne dans ${pct(fav.p)} des scénarios du modèle, contre ${pct(fav.q)} pour ${fav.other}. Écart net.`
-        : `${fav.name} part devant (${pct(fav.p)}) mais ${fav.other} reste proche (${pct(fav.q)}), avec ${pct(pd)} de nul.`;
+        : gap >= 0.08
+          ? `${fav.name} part devant (${pct(fav.p)}) mais ${fav.other} reste dans le coup (${pct(fav.q)}), avec ${pct(pd)} de nul.`
+          : `Match équilibré : ${home} ${pct(ph)}, nul ${pct(pd)}, ${away} ${pct(pa)}.`;
 
   const btts = m.markets.btts;
   const second =

@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowRight, Check, Clock3, Lock, RotateCcw, X } from "lucide-react";
+import { ArrowRight, Check, Lock, RotateCcw, X } from "lucide-react";
 import { AnalysisView, ConfidenceChip, Crest, ExampleTag, LockedPreview } from "@/components/analysis";
 import { MatchHeader } from "@/components/match-header";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
-import { WaitlistForm } from "@/components/waitlist-form";
+import { StartCta } from "@/components/start-cta";
+import { TrackerTeaser } from "@/components/tracker-teaser";
 import { CREDIT_PACKS, DEMO_MATCHES, leagueById } from "@/lib/demo-data";
 import { confidenceOf } from "@/lib/model";
 
@@ -23,10 +24,10 @@ export default function Home() {
             </h1>
             <p className="mt-5 max-w-[34rem] text-lg leading-relaxed text-text-2">
               Winala passe chaque match de Premier League, Liga, Serie A et Ligue 1 dans un modèle statistique. Tu vois la probabilité de
-              chaque issue, le niveau de risque, et quand une cote vaut vraiment le coup.
+              chaque issue, les buts attendus, le score exact le plus probable et le niveau de risque.
             </p>
             <div id="liste" className="mt-7 max-w-[34rem] scroll-mt-24">
-              <WaitlistForm source="hero" />
+              <StartCta source="hero" />
             </div>
             <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-text-2">
               <li className="flex items-center gap-1.5">
@@ -69,7 +70,7 @@ export default function Home() {
               <h2 className="font-display text-4xl leading-none sm:text-5xl">Un crédit, une analyse complète.</h2>
               <p className="mt-4 text-lg text-text-2">
                 Sur chaque match, tu vois gratuitement l&apos;indice de confiance du modèle. Si le match t&apos;intéresse, un crédit débloque
-                les chiffres. Deux crédits ajoutent le rapport Value Bet.
+                les chiffres, les buts et le score exact. Et un match par jour est offert.
               </p>
             </div>
 
@@ -102,7 +103,7 @@ export default function Home() {
             </div>
             <p className="mt-6">
               <Link href="/app" className="inline-flex items-center gap-1.5 font-semibold text-accent-ink hover:underline">
-                Essayer la démo de l&apos;appli <ArrowRight size={16} aria-hidden="true" />
+                Voir les matchs <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </p>
           </div>
@@ -122,34 +123,7 @@ export default function Home() {
                 10. C&apos;est ce qu&apos;on mesure, et c&apos;est ce qu&apos;on publie.
               </p>
             </div>
-            <div className="rounded-card border border-line bg-surface">
-              <div className="flex items-center justify-between border-b border-line px-4 py-3 text-sm">
-                <span className="font-semibold">Historique</span>
-                <span className="text-text-2">Mis à jour après chaque match</span>
-              </div>
-              <dl className="grid grid-cols-3 divide-x divide-line border-b border-line text-center">
-                {[
-                  ["Réglés", "0"],
-                  ["Gagnés", "0"],
-                  ["Réussite", "—"],
-                ].map(([k, v]) => (
-                  <div key={k} className="px-2 py-4">
-                    <dt className="text-xs text-text-2">{k}</dt>
-                    <dd className="font-display text-3xl">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-              <div className="flex flex-col items-center gap-2 px-6 py-8 text-center">
-                <Clock3 className="text-text-3" size={22} aria-hidden="true" />
-                <p className="font-semibold">Aucun pronostic réglé pour l&apos;instant.</p>
-                <p className="max-w-xs text-sm text-text-2">
-                  Le compteur démarre au lancement, avec le premier vrai pronostic. Pas de faux chiffres en attendant.
-                </p>
-                <Link href="/tracker" className="mt-2 text-sm font-semibold text-accent-ink hover:underline">
-                  Voir la page historique
-                </Link>
-              </div>
-            </div>
+            <TrackerTeaser />
           </div>
         </section>
 
@@ -168,12 +142,12 @@ export default function Home() {
                     <dd className="font-semibold">1 crédit</dd>
                   </div>
                   <div className="flex justify-between gap-4 border-b border-line pb-3">
-                    <dt className="text-text-2">Rapport Value Bet approfondi</dt>
-                    <dd className="font-semibold">2 crédits</dd>
+                    <dt className="text-text-2">Prono du jour</dt>
+                    <dd className="font-semibold">Gratuit</dd>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <dt className="text-text-2">Mise à jour avec les compos (H-1)</dt>
-                    <dd className="font-semibold">Gratuite</dd>
+                    <dt className="text-text-2">Match reporté ou annulé</dt>
+                    <dd className="font-semibold">Remboursé</dd>
                   </div>
                 </dl>
               </div>
@@ -257,7 +231,7 @@ export default function Home() {
               <h2 className="font-display text-4xl leading-none sm:text-5xl">Sois là au premier match.</h2>
               <p className="mt-4 text-lg text-text-2">Inscris-toi sur la liste. Tes 3 crédits t&apos;attendent à l&apos;ouverture.</p>
               <div className="mt-6">
-                <WaitlistForm source="footer" />
+                <StartCta source="footer" />
               </div>
             </div>
           </div>
@@ -294,11 +268,11 @@ function MatchRowPreview() {
 const FAQ: [string, string][] = [
   [
     "D'où viennent les probabilités ?",
-    "D'un modèle statistique (Dixon-Coles / Poisson) nourri par les résultats passés et les expected goals (xG), calibré ligue par ligue. Aucune intelligence artificielle n'invente les chiffres.",
+    "D'un modèle statistique (Dixon-Coles / Poisson) qui apprend des résultats des saisons passées, combiné aux cotes du marché d'avant-match. Il est testé semaine par semaine sur les 3 dernières saisons de chaque championnat. Aucune intelligence artificielle n'invente les chiffres.",
   ],
   [
-    "Pourquoi l'appli n'est pas encore ouverte ?",
-    "Parce qu'on teste d'abord le modèle sur des saisons passées, face aux vraies cotes. On ouvre quand les chiffres tiennent, pas avant.",
+    "Le score exact, c'est fiable ?",
+    "C'est le marché le plus difficile. Même le score le plus probable n'arrive qu'environ 1 fois sur 8. On l'affiche avec son pourcentage pour que tu mises prudemment.",
   ],
   [
     "Et si le match est reporté ?",
@@ -309,7 +283,7 @@ const FAQ: [string, string][] = [
     "Oui. L'appli est très légère et s'installe sur l'écran d'accueil. Les pages déjà ouvertes restent consultables quand le réseau coupe.",
   ],
   [
-    "C'est quoi un value bet ?",
-    "Un pari où la cote proposée paraît plus généreuse que la probabilité calculée par le modèle. On l'affiche seulement sur les ligues où le modèle est calibré.",
+    "Vous donnez des value bets ?",
+    "Pas pour l'instant. Nos tests sur les saisons passées ne montrent pas de gain régulier face aux cotes des bookmakers, donc on ne les affiche pas. On les activera seulement si les tests deviennent positifs.",
   ],
 ];
