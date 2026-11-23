@@ -38,7 +38,7 @@
 }
 /* page CSS: compositions and cards the kit does not ship */
 /* decorative name across the close row (dealt moment: name) */
-.close__word { color: var(--p-accent); }
+.close__word { color: var(--p-accent); overflow: visible; line-height: .95; }
 
 /* room cards: photo over name, price and facts */
 .rooms-grid { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); column-gap: var(--gutter); row-gap: var(--s-6); }
@@ -47,8 +47,8 @@
 .room__frame img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .room:hover .room__frame img { transform: scale(1.03); }
 .room__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-3); margin-top: var(--s-4); }
-.room__head h3 { font-size: var(--t-h4); }
-.room__price { font-family: var(--font-text); font-weight: 600; color: var(--p-accent); white-space: nowrap; }
+.room__head h3 { font-size: var(--t-h3); }
+.room__price { font-family: var(--font-text); font-weight: 600; font-size: 18px; color: var(--p-accent); white-space: nowrap; }
 .room__price small { font-weight: 400; color: var(--muted); }
 .room__desc { color: var(--ink); margin-top: var(--s-2); font-size: 16px; }
 .room__facts { list-style: none; padding: 0; margin: var(--s-3) 0 0; display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-3); font-size: 13px; color: var(--muted); }
@@ -74,7 +74,7 @@
 .svc > li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: var(--s-1) var(--s-5); padding-block: var(--s-4); border-bottom: 1px solid var(--line); }
 .svc > li:first-child { padding-top: 0; }
 .svc__name { font-weight: 500; }
-.svc__when { grid-column: 2; grid-row: 1; text-align: right; color: var(--muted); font-size: 16px; white-space: nowrap; }
+.svc__when { grid-column: 2; grid-row: 1; text-align: right; color: var(--ink); font-size: 16px; white-space: nowrap; }
 .svc > li > p { grid-column: 1; color: var(--ink); font-size: 16px; margin: 0; }
 .chips { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); margin-top: var(--s-4); }
 .chip { border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: var(--s-4); display: flex; flex-direction: column; gap: 4px; justify-content: center; min-height: 92px; }
@@ -82,14 +82,12 @@
 .chip span { font-size: 14px; color: var(--muted); }
 
 /* booking: form beside the direct-contact column */
-.book-grid { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); column-gap: var(--gutter); row-gap: var(--s-6); }
-.book-form { grid-column: span 6; }
-.book-aside { grid-column: span 5; grid-column-start: 8; }
-@media (max-width: 1023px) { .book-form, .book-aside { grid-column: 1 / -1; } }
-.book-photo { overflow: hidden; border-radius: var(--r-lg); aspect-ratio: 16/10; }
+.book-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: var(--s-7); row-gap: var(--s-6); align-items: start; }
+@media (max-width: 1023px) { .book-grid { grid-template-columns: minmax(0, 1fr); } }
+.book-photo { overflow: hidden; border-radius: var(--r-lg); aspect-ratio: 4/3; width: 100%; }
 .book-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .book-aside .book-photo:hover img { transform: scale(1.03); }
-.book-aside .link-big { display: flex; align-items: center; min-height: 44px; font-family: var(--font-display); font-size: var(--t-h4); color: var(--ink); text-decoration: none; white-space: nowrap; border-bottom: 1px solid var(--line); }
+.book-aside .link-big { display: flex; align-items: center; min-height: 44px; font-family: var(--font-display); font-size: var(--t-h3); color: var(--ink); text-decoration: none; white-space: nowrap; border-bottom: 1px solid var(--line); }
 .book-aside .link-big:last-of-type { border-bottom: 0; }
 .book-aside .link-big:hover { color: var(--p-accent); }
 .adv { list-style: none; padding: 0; margin: 0; }
@@ -204,7 +202,7 @@
         </article>
         <article class="room">
           <div class="room__frame"><img src="assets/images/hotel/taciana6.jpg" alt="Le jardin et l'allée centrale de l'hôtel au coucher du soleil" loading="lazy"></div>
-          <div class="room__head"><h3>Petit-déjeuner inclus ?</h3><span class="room__price">+$12<small>/pers.</small></span></div>
+          <div class="room__head"><h3>Petit-déjeuner</h3><span class="room__price">+$12<small>/pers.</small></span></div>
           <p class="room__desc">Buffet continental servi de 7 h à 11 h, en option sur toutes les chambres.</p>
           <ul class="room__facts"><li>7 h à 11 h</li><li>Buffet continental</li><li>Café et jus frais</li></ul>
         </article>
@@ -240,7 +238,7 @@
               <li><span class="svc__name">Wi-Fi &amp; petit-déjeuner</span><span class="svc__when">7 h – 11 h</span><p>Wi-Fi gratuit partout, buffet continental servi chaque matin.</p></li>
             </ul>
           </div>
-          <div class="span-5 start-8">
+          <div class="span-6 start-7">
             <p class="t-label muted">Accès à la piscine</p>
             <div class="chips">
               <span class="chip"><b>Gratuit</b><span>Résidents de l'hôtel</span></span>
